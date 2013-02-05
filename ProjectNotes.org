@@ -1,0 +1,16 @@
+* Project notes
+  - File types
+    - Video
+    - Music
+    - Books
+  - Streaming
+  - Renting for a limited time
+  - All users upload?
+  - All users download? (streaming)
+  - 3 user levels
+    - Super users - Our group
+    - Upload group - Companies
+    - Regular users - Rent media
+* Tools
+  - Silverlight = NO GO!
+  - github for versioning
