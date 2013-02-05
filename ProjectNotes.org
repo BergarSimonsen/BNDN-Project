@@ -17,6 +17,7 @@
   - EntityFramework (!!)
 * Development
   - Test-Driven design
+  - SCRUM
 * Requirements
   - System must support multiple media types
     - Video

@@ -14,3 +14,26 @@
 * Tools
   - Silverlight = NO GO!
   - github for versioning
+  - EntityFramework (!!)
+* Development
+  - Test-Driven design
+* Requirements
+  - System must support multiple media types
+    - Video
+    - Music
+    - E-books
+    - ...
+  - Streaming
+    - Download (back-up)
+  - User-authentication
+    - Sign-up
+    - Login
+    - Multiple access levels
+  - Multi-User system
+  - Encryption (optional)
+  - Client
+    - Desktop Client
+    - Web Client
+  - Subscription?
+    - Subscription (monthly sub.)
+    - Free (pay-per-view)
