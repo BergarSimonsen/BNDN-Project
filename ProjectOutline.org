@@ -1,0 +1,47 @@
+* Project
+** Intro
+*** Introduction
+    - Short intro to the report
+*** Vision
+    - Vision of the project
+*** Problem statement
+*** Summary of system features
+*** Glossary
+** Requirement / Analysis
+*** User stories
+*** Use cases
+    - Use case model
+    - Use case stories
+*** Other requirements
+*** Domain model
+*** Data model
+*** Logical architecture
+    - Core architecture of our system
+*** Limitations (if any)
+** Design
+*** Class diagram
+*** Design patterns???
+*** Interaction diagrams
+    - If neccessary
+*** ER-Model
+*** User manual ???
+** Implementation
+*** Architectural decisions
+    - Why we chose one thing over another
+    - SOAP vs REST
+    - Web-client vs Stand-alone client
+*** Related diagrams
+    - Logcal view
+    - Deployment model
+    - Package / Class diagram
+*** Test
+    - Test strategy
+    - Everything test related
+*** Known issues (Hopefully not needed :)
+** Project process
+   - How did the process go?
+   - Communication with Singapore
+   - Issues?
+** Conclusion
+** Reflectione
+** Appendices
