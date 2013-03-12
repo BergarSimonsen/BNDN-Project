@@ -1,0 +1,140 @@
+% Created 2013-03-08 Fri 14:27
+\documentclass[11pt]{article}
+\usepackage[AUTO]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{ProjectOutline}
+\author{Bergar Simonsen}
+\date{\today}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.8.11}}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+\vspace*{1cm}
+\section{Project}
+\label{sec-1}
+\subsection{Intro}
+\label{sec-1-1}
+\subsubsection{Introduction}
+\label{sec-1-1-1}
+
+\begin{itemize}
+\item Short intro to the report
+\end{itemize}
+\subsubsection{Vision}
+\label{sec-1-1-2}
+
+\begin{itemize}
+\item Vision of the project
+\end{itemize}
+\subsubsection{Problem statement}
+\label{sec-1-1-3}
+\subsubsection{Summary of system features}
+\label{sec-1-1-4}
+\subsubsection{Glossary}
+\label{sec-1-1-5}
+\subsection{Requirement / Analysis}
+\label{sec-1-2}
+\subsubsection{User stories}
+\label{sec-1-2-1}
+\subsubsection{Use cases}
+\label{sec-1-2-2}
+
+\begin{itemize}
+\item Use case model
+\item Use case stories
+\end{itemize}
+\subsubsection{Other requirements}
+\label{sec-1-2-3}
+\subsubsection{Domain model}
+\label{sec-1-2-4}
+\subsubsection{Data model}
+\label{sec-1-2-5}
+\subsubsection{Logical architecture}
+\label{sec-1-2-6}
+
+\begin{itemize}
+\item Core architecture of our system
+\end{itemize}
+\subsubsection{Limitations (if any)}
+\label{sec-1-2-7}
+\subsection{Design}
+\label{sec-1-3}
+\subsubsection{Class diagram}
+\label{sec-1-3-1}
+\subsubsection{Design patterns???}
+\label{sec-1-3-2}
+\subsubsection{Interaction diagrams}
+\label{sec-1-3-3}
+
+\begin{itemize}
+\item If neccessary
+\end{itemize}
+\subsubsection{ER-Model}
+\label{sec-1-3-4}
+\subsubsection{User manual ???}
+\label{sec-1-3-5}
+\subsection{Implementation}
+\label{sec-1-4}
+\subsubsection{Architectural decisions}
+\label{sec-1-4-1}
+
+\begin{itemize}
+\item Why we chose one thing over another
+\item SOAP vs REST
+\item Web-client vs Stand-alone client
+\end{itemize}
+\subsubsection{Related diagrams}
+\label{sec-1-4-2}
+
+\begin{itemize}
+\item Logcal view
+\item Deployment model
+\item Package / Class diagram
+\end{itemize}
+\subsubsection{Test}
+\label{sec-1-4-3}
+
+\begin{itemize}
+\item Test strategy
+\item Everything test related
+\end{itemize}
+\subsubsection{Known issues (Hopefully not needed :)}
+\label{sec-1-4-4}
+\subsection{Project process}
+\label{sec-1-5}
+
+\begin{itemize}
+\item How did the process go?
+\item Communication with Singapore
+\item Issues?
+\end{itemize}
+\subsection{Conclusion}
+\label{sec-1-6}
+\subsection{Reflectione}
+\label{sec-1-7}
+\subsection{Appendices}
+\label{sec-1-8}
+
+\end{document}
