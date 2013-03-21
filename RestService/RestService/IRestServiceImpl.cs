@@ -36,5 +36,14 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user")]
         int insertUser(User user);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/user/me")]
+        User getLoggedUser(Token token);
     }
 }

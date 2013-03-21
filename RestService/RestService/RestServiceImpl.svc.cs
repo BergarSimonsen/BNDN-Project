@@ -47,5 +47,16 @@ namespace RestService
         {
             return user.id;
         }
+
+        public User getLoggedUser(Token token)
+        {
+            User user = new User();
+
+            user.id = 1337;
+
+            return user;
+        }
+
+
     }
 }
