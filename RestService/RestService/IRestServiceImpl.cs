@@ -52,5 +52,28 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/token/{email}/{password}")]
         Token getToken(string email, string password);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/user/token/renew/{token}")]
+        Token renewToken(string token);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "PUT",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/user/{id}/{oldPassword}")]
+        void updateUser(string id, string oldPassword, User newUser);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/user/{id}")]
+        void deleteUser(string id);
     }
 }

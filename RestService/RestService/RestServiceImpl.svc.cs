@@ -53,7 +53,22 @@ namespace RestService
             DateTime from = DateTime.Now;
             DateTime to = new DateTime(2013,4,1);
 
-            return new Token("HFjdje33hdHS", from, to);
+            return new Token("Token Made", from, to);
+        }
+
+        public Token renewToken(string token)
+        {
+            return new Token("Token renewed", DateTime.Now, new DateTime(2100, 1, 1));
+        }
+
+        public void updateUser(string id, string oldPassword, User newUser)
+        {
+
+        }
+
+        public void deleteUser(string id)
+        {
+
         }
     }
 }
