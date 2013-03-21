@@ -10,12 +10,19 @@ namespace RestService
     public class Token
     {
         [DataMember]
-        string token;
+        public string token;
 
         [DataMember]
-        DateTime issued;
+        public DateTime issued;
 
         [DataMember]
-        long lifetime;
+        public DateTime expires;
+
+        public Token(string token, DateTime issued, DateTime expires)
+        {
+            this.issued = issued;
+            this.token = token;
+            this.expires = expires;
+        }
     }
 }

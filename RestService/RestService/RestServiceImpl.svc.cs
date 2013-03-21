@@ -13,20 +13,15 @@ namespace RestService
     {
         public User getUser(string id)
         {
-            User user = new User();
-            user.id = int.Parse(id);
-            return user;
+            return new User(int.Parse(id), null,null);
         }
 
         public User[] getUsersWithParameter(string group_id, string search_string, string search_fields)
         {
             User[] users = new User[3];
-            User user1 = new User();
-            User user2 = new User();
-            User user3 = new User();
-            user1.email = "hej";
-            user2.email = "hej";
-            user3.email = "derp";
+            User user1 = new User(1,"hej",null);
+            User user2 = new User(2, "hej", null);
+            User user3 = new User(3,"derp",null);
             users[0] = user1;
             users[1] = user2;
             users[2] = user3;
@@ -50,13 +45,15 @@ namespace RestService
 
         public User getLoggedUser(string token)
         {
-            User user = new User();
-
-            user.id = 1337;
-
-            return user;
+            return new User(1337,null,null);
         }
 
+        public Token getToken(string email, string password)
+        {
+            DateTime from = DateTime.Now;
+            DateTime to = new DateTime(2013,4,1);
 
+            return new Token("HFjdje33hdHS", from, to);
+        }
     }
 }

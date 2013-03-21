@@ -44,5 +44,13 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/me/{token}")]
         User getLoggedUser(string token);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/user/token/{email}/{password}")]
+        Token getToken(string email, string password);
     }
 }
