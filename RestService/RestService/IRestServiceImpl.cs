@@ -40,10 +40,9 @@ namespace RestService
         [OperationContract]
         [WebInvoke(
             Method = "GET",
-            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/user/me")]
-        User getLoggedUser(Token token);
+            UriTemplate = "/user/me/{token}")]
+        User getLoggedUser(string token);
     }
 }

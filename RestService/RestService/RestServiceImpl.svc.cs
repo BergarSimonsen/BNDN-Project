@@ -48,7 +48,7 @@ namespace RestService
             return user.id;
         }
 
-        public User getLoggedUser(Token token)
+        public User getLoggedUser(string token)
         {
             User user = new User();
 
