@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.ServiceModel;
+using System.ServiceModel.Web;
 using System.Text;
 
 namespace RestService
@@ -43,9 +45,13 @@ namespace RestService
             return user.id;
         }
 
-        public User getLoggedUser(string token)
+        public User getLoggedUser()
         {
-            return new User(1337,null,null);
+            WebHeaderCollection headers = WebOperationContext.Current.IncomingRequest.Headers;
+
+            string token = headers[HttpRequestHeader.Authorization];
+
+            return new User(1337, "derpderpdillz", token);
         }
 
         public Token getToken(string email, string password)
@@ -56,9 +62,13 @@ namespace RestService
             return new Token("Token Made", from, to);
         }
 
-        public Token renewToken(string token)
+        public Token renewToken()
         {
-            return new Token("Token renewed", DateTime.Now, new DateTime(2100, 1, 1));
+            WebHeaderCollection headers = WebOperationContext.Current.IncomingRequest.Headers;
+
+            string token = headers[HttpRequestHeader.Authorization];
+
+            return new Token(token +" has been renewed", DateTime.Now, new DateTime(2100, 1, 1));
         }
 
         public void updateUser(string id, string oldPassword, User newUser)
@@ -70,5 +80,37 @@ namespace RestService
         {
 
         }
+
+        public Media getMedia(string id)
+        {
+            return new Media(int.Parse(id), 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 });
+        }
+
+        public MediaList getMedias(string andTags, string orTags, string mediaCategoryFilter, string nameFilter, string page, string limit)
+        {
+            Media[] mediaList = new Media[] {new Media(2, 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 }),
+                new Media(3, 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 }),
+                new Media(4, 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 }),
+                new Media(5, 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 }),
+                new Media(5, 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 })};
+
+            int pageCount;
+
+            if (limit != null)
+            {
+                pageCount = (mediaList.Length + int.Parse(limit) - 1) / int.Parse(limit);
+            }
+            else
+            {
+                pageCount = -1;
+            }
+
+            return new MediaList(pageCount, mediaList);                                
+        }
+
+        public int insertMedia(Media media)
+        {
+            return media.id;
+        }        
     }
 }
