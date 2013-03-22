@@ -12,6 +12,7 @@ namespace RestService
     [ServiceContract]
     public interface IRestServiceImpl
     {
+        //================================ USER AND TOKEN ====================================//
         [OperationContract]
         [WebInvoke(
             Method = "GET",
@@ -42,8 +43,8 @@ namespace RestService
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/user/me/{token}")]
-        User getLoggedUser(string token);
+            UriTemplate = "/user/me")]
+        User getLoggedUser();
 
         [OperationContract]
         [WebInvoke(
@@ -58,8 +59,8 @@ namespace RestService
             Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/user/token/renew/{token}")]
-        Token renewToken(string token);
+            UriTemplate = "/user/token/renew")]
+        Token renewToken();
 
         [OperationContract]
         [WebInvoke(
@@ -75,5 +76,30 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/{id}")]
         void deleteUser(string id);
+
+        //========================================= MEDIA AND MEDIA CATEGORY ================================//
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/media/{id}")]
+        Media getMedia(string id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/media?andTags={andTags}&orTags={orTags}&mediaCategoryFilter={mediaCategoryFilter}&nameFilter={nameFilter}&page={page}&limit={limit}")]
+        MediaList getMedias(string andTags, string orTags,string mediaCategoryFilter, string nameFilter, string page, string limit);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/media")]
+        int insertMedia(Media media);
     }
 }
