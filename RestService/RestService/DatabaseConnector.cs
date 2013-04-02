@@ -9,18 +9,6 @@ namespace ConsoleApplication1
 {
     class DatabaseConnector
     {
-        
-        static void Main(string[] args)
-        {
-            DatabaseConnector dbCon = DatabaseConnector.GetInstance;
-            //dbCon.Connect("ITU");
-            //dbCon.CloseConnection();
-            //dbCon.Connect("SMU");
-            //dbCon.CloseConnection();
-            dbCon.selectTest();
-            Console.ReadKey();
-        }
-
         private static DatabaseConnector instance;
         private SqlConnection connection;
         private string connectionString;
@@ -60,7 +48,7 @@ namespace ConsoleApplication1
             }
             catch(SqlException e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine(e.StackTrace);
                 return null;
             }
             
@@ -115,7 +103,5 @@ namespace ConsoleApplication1
             ExecuteQuery(query, "SmuDatabase");
             CloseConnection();
         }
-
-
     }
 }
