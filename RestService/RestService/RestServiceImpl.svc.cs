@@ -5,9 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Web.Script.Serialization;
 
 namespace RestService
 {
@@ -22,26 +24,67 @@ namespace RestService
             return database.getUser(int.Parse(id));
         }
 
-        public User[] getUsersWithParameter(string group_id, string search_string, string search_fields)
+        public UserList getUsersWithParameter(string group_id, string search_string, string search_fields, string limit, string page, string order_by, string order)
         {
-            User[] users = new User[3];
-            User user1 = new User(1,"hej",null);
-            User user2 = new User(2, "hej", null);
-            User user3 = new User(3,"derp",null);
-            users[0] = user1;
-            users[1] = user2;
-            users[2] = user3;
-
-            User[] returnUsers = new User[3];
-            for (int i = 0; i < 3; i++)
+            int groupId = 0;
+            if (group_id != null)
             {
-                if (users[i].email == search_string)
+                groupId = int.Parse(group_id);
+            }
+            string seachString = null;
+            if (search_string != null)
+            {
+                seachString = search_string;
+            }
+            string searchField = null;
+            if (search_fields != null)
+            {
+                searchField = search_fields;
+            }
+            string orderBy = "email";
+            if (order_by != null)
+            {
+                orderBy = order_by;
+            }
+            string orders = "ASC";
+            if (order != null)
+            {
+                orders = order;
+            }
+
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            User[] users = database.getUsers(groupId, seachString, searchField, orderBy, orders);
+
+            int pageLimit = users.Length;
+            if (limit != null)
+            {
+                pageLimit = int.Parse(limit);
+            }
+            int pageCount = (users.Length + pageLimit - 1) / pageLimit;
+
+            int pageNumber = 1;
+            if (page != null)
+            {
+                pageNumber = int.Parse(page);
+            }
+
+            User[] returnUsers = new User[pageLimit];
+            int pageCounter = 1;
+            int userCounter = 0;
+            for (int i = 0; i < users.Length; i++)
+            {
+                if (pageCounter == pageNumber)
                 {
-                    returnUsers[i] = users[i];
+                    returnUsers[userCounter] = users[i];
+                    userCounter++;
+                }
+                if ((i+1) % pageLimit == 0)
+                {
+                    pageCounter++;
                 }
             }
 
-            return returnUsers;
+            return new UserList(users.Length, pageCount, returnUsers);     
         }
 
         public int insertUser(User user)

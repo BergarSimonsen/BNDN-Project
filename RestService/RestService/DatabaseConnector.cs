@@ -123,5 +123,42 @@ namespace RestService
 
             return user;
         }
+
+        public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order)
+        {
+            Connect("SMU");
+
+            string query = null;
+            if (group_id != 0 && search_string == null && search_fields == null)
+            {
+                query = "select user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order;
+            }
+            else if(group_id != 0 && search_string != null && search_fields != null)
+            {
+                query = "select * from (select user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order+") users where "+search_fields+" = '"+search_string+"'";
+            }
+            else if(group_id == 0 && search_string != null && search_fields != null)
+            {
+                query = "select * from user_account where "+search_fields+" = '"+search_string+"' order by user_account."+order_by+" "+order;
+            }
+            else
+            {
+                query = "select * from user_account";
+            }
+
+            List<User> groupsUsers = null;
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+            groupsUsers = new List<User>();
+            while (reader.Read())
+            {
+                int userId = reader.GetInt32(reader.GetOrdinal("id"));
+                string email = reader.GetString(reader.GetOrdinal("email"));
+                string password = reader.GetString(reader.GetOrdinal("password_hash"));
+
+                groupsUsers.Add(UserHandler.createUser(userId, email, password));
+            }
+
+            return groupsUsers.ToArray();
+        }
     }
 }
