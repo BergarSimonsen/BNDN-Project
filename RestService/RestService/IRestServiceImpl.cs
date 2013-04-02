@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -101,5 +102,12 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media")]
         int insertMedia(Media media);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/mediaFiles")]
+        void insertMediaFile(FileStream file);
     }
 }

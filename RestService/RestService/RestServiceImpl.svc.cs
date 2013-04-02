@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
@@ -111,6 +112,11 @@ namespace RestService
         public int insertMedia(Media media)
         {
             return media.id;
-        }        
+        }
+
+        public void insertMediaFile(FileStream file)
+        {
+
+        }
     }
 }
