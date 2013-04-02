@@ -24,8 +24,11 @@ namespace RestService
 
         public static bool VerifyToken(string username, Token token)
         {
-            Token verificationToken = CreateToken(username, token.issued);
-            return token.Equals(verificationToken);
+            if (DateTime.UtcNow.Ticks > token.expires.Ticks)
+            {
+                Token verificationToken = CreateToken(username, token.issued);
+                return token.Equals(verificationToken);
+            } else return false;
         }
 
     }
