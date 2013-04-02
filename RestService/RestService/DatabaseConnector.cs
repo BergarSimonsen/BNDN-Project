@@ -123,5 +123,30 @@ namespace RestService
 
             return user;
         }
+
+        public void NewUser(string email, string password, int[] userData)
+        {
+            Connect("SMU");
+            // created and modified are the same at insertion.
+            DateTime created = DateTime.Now;
+        }
+
+        public void DeleteUser(int id)
+        {
+            Connect("SMU");
+            // Check if user exists
+            if (getUser(id) != null)
+            {
+                // Delete user from database
+                string query = "delete * from user_account where id = " + id;
+                ExecuteQuery(query, "SmuDatabase");
+            }
+            else
+            { 
+                // User doesn't exist
+                Console.WriteLine("User doesn't exist!!!");
+            }
+            
+        }
     }
 }
