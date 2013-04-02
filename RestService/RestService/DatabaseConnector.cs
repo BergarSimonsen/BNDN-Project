@@ -97,13 +97,6 @@ namespace RestService
         }
 
 //******************************************************** User *******************************************************
-        public void selectTest()
-        {
-            Connect("SMU");
-            string query = "insert into user_account_data_type (name) values('kaboom')";
-            ExecuteQuery(query, "SmuDatabase");
-            CloseConnection();
-        }
 
         public User getUser(int id)
         {
@@ -119,6 +112,75 @@ namespace RestService
                 string password = reader.GetString(reader.GetOrdinal("password_hash"));
 
                 user = UserHandler.createUser(userId,email,password);
+            }
+
+            return user;
+        }
+
+        public void NewUser(string email, string password, int[] userData)
+        {
+            Connect("SMU");
+            // created and modified are the same at insertion.
+            DateTime created = DateTime.Now;
+            // Insert into user_account
+            string query = "insert into user_account values('', '"+email+"','"+password+"','"+created+"','"+created+"')";
+            ExecuteQuery(query, "SmuDatabase");
+            // Get user back from database in order to get the id
+            User curUser = getUser(email);
+            int curId = curUser.id;
+            // Insert into user_account_data
+            foreach(int i in userData) {
+                string newQuery = "insert into user_account_data values('','"+curId+"','"+i+"','')";
+                ExecuteQuery(newQuery, "SmuDatabase");
+            }
+        }
+
+        public void DeleteUser(int id)
+        {
+            Connect("SMU");
+            // Check if user exists
+            if (getUser(id) != null)
+            {
+                // Delete user from database
+                string query = "delete * from user_account where id = " + id;
+                ExecuteQuery(query, "SmuDatabase");
+            }
+            else
+            { 
+                // User doesn't exist
+                Console.WriteLine("User doesn't exist!!!");
+            }
+            
+        public void putUser(string[] info, int id)
+        {
+            Connect("SMU");
+            string query = "";
+            if (info[0] != null && info[1] != null && info[2] != null)
+                query = "UPDATE user_account SET email = '"+info[0]+"', password_hash = '"+info[2]+"' where id = '"+id+"'";
+            else if (info[0] != null && info[1] == null || info[2] == null)
+                query = "UPDATE user_account SET email = '" + info[0] + "' where id = '" + id + "'";
+            else if (info[0] == null && info[1] != null && info[2] != null)
+                query = "UPDATE user_account SET password_hash = '" + info[2] + "' where id = '" + id + "'";
+
+            ExecuteQuery(query, "SMU");
+            
+
+        }
+
+        public User getUser(string incmail)
+        {
+            Connect("SMU");
+            string query = "select * from user_account where email = '" + incmail + "';";
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+
+            User user = null;
+            while (reader.Read())
+            {
+                int userId = reader.GetInt32(reader.GetOrdinal("id"));
+                string email = reader.GetString(reader.GetOrdinal("email"));
+                string password = reader.GetString(reader.GetOrdinal("password_hash"));
+
+                user = UserHandler.createUser(userId, email, password);
             }
 
             return user;
