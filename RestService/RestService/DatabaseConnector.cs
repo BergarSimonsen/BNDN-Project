@@ -97,7 +97,7 @@ namespace ConsoleApplication1
                     //CloseConnection();
                     return reader;
                 }
-                catch (SqlException e) { ErrorMessage(e.ToString()); }
+                catch (SqlException e) { ErrorMessage(e.StackTrace); }
             }
             return null;
         }
