@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,7 +17,9 @@ namespace RestService
     {
         public User getUser(string id)
         {
-            return new User(int.Parse(id), null,null);
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+
+            return database.getUser(int.Parse(id));
         }
 
         public User[] getUsersWithParameter(string group_id, string search_string, string search_fields)
@@ -114,9 +117,15 @@ namespace RestService
             return media.id;
         }
 
-        public void insertMediaFile(FileStream file)
+        public void insertMediaFile(Stream file)
         {
+            StreamReader reader = new StreamReader(file);
+            string fileContent = reader.ReadToEnd();
+            reader.Close();
 
+            StreamWriter writer = new StreamWriter(@"C:\Users\christian\Documents\RentItTest\derp.mkv");
+            writer.Write(fileContent);
+            writer.Close();
         }
     }
 }
