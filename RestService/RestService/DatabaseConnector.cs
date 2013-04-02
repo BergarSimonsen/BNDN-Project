@@ -122,6 +122,17 @@ namespace RestService
             Connect("SMU");
             // created and modified are the same at insertion.
             DateTime created = DateTime.Now;
+            // Insert into user_account
+            string query = "insert into user_account values('', '"+email+"','"+password+"','"+created+"','"+created+"')";
+            ExecuteQuery(query, "SmuDatabase");
+            // Get user back from database in order to get the id
+            User curUser = getUser(email);
+            int curId = curUser.id;
+            // Insert into user_account_data
+            foreach(int i in userData) {
+                string newQuery = "insert into user_account_data values('','"+curId+"','"+i+"','')";
+                ExecuteQuery(newQuery, "SmuDatabase");
+            }
         }
 
         public void DeleteUser(int id)
@@ -173,7 +184,6 @@ namespace RestService
             }
 
             return user;
->>>>>>> cf09668f0f48fb26513486a8131fac4e89662c7b
         }
     }
 }
