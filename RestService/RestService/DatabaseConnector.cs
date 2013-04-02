@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Data;
 
-namespace ConsoleApplication1
+namespace RestService
 {
     class DatabaseConnector
     {
@@ -114,6 +115,25 @@ namespace ConsoleApplication1
             string query = "insert into user_account_data_type (name) values('kaboom')";
             ExecuteQuery(query, "SmuDatabase");
             CloseConnection();
+        }
+
+        public User getUser(int id)
+        {
+            Connect("SMU");
+            string query = "select * from user_account where id = " + id;
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+
+            User user = null;
+            while (reader.Read())
+            {
+                int userId = reader.GetInt32(reader.GetOrdinal("id"));
+                string email = reader.GetString(reader.GetOrdinal("email"));
+                string password = reader.GetString(reader.GetOrdinal("password_hash"));
+
+                user = UserHandler.createUser(userId,email,password);
+            }
+
+            return user;
         }
     }
 }
