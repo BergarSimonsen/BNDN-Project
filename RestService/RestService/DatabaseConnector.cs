@@ -115,5 +115,7 @@ namespace ConsoleApplication1
             ExecuteQuery(query, "SmuDatabase");
             CloseConnection();
         }
+
+
     }
 }
