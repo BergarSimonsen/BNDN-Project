@@ -97,13 +97,6 @@ namespace RestService
         }
 
 //******************************************************** User *******************************************************
-        public void selectTest()
-        {
-            Connect("SMU");
-            string query = "insert into user_account_data_type (name) values('kaboom')";
-            ExecuteQuery(query, "SmuDatabase");
-            CloseConnection();
-        }
 
         public User getUser(int id)
         {
@@ -119,6 +112,41 @@ namespace RestService
                 string password = reader.GetString(reader.GetOrdinal("password_hash"));
 
                 user = UserHandler.createUser(userId,email,password);
+            }
+
+            return user;
+        }
+
+        public void putUser(string[] info, int id)
+        {
+            Connect("SMU");
+            string query = "";
+            if (info[0] != null && info[1] != null && info[2] != null)
+                query = "UPDATE user_account SET email = '"+info[0]+"', password_hash = '"+info[2]+"' where id = '"+id+"'";
+            else if (info[0] != null && info[1] == null || info[2] == null)
+                query = "UPDATE user_account SET email = '" + info[0] + "' where id = '" + id + "'";
+            else if (info[0] == null && info[1] != null && info[2] != null)
+                query = "UPDATE user_account SET password_hash = '" + info[2] + "' where id = '" + id + "'";
+
+            ExecuteQuery(query, "SMU");
+            
+
+        }
+
+        public User getUser(string incmail)
+        {
+            Connect("SMU");
+            string query = "select * from user_account where email = '" + incmail + "';";
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+
+            User user = null;
+            while (reader.Read())
+            {
+                int userId = reader.GetInt32(reader.GetOrdinal("id"));
+                string email = reader.GetString(reader.GetOrdinal("email"));
+                string password = reader.GetString(reader.GetOrdinal("password_hash"));
+
+                user = UserHandler.createUser(userId, email, password);
             }
 
             return user;
