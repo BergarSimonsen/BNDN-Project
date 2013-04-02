@@ -146,10 +146,11 @@ namespace RestService
                 ExecuteQuery(query, "SmuDatabase");
             }
             else
-            { 
+            {
                 // User doesn't exist
                 Console.WriteLine("User doesn't exist!!!");
             }
+        }
             
         public void putUser(string[] info, int id)
         {
@@ -163,8 +164,6 @@ namespace RestService
                 query = "UPDATE user_account SET password_hash = '" + info[2] + "' where id = '" + id + "'";
 
             ExecuteQuery(query, "SMU");
-            
-
         }
 
         public User getUser(string incmail)
