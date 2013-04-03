@@ -223,5 +223,51 @@ namespace RestService
 
             return groupsUsers.ToArray();
         }
+//*****************************************************************************************************************************************************
+//********************************************************** Media ************************************************************************************
+
+        public Media getMedia(int id)
+        {
+            string query = "SELECT * FROM media WHERE id = '"+id+"'";
+
+
+            return null;
+        }
+
+        public void deleteMedia(int id)
+        {
+            string query = "DELETE * FROM media WHERE id = '"+id+"'";
+            ExecuteQuery(query, "SmuDatabase");
+        }
+
+        public void putMedia(string[] table, string[] value, int id)
+        {
+            Connect("SMU");
+            List<string> updates = new List<string>();
+
+            // creates ready-to-use "SET" SQL operations
+            for (int i = 0; i < table.Length; i++)
+            {
+                // this will give: "SET title = 'tempTitle'" (used when this is the last "SET" operation)
+                if (i == table.Length - 1) updates.Add(table[i] + " = '" + value[i] + "'");
+
+                // this will give: "SET title = 'tempTitle'," (used when this is NOT the last "SET" operation)
+                else updates.Add("SET "+table[i] + " = '" + value[i] + "',");
+            }
+
+            string doneUpdate = "";
+
+            // combines all the "SET" operations into one ready-to-use string
+            foreach (string s in updates)
+            {
+                doneUpdate = doneUpdate + s;
+            }
+
+            string query = "UPDATE media "+doneUpdate+" WHERE id = '"+id+"'";
+            ExecuteQuery(query, "SMU");
+        }
+        
+        
+//*****************************************************************************************************************************************************
     }
 }
