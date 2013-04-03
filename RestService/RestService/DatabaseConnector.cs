@@ -111,8 +111,9 @@ namespace RestService
                 string email = reader.GetString(reader.GetOrdinal("email"));
                 string password = reader.GetString(reader.GetOrdinal("password_hash"));
 
-                user = UserHandler.createUser(userId,email,password);
+                user = UserHandler.createUser(userId,email,password, null);
             }
+            CloseConnection();
 
             return user;
         }
@@ -123,15 +124,19 @@ namespace RestService
             // created and modified are the same at insertion.
             DateTime created = DateTime.Now;
             // Insert into user_account
-            string query = "insert into user_account values('', '"+email+"','"+password+"','"+created+"','"+created+"')";
+            string query = "insert into user_account(email, password_hash, created, modified) values('"+email+"','"+password+"','"+created+"','"+created+"')";
             ExecuteQuery(query, "SmuDatabase");
             // Get user back from database in order to get the id
             User curUser = getUser(email);
             int curId = curUser.id;
             // Insert into user_account_data
-            foreach(int i in userData) {
-                string newQuery = "insert into user_account_data values('','"+curId+"','"+i+"','')";
-                ExecuteQuery(newQuery, "SmuDatabase");
+            if (userData != null)
+            {
+                foreach (int i in userData)
+                {
+                    string newQuery = "insert into user_account_data values('','" + curId + "','" + i + "','')";
+                    ExecuteQuery(newQuery, "SmuDatabase");
+                }
             }
 
             return curId;
@@ -144,7 +149,7 @@ namespace RestService
             if (getUser(id) != null)
             {
                 // Delete user from database
-                string query = "delete * from user_account where id = " + id;
+                string query = "delete from user_account where id = " + id;
                 ExecuteQuery(query, "SmuDatabase");
             }
             else
@@ -154,18 +159,18 @@ namespace RestService
             }
         }
             
-        public void putUser(string[] info, int id)
+        public void putUser(int id, User newUser)
         {
             Connect("SMU");
             string query = "";
-            if (info[0] != null && info[1] != null && info[2] != null)
-                query = "UPDATE user_account SET email = '"+info[0]+"', password_hash = '"+info[2]+"' where id = '"+id+"'";
-            else if (info[0] != null && info[1] == null || info[2] == null)
-                query = "UPDATE user_account SET email = '" + info[0] + "' where id = '" + id + "'";
-            else if (info[0] == null && info[1] != null && info[2] != null)
-                query = "UPDATE user_account SET password_hash = '" + info[2] + "' where id = '" + id + "'";
+            if (newUser.email != null && newUser.password != null)
+                query = "UPDATE user_account SET email = '"+newUser.email+"', password_hash = '"+newUser.password+"' where id = '"+id+"'";
+            else if (newUser.email != null && newUser.password == null)
+                query = "UPDATE user_account SET email = '" + newUser.email + "' where id = '" + id + "'";
+            else if (newUser.email == null && newUser.password != null)
+                query = "UPDATE user_account SET password_hash = '" + newUser.password + "' where id = '" + id + "'";
 
-            ExecuteQuery(query, "SMU");
+            ExecuteQuery(query, "SmuDatabase");
         }
 
         public User getUser(string incmail)
@@ -181,8 +186,9 @@ namespace RestService
                 string email = reader.GetString(reader.GetOrdinal("email"));
                 string password = reader.GetString(reader.GetOrdinal("password_hash"));
 
-                user = UserHandler.createUser(userId, email, password);
+                user = UserHandler.createUser(userId, email, password,null);
             }
+            CloseConnection();
 
             return user;
         }
@@ -218,8 +224,9 @@ namespace RestService
                 string email = reader.GetString(reader.GetOrdinal("email"));
                 string password = reader.GetString(reader.GetOrdinal("password_hash"));
 
-                groupsUsers.Add(UserHandler.createUser(userId, email, password));
+                groupsUsers.Add(UserHandler.createUser(userId, email, password, null));
             }
+            CloseConnection();
 
             return groupsUsers.ToArray();
         }

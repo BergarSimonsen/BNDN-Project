@@ -96,38 +96,35 @@ namespace RestService
 
         public User getLoggedUser()
         {
-            WebHeaderCollection headers = WebOperationContext.Current.IncomingRequest.Headers;
-
-            string token = headers[HttpRequestHeader.Authorization];
-
-            return new User(1337, "derpderpdillz", token, null);
+            throw new NotImplementedException();
         }
 
         public Token getToken(string email, string password)
         {
-            DateTime from = DateTime.Now;
-            DateTime to = new DateTime(2013,4,1);
-
-            return new Token("Token Made", from, to);
+            throw new NotImplementedException();
         }
 
         public Token renewToken()
         {
-            WebHeaderCollection headers = WebOperationContext.Current.IncomingRequest.Headers;
-
-            string token = headers[HttpRequestHeader.Authorization];
-
-            return new Token(token +" has been renewed", DateTime.Now, new DateTime(2100, 1, 1));
+            throw new NotImplementedException();
         }
 
         public void updateUser(string id, string oldPassword, User newUser)
         {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
 
+            User varificationUser = database.getUser(int.Parse(id));
+            if (varificationUser.password.Equals(oldPassword)) 
+            {
+                database.putUser(int.Parse(id), newUser);
+            }
         }
 
         public void deleteUser(string id)
         {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
 
+            database.DeleteUser(int.Parse(id));
         }
 
         public Media getMedia(string id)
