@@ -117,7 +117,7 @@ namespace RestService
             return user;
         }
 
-        public void NewUser(string email, string password, int[] userData)
+        public int NewUser(string email, string password, int[] userData)
         {
             Connect("SMU");
             // created and modified are the same at insertion.
@@ -133,6 +133,8 @@ namespace RestService
                 string newQuery = "insert into user_account_data values('','"+curId+"','"+i+"','')";
                 ExecuteQuery(newQuery, "SmuDatabase");
             }
+
+            return curId;
         }
 
         public void DeleteUser(int id)
