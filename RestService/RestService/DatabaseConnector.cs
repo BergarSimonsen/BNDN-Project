@@ -100,7 +100,6 @@ namespace RestService
 
         public User getUser(int id)
         {
-            Connect("SMU");
             string query = "select * from user_account where id = " + id;
             SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
 
@@ -120,7 +119,6 @@ namespace RestService
 
         public int NewUser(string email, string password, int[] userData)
         {
-            Connect("SMU");
             // created and modified are the same at insertion.
             DateTime created = DateTime.Now;
             // Insert into user_account
@@ -144,7 +142,6 @@ namespace RestService
 
         public void DeleteUser(int id)
         {
-            Connect("SMU");
             // Check if user exists
             if (getUser(id) != null)
             {
@@ -158,10 +155,10 @@ namespace RestService
                 Console.WriteLine("User doesn't exist!!!");
             }
         }
-            
+        
+        // NEEDS REVISION skal være som "putMedia"
         public void putUser(int id, User newUser)
         {
-            Connect("SMU");
             string query = "";
             if (newUser.email != null && newUser.password != null)
                 query = "UPDATE user_account SET email = '"+newUser.email+"', password_hash = '"+newUser.password+"' where id = '"+id+"'";
@@ -175,7 +172,6 @@ namespace RestService
 
         public User getUser(string incmail)
         {
-            Connect("SMU");
             string query = "select * from user_account where email = '" + incmail + "';";
             SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
 
@@ -195,7 +191,6 @@ namespace RestService
 
         public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order)
         {
-            Connect("SMU");
 
             string query = null;
             if (group_id != 0 && search_string == null && search_fields == null)
@@ -246,9 +241,14 @@ namespace RestService
             ExecuteQuery(query, "SmuDatabase");
         }
 
+        /// <summary>
+        /// first creates SQL "SET" commands and then creates a full "INSERT" SQL command
+        /// </summary>
+        /// <param name="table">what table to be edited</param>
+        /// <param name="value">what to be edited</param>
+        /// <param name="id">identifyer of item to be changed</param>
         public void putMedia(string[] table, string[] value, int id)
         {
-            Connect("SMU");
             List<string> updates = new List<string>();
 
             // creates ready-to-use "SET" SQL operations
