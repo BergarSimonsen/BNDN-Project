@@ -230,7 +230,6 @@ namespace RestService
         {
             string query = "SELECT * FROM media WHERE id = '"+id+"'";
 
-
             return null;
         }
 

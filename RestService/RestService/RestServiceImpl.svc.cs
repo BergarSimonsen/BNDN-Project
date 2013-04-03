@@ -89,7 +89,9 @@ namespace RestService
 
         public int insertUser(User user)
         {
-            return user.id;
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+
+            return database.NewUser(user.email, user.password, user.userData);
         }
 
         public User getLoggedUser()
@@ -98,7 +100,7 @@ namespace RestService
 
             string token = headers[HttpRequestHeader.Authorization];
 
-            return new User(1337, "derpderpdillz", token);
+            return new User(1337, "derpderpdillz", token, null);
         }
 
         public Token getToken(string email, string password)
