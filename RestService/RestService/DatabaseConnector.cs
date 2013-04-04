@@ -395,6 +395,245 @@ namespace RestService
         }
         
         
-//*****************************************************************************************************************************************************
+//****************************************** TAGS **************************************************************************************
+        /// <summary>
+        /// Gets all tags from the database
+        /// </summary>
+        /// <param name="tagGroupFilter">Id of the tag group to filter by</param>
+        /// <param name="limit">How many results per page?</param>
+        /// <param name="page">Page offset</param>
+        /// <returns>Array of all tags</returns>
+        public Tag[] getTags(int tagGroupFilter, int limit, int page)
+        {
+            string query = "";
+            List<Tag> tags = new List<Tag>();
+            if (tagGroupFilter < 1 && limit < 1 && page < 1)
+            {
+                query = "SELECT * FROM tag";
+            }
+            else if (tagGroupFilter > 0 && limit < 1 && page < 1)
+            {
+                query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "'";
+            }
+            else if (tagGroupFilter > 0 && limit > 0 && page < 1)
+            {
+                query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT 0, " + limit + "";
+            }
+            else if (tagGroupFilter > 0 && limit > 0 && page > 0)
+            { 
+                int limitStart = limit * page;
+                int limitEnd = limitStart + limit;
+                query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT " + limitStart + "," + limitEnd;
+            }
+            else if (tagGroupFilter < 1 && limit > 0 && page > 0)
+            {
+                int limitStart = limit * page;
+                int limitEnd = limitStart + limit;
+                query = "SELECT * FROM tag LIMIT " + limitStart + "," + limitEnd;
+            }
+            else if (tagGroupFilter < 1 && limit > 0 && page < 1)
+            {
+                query = "SELECT * FROM tag LIMIT 0, " + limit;
+            }
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) {
+                int id = reader.GetInt32(reader.GetOrdinal("id"));
+                int tagGroup = reader.GetInt32(reader.GetOrdinal("tag_group"));
+                string name = reader.GetString(reader.GetOrdinal("name"));
+                string shortName = reader.GetString(reader.GetOrdinal("simple_name"));
+                tags.Add(new Tag(id, tagGroup, name, shortName));
+            }
+            return tags.ToArray();
+        }
+
+        /// <summary>
+        /// Gets a tag from the database
+        /// </summary>
+        /// <param name="id">The id of the tag to retreive</param>
+        /// <returns>The tag</returns>
+        public Tag getTag(string id)
+        {
+            Tag tag = null;
+            int tagId = int.Parse(id);
+            string query = "SELECT * FROM tag WHERE id = '" + tagId + "'";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) { 
+                int tID = reader.GetInt32(reader.GetOrdinal("id"));
+                int tagGroup = reader.GetInt32(reader.GetOrdinal("tag_group"));
+                string name = reader.GetString(reader.GetOrdinal("name"));
+                string shortName = reader.GetString(reader.GetOrdinal("simple_name"));
+                tag = new Tag(tID, tagGroup, name, shortName);
+            }
+            return tag;
+        }
+
+        /// <summary>
+        /// Inserts a new tag into the database
+        /// </summary>
+        /// <param name="name">The name of the tag</param>
+        /// <param name="simpleName">The simple name of the tag</param>
+        /// <param name="tagGroups">Tag group that the tag is member of</param>
+        /// <returns>Id of the new tag.</returns>
+        public int postTag(string name, string simpleName, int tagGroup)
+        {
+            string query = "INSERT INTO tag VALUES('', '" + tagGroup + "', " + name + "', " + simpleName + "'";
+            ExecuteQuery(query, "SMU");
+            return getTagByName(name);
+        }
+
+        /// <summary>
+        /// Private helper method.
+        /// Gets a tag by it's name
+        /// </summary>
+        /// <param name="name">The name of the tag</param>
+        /// <returns>The id of the tag</returns>
+        private int getTagByName(string name)
+        {
+            int id = -1;
+            string query = "SELECT * FROM tag WHERE name = '" + name + "'";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) {
+                id = reader.GetInt32(reader.GetOrdinal("id"));
+            }
+            return id;
+        }
+
+        /// <summary>
+        /// Updates a tag
+        /// </summary>
+        /// <param name="id">The id of the tag to update</param>
+        /// <param name="name">The new name of the tag</param>
+        /// <param name="simpleName">The new simple name</param>
+        /// <param name="tagGroup">The new tag group</param>
+        public void putTag(string id, string name, string simpleName, int tagGroup)
+        {
+            int tagId = int.Parse(id);
+            string query = "";
+            if(name != "" && simpleName == "" && tagGroup < 1) {
+                query = "UPDATE tag SET name = '" + name + "' WHERE id = '" + tagId + "'";
+            }
+            else if (name != "" && simpleName != "" && tagGroup < 1) {
+                query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "' WHERE id = '" + tagId + "'";
+            }
+            else if (name != "" && simpleName != "" && tagGroup > 0) {
+                query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "', tag_group = '" + tagGroup + "' WHERE id = '" + tagId + "'";
+            }
+            ExecuteQuery(query, "SMU");
+        }
+
+        /// <summary>
+        /// Deletes a tag from the database.
+        /// </summary>
+        /// <param name="id">The id of the tag to delete</param>
+        public void deleteTag(string id)
+        {
+            int tagId = int.Parse(id);
+            string query = "DELETE from tag WHERE id = '" + tagId + "'";
+            ExecuteQuery(query, "SMU");
+        }
+
+        /// <summary>
+        /// Gets a tag group from the database.
+        /// </summary>
+        /// <param name="id">The id of the tag group</param>
+        /// <returns>Tag group object</returns>
+        public TagGroup getTagGroup(string id)
+        {
+            TagGroup tagGroup = null;
+            int tgId = int.Parse(id);
+            string query = "SELECT * FROM tag_group WHERE id = '" + tgId + "'";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) {
+                int tId = reader.GetInt32(reader.GetOrdinal("id"));
+                string name = reader.GetString(reader.GetOrdinal("name"));
+                tagGroup = new TagGroup(tId, name);
+            }
+            return tagGroup;
+        }
+
+        /// <summary>
+        /// Returns all tag groups from the database.
+        /// </summary>
+        /// <param name="limit">Number of tag groups per page.</param>
+        /// <param name="page">Page offset</param>
+        /// <returns>Array of tagGroups</returns>
+        public TagGroup[] getTagGroups(string limit, string page)
+        {
+            int nLimit = int.Parse(limit);
+            int nPage = int.Parse(page);
+            List<TagGroup> tagGroups = new List<TagGroup>();
+            int limitStart = nPage * nLimit;
+            int limitEnd = limitStart + nLimit;
+            string query = "";
+            if (nLimit > 0 && nPage < 1) {
+                query = "SELECT * FROM tag_group LIMIT 0, " + nLimit;
+            }
+            else if (nLimit > 0 && nPage > 0)
+            {
+                query = "SELECT * FROM tag_group LIMIT " + limitStart + ", " + limitEnd;
+            }
+            else {
+                query = "SELECT * FROM tag_group";
+            }
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) {
+                int tgId = reader.GetInt32(reader.GetOrdinal("id"));
+                string name = reader.GetString(reader.GetOrdinal("name"));
+                tagGroups.Add(new TagGroup(tgId, name));
+            }
+            return tagGroups.ToArray();
+        }
+
+        /// <summary>
+        /// Create a new tag group and save it in the database.
+        /// </summary>
+        /// <param name="name">The name of the tag group</param>
+        /// <returns>The id of the newly created tag group</returns>
+        public int postTagGroup(string name)
+        {
+            string query = "INSERT INTO tag_group VALUES('', '" + name + "')";
+            ExecuteQuery(query, "SMU");
+            return getTagGroupByName(name);
+        }
+
+        /// <summary>
+        /// Updates a tag group
+        /// </summary>
+        /// <param name="id">The id of the tag group to update</param>
+        /// <param name="name">The new name of the tag group</param>
+        public void putTagGroup(string id, string name)
+        {
+            int tId = int.Parse(id);
+            string query = "UPDATE tag_group SET name = '" + name + "' WHERE id = '" + tId + "'";
+            ExecuteQuery(query, "SMU");
+        }
+
+        /// <summary>
+        /// Deletes a tag group from the database
+        /// </summary>
+        /// <param name="id">The id of the tag group to delete</param>
+        public void deleteTagGroup(string id)
+        {
+            int tId = int.Parse(id);
+            string query = "DELETE FROM tag_group WHERE id = '" + tId + "'";
+            ExecuteQuery(query, "SMU");
+        }
+
+        /// <summary>
+        /// Private helper method.
+        /// Returns the id of a tag group based on it's name
+        /// </summary>
+        /// <param name="name">The name of the tag group</param>
+        /// <returns>The id of the tag group</returns>
+        private int getTagGroupByName(string name)
+        {
+            int id = -1;
+            string query = "SELECT id FROM tag_group WHERE name = '" + name;
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) {
+                id = reader.GetInt32(reader.GetOrdinal("id"));
+            }
+            return id;
+        }
     }
 }

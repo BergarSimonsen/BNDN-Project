@@ -233,5 +233,121 @@ namespace RestService
             DatabaseConnector database = DatabaseConnector.GetInstance;
             return database.postMediaCategory(name);
         }
+
+        //==================================== TAGS ===============================================
+        /// <summary>
+        /// Get all tags from the database
+        /// </summary>
+        /// <param name="tagGroupFilter">Filter by tag group</param>
+        /// <param name="limit">Amount of tags per page.</param>
+        /// <param name="page">The page number</param>
+        /// <returns></returns>
+        public Tag[] getTags(int tagGroupFilter, int limit, int page)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getTags(tagGroupFilter, limit, page);
+        }
+
+        /// <summary>
+        /// Gets a tag from the database
+        /// </summary>
+        /// <param name="id">The id of the tag to retreive</param>
+        /// <returns>The tag</returns>
+        public Tag getTag(string id)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getTag(id);
+        }
+
+        /// <summary>
+        /// Inserts a new tag into the database
+        /// </summary>
+        /// <param name="name">The name of the tag</param>
+        /// <param name="simpleName">The simple name of the tag</param>
+        /// <param name="tagGroups">Tag group that the tag is member of</param>
+        /// <returns>Id of the new tag.</returns>
+        public int postTag(string name, string simpleName, int tagGroup)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.postTag(name, simpleName, tagGroup);
+        }
+
+        /// <summary>
+        /// Updates a tag
+        /// </summary>
+        /// <param name="id">The id of the tag to update</param>
+        /// <param name="name">The new name of the tag</param>
+        /// <param name="simpleName">The new simple name</param>
+        /// <param name="tagGroup">The new tag group</param>
+        public void putTag(string id, string name, string simpleName, int tagGroup)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.putTag(id, name, simpleName, tagGroup);
+        }
+
+        /// <summary>
+        /// Deletes a tag from the database.
+        /// </summary>
+        /// <param name="id">The id of the tag to delete</param>
+        public void deleteTag(string id)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.deleteTag(id);
+        }
+
+        /// <summary>
+        /// Gets a tag group from the database.
+        /// </summary>
+        /// <param name="id">The id of the tag group</param>
+        /// <returns>Tag group object</returns>
+        public TagGroup getTagGroup(string id)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getTagGroup(id);
+        }
+
+        /// <summary>
+        /// Returns all tag groups from the database.
+        /// </summary>
+        /// <param name="limit">Number of tag groups per page.</param>
+        /// <param name="page">Page offset</param>
+        /// <returns>Array of tagGroups</returns>
+        public TagGroup[] getTagGroups(string limit, string page)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getTagGroups(limit, page);
+        }
+
+        /// <summary>
+        /// Create a new tag group and save it in the database.
+        /// </summary>
+        /// <param name="name">The name of the tag group</param>
+        /// <returns>The id of the newly created tag group</returns>
+        public int postTagGroup(string name)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.postTagGroup(name);
+        }
+
+        /// <summary>
+        /// Updates a tag group
+        /// </summary>
+        /// <param name="id">The id of the tag group to update</param>
+        /// <param name="name">The new name of the tag group</param>
+        public void putTagGroup(string id, string name)
+        {            
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.putTagGroup(id, name);
+        }
+
+        /// <summary>
+        /// Deletes a tag group from the database
+        /// </summary>
+        /// <param name="id">The id of the tag group to delete</param>
+        public void deleteTagGroup(string id)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.deleteTagGroup(id);
+        }
     }
 }
