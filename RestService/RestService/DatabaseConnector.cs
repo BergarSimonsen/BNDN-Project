@@ -640,5 +640,58 @@ namespace RestService
             }
             return id;
         }
+
+        // ============================================ Rating ======================================= //
+
+        /// <summary>
+        /// Gets the rating for a media
+        /// </summary>
+        /// <param name="media">The id of the media</param>
+        /// <returns>Rating object</returns>
+        public Rating getRating(string media)
+        {
+            Rating ratingObj = null;
+            int mediaId = int.Parse(media);
+            string query = "SELECT * FROM rating WHERE media_id = '" + mediaId + "'";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) { 
+                int id = reader.GetInt32(reader.GetOrdinal("id"));
+                int userAccount = reader.GetInt32(reader.GetOrdinal("user_account"));
+                mediaId = reader.GetInt32(reader.GetOrdinal("media_id"));
+                short rating = (short) reader.GetInt32(reader.GetOrdinal("rating"));
+                string comment = reader.GetString(reader.GetOrdinal("comment"));
+                string commentTitle = reader.GetString(reader.GetOrdinal("comment_title"));
+                ratingObj = new Rating(id, userAccount, mediaId, rating, commentTitle, comment);
+            }
+            return ratingObj;
+        }
+
+        /// <summary>
+        /// Posts a new rating for a media
+        /// </summary>
+        /// <param name="userId">Id of the user who posted</param>
+        /// <param name="mediaId">Id of the media the rating belongs to</param>
+        /// <param name="stars">Amount of stars to give</param>
+        /// <param name="commentTitle">Title of the comment</param>
+        /// <param name="comment">Content of the comment</param>
+        public void postRating(int userId, int mediaId, int stars, string commentTitle, string comment)
+        {
+            string query = "INSERT INTO rating VALUES('', '" + userId + "', '" + mediaId + "', '" + stars + "', '" + comment + "', '" + commentTitle + "')";
+            ExecuteQuery(query, "SMU");
+        }
+
+        /// <summary>
+        /// Updates an already existing comment
+        /// </summary>
+        /// <param name="id">The id of the comment to edit</param>
+        /// <param name="commentTitle">The new title of the comment</param>
+        /// <param name="comment">The new content of the comment</param>
+        /// <param name="stars">The new amount of stars</param>
+        public void putRating(string id, string commentTitle, string comment, int stars)
+        {
+            int rId = int.Parse(id);
+            string query = "UPDATE rating SET comment_title = '" + commentTitle + "', comment = '" + comment + "', rating = '" + stars + "' WHERE id = '" + rId + "'";
+            ExecuteQuery(query, "SMU");
+        }
     }
 }

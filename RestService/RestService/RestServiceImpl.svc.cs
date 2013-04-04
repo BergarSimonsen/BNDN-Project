@@ -349,5 +349,45 @@ namespace RestService
             DatabaseConnector database = DatabaseConnector.GetInstance;
             database.deleteTagGroup(id);
         }
+
+        //==================================== Ragting ===============================================
+
+        /// <summary>
+        /// Gets the rating for a media
+        /// </summary>
+        /// <param name="media">The id of the media</param>
+        /// <returns>Rating object</returns>
+        public Rating getRating(string media)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getRating(media);
+        }
+
+        /// <summary>
+        /// Posts a new rating for a media
+        /// </summary>
+        /// <param name="userId">Id of the user who posted</param>
+        /// <param name="mediaId">Id of the media the rating belongs to</param>
+        /// <param name="stars">Amount of stars to give</param>
+        /// <param name="commentTitle">Title of the comment</param>
+        /// <param name="comment">Content of the comment</param>
+        public void postRating(int userId, int mediaId, int stars, string commentTitle, string comment)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.postRating(userId, mediaId, stars, commentTitle, comment);
+        }
+
+        /// <summary>
+        /// Updates an already existing comment
+        /// </summary>
+        /// <param name="id">The id of the comment to edit</param>
+        /// <param name="commentTitle">The new title of the comment</param>
+        /// <param name="comment">The new content of the comment</param>
+        /// <param name="stars">The new amount of stars</param>
+        public void putRating(string id, string commentTitle, string comment, int stars)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.putRating(id, commentTitle, comment, stars);
+        }
     }
 }

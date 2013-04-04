@@ -243,5 +243,28 @@ namespace RestService
             Method = "DELETE",
             UriTemplate = "/tagGroups/{id}")]
         void deleteTagGroup(string id);
+
+        //========================================= TAGS ===================================================//
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/rating/{media}")]
+        Rating getRating(string media);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            UriTemplate = "/rating")]
+        void postRating(int userId, int mediaId, int stars, string commentTitle, string comment);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "PUT",
+            UriTemplate = "/rating/{id}")]
+        void putRating(string id, string commentTitle, string comment, int stars);
     }
 }
