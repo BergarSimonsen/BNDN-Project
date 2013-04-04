@@ -129,7 +129,9 @@ namespace RestService
 
         public Media getMedia(string id)
         {
-            return new Media(int.Parse(id), 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 });
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+
+            return database.getMedia(int.Parse(id));
         }
 
         public MediaList getMedias(string andTags, string orTags, string mediaCategoryFilter, string nameFilter, string page, string limit)

@@ -39,7 +39,7 @@ namespace RestService
 
         private SqlConnection Connect(string s)
         { 
-            connectionString = "Server=rentit.itu.dk;DATABASE="+databases[s]+";UID=Rentit26db;PASSWORD=ZAQ12wsx;";
+            connectionString = "Server=rentit.itu.dk;DATABASE=SmuDatabase;UID=Rentit26db;PASSWORD=ZAQ12wsx;";
             connection = new SqlConnection(connectionString);
             try
             {
@@ -63,6 +63,7 @@ namespace RestService
 
         private void ExecuteQuery(string query, string database)
         {
+            Connect("SMU");
             if (connection.State != System.Data.ConnectionState.Open) Connect(database);
             if (connection.State != System.Data.ConnectionState.Open) ErrorMessage("Cannot open connection to server");
             else
@@ -75,6 +76,7 @@ namespace RestService
 
         private SqlDataReader ExecuteReader(string query, string database)
         {
+            Connect("SMU");
             if (connection.State != System.Data.ConnectionState.Open) Connect(database);
             if (connection.State != System.Data.ConnectionState.Open) ErrorMessage("Cannot open connection to server");
             else
@@ -145,9 +147,11 @@ namespace RestService
             // Check if user exists
             if (getUser(id) != null)
             {
+                string userGroupQuery = "delete from user_account_in_user_group where user_account_id = " + id;
+                ExecuteQuery(userGroupQuery, "SmuDatabase");
                 // Delete user from database
-                string query = "delete from user_account where id = " + id;
-                ExecuteQuery(query, "SmuDatabase");
+                string userQuery = "delete from user_account where id = " + id;
+                ExecuteQuery(userQuery, "SmuDatabase");
             }
             else
             {
@@ -191,7 +195,6 @@ namespace RestService
 
         public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order)
         {
-
             string query = null;
             if (group_id != 0 && search_string == null && search_fields == null)
             {
@@ -231,8 +234,35 @@ namespace RestService
         public Media getMedia(int id)
         {
             string query = "SELECT * FROM media WHERE id = '"+id+"'";
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
 
-            return null;
+            Media returnMedia = null;
+            while(reader.Read())
+            {
+                int mediaId = reader.GetInt32(reader.GetOrdinal("id"));
+                int mediaCategory = reader.GetInt32(reader.GetOrdinal("media_category_id"));
+                int user = reader.GetInt32(reader.GetOrdinal("user_account_id"));
+                string fileLocation = reader.GetString(reader.GetOrdinal("file_location"));
+                string title = reader.GetString(reader.GetOrdinal("title"));
+                string description = reader.GetString(reader.GetOrdinal("description"));
+                int mediaLength = reader.GetInt32(reader.GetOrdinal("minutes"));
+                string format = reader.GetString(reader.GetOrdinal("format"));
+
+                returnMedia = MediaHandler.createMedia(mediaId, mediaCategory, user, fileLocation, title, description, mediaLength, format,null);
+            }
+
+            query = "SELECT tag_id from media_has_tag where media_id = " + id;
+            reader = ExecuteReader(query, "SmuDatabase");
+
+            List<int> returnMediaTags = new List<int>();
+            while (reader.Read())
+            {
+                returnMediaTags.Add(reader.GetInt32(reader.GetOrdinal("tag_id")));
+            }
+
+            returnMedia.tags = returnMediaTags.ToArray();
+
+            return returnMedia;
         }
 
         public void deleteMedia(int id)
