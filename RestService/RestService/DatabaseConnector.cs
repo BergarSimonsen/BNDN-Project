@@ -242,6 +242,24 @@ namespace RestService
         }
 
         /// <summary>
+        /// Retreives a media category from the database based on its name.
+        /// </summary>
+        /// <param name="name">the name of the media category</param>
+        /// <returns>The id of the media category. Returns -1 if not found.</returns>
+        public int getMediaCategory(string name)
+        {
+            int id = -1;
+            string query = "SELECT id FROM media_category WHERE name = '" + name + "'";
+
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+            while (reader.Read())
+            {
+                id = reader.GetInt32(reader.GetOrdinal("id"));
+            }
+            return id;
+        }
+
+        /// <summary>
         /// first creates SQL "SET" commands and then creates a full "INSERT" SQL command
         /// </summary>
         /// <param name="table">what table to be edited</param>
@@ -271,6 +289,13 @@ namespace RestService
 
             string query = "UPDATE media "+doneUpdate+" WHERE id = '"+id+"'";
             ExecuteQuery(query, "SMU");
+        }
+
+        public int postMediaCategory(string name)
+        {
+            string query = "insert into media_category values('', '" + name + "')";
+            ExecuteQuery(query, "SMU");
+            return getMediaCategory(name);
         }
         
         

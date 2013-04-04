@@ -201,10 +201,15 @@ namespace RestService
             // TODO
         }
 
+        /// <summary>
+        /// Inserts a new media category into the database.
+        /// </summary>
+        /// <param name="name">The name of the media category.</param>
+        /// <returns>The id of the media category.</returns>
         public int postMediaCategory(string name)
         {
-            // TODO
-            return 0;
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.postMediaCategory(name);
         }
     }
 }
