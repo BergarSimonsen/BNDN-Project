@@ -241,23 +241,7 @@ namespace RestService
             ExecuteQuery(query, "SmuDatabase");
         }
 
-        /// <summary>
-        /// Retreives a media category from the database based on its name.
-        /// </summary>
-        /// <param name="name">the name of the media category</param>
-        /// <returns>The id of the media category. Returns -1 if not found.</returns>
-        public int getMediaCategory(string name)
-        {
-            int id = -1;
-            string query = "SELECT id FROM media_category WHERE name = '" + name + "'";
-
-            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
-            while (reader.Read())
-            {
-                id = reader.GetInt32(reader.GetOrdinal("id"));
-            }
-            return id;
-        }
+        
 
         /// <summary>
         /// first creates SQL "SET" commands and then creates a full "INSERT" SQL command
@@ -291,11 +275,93 @@ namespace RestService
             ExecuteQuery(query, "SMU");
         }
 
+        /// <summary>
+        /// Inserts a new media category into the database.
+        /// </summary>
+        /// <param name="name">The name of the new media category.</param>
+        /// <returns>Id of the newly inserted media category</returns>
         public int postMediaCategory(string name)
         {
             string query = "insert into media_category values('', '" + name + "')";
             ExecuteQuery(query, "SMU");
             return getMediaCategory(name);
+        }
+
+        /// <summary>
+        /// Gets a media category from the database based on its id
+        /// </summary>
+        /// <param name="id">The id of the media category</param>
+        /// <returns>A media category object.</returns>
+        public MediaCategory getMediaCategory(int id)
+        {
+            MediaCategory mediaCategory = null;
+            string query = "SELECT * FROM media_category WHERE id = '" + id + "'";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read())
+            {
+                int mId = reader.GetInt32(reader.GetOrdinal("id"));
+                string name = reader.GetString(reader.GetOrdinal("name"));
+                mediaCategory = new MediaCategory(mId, name);
+            }
+            return mediaCategory;
+        }
+
+        /// <summary>
+        /// Selects all media categories in the database.
+        /// </summary>
+        /// <returns>Array of all media categories</returns>
+        public MediaCategory[] getMediaCategory()
+        {
+            List<MediaCategory> mediaCategories = new List<MediaCategory>();
+            string query = "SELECT * FROM media_category";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read())
+            {
+                int mId = reader.GetInt32(reader.GetOrdinal("id"));
+                string name = reader.GetString(reader.GetOrdinal("name"));
+                mediaCategories.Add(new MediaCategory(mId, name));
+            }
+            return mediaCategories.ToArray();
+        }
+
+        /// <summary>
+        /// Deletes a media category from the database based on its id.
+        /// </summary>
+        /// <param name="id">Id of the media category to delete.</param>
+        public void deleteMediaCategory(int id)
+        {
+            string query = "DELETE * FROM media_category WHERE id = '" + id + "'";
+            ExecuteQuery(query, "SMU");
+        }
+
+        /// <summary>
+        /// Updates a media category.
+        /// </summary>
+        /// <param name="id">The id of the media category to update.</param>
+        /// <param name="name">The new name of the media category</param>
+        public void putMediaCategory(int id, string name)
+        {
+            string query = "UPDATE media_category SET name = '" + name + "' WHERE id = '" + id + "'";
+            ExecuteQuery(query, "SMU");
+        }
+
+        /// <summary>
+        /// Private helper method.
+        /// Retreives a media category from the database based on its name.
+        /// </summary>
+        /// <param name="name">the name of the media category</param>
+        /// <returns>The id of the media category. Returns -1 if not found.</returns>
+        private int getMediaCategory(string name)
+        {
+            int id = -1;
+            string query = "SELECT id FROM media_category WHERE name = '" + name + "'";
+
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+            while (reader.Read())
+            {
+                id = reader.GetInt32(reader.GetOrdinal("id"));
+            }
+            return id;
         }
         
         

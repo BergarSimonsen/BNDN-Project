@@ -157,7 +157,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaCategory/{id}")]
-        void putMediaCategory(string name);
+        void putMediaCategory(int id, string name);
 
         [OperationContract]
         [WebInvoke(
@@ -165,6 +165,6 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaCategory/{id}")]
-        void deleteMediaCategory();
+        void deleteMediaCategory(int id);
     }
 }

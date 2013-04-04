@@ -179,26 +179,46 @@ namespace RestService
             // TODO
         }
 
+        /// <summary>
+        /// Retreives all media categories from the database.
+        /// </summary>
+        /// <returns>Array of all media categories</returns>
         public MediaCategory[] getMediaCategory()
-        { 
-            // TODO
-            return null;
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getMediaCategory();
         }
-
+        
+        /// <summary>
+        /// Gets a media category from the database based on its id
+        /// </summary>
+        /// <param name="id">The id of the media categoryu</param>
+        /// <returns>A media category object.</returns>
         public MediaCategory getMediaCategory(int id)
         {
-            // TODO
-            return null;
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getMediaCategory(id);
         }
 
-        public void putMediaCategory(string name)
-        { 
-            // TODO
+        /// <summary>
+        /// Updates a media category.
+        /// </summary>
+        /// <param name="id">The id of the media category to update.</param>
+        /// <param name="name">The new name of the media category</param>
+        public void putMediaCategory(int id, string name)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.putMediaCategory(id, name);
         }
 
-        public void deleteMediaCategory()
-        { 
-            // TODO
+        /// <summary>
+        /// Deletes a media category from the database based on its id
+        /// </summary>
+        /// <param name="id">Id of the media category to delete.</param>
+        public void deleteMediaCategory(int id)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.deleteMediaCategory(id);
         }
 
         /// <summary>
