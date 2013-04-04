@@ -105,8 +105,66 @@ namespace RestService
 
         [OperationContract]
         [WebInvoke(
+            Method = "PUT",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/media/{id}")]
+        void putMedia(int id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/media/{id}")]
+        void deleteMedia(int id);
+
+        [OperationContract]
+        [WebInvoke(
             Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaFiles")]
         void insertMediaFile(Stream file);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/mediaCategory")]
+        MediaCategory[] getMediaCategory();
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/mediaCategory/{id}")]
+        MediaCategory getMediaCategory(int id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/mediaCategory")]
+        int postMediaCategory(string name);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "PUT",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/mediaCategory/{id}")]
+        void putMediaCategory(int id, string name);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/mediaCategory/{id}")]
+        void deleteMediaCategory(int id);
     }
 }
