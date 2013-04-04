@@ -9,7 +9,6 @@ using System.Runtime.Serialization.Json;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-using System.Web.Script.Serialization;
 
 namespace RestService
 {
@@ -91,7 +90,7 @@ namespace RestService
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
 
-            return database.NewUser(user.email, user.password, user.userData);
+            return database.PostUser(user.email, user.password, user.userData);
         }
 
         public User getLoggedUser()
@@ -168,6 +167,22 @@ namespace RestService
             StreamWriter writer = new StreamWriter(@"C:\Users\christian\Documents\RentItTest\derp.mkv");
             writer.Write(fileContent);
             writer.Close();
+        }
+
+        public void putMediaCategory(string name)
+        { 
+            // TODO
+        }
+
+        public void deleteMediaCategory()
+        { 
+            // TODO
+        }
+
+        public int postMediaCategory(string name)
+        {
+            // TODO
+            return 0;
         }
     }
 }

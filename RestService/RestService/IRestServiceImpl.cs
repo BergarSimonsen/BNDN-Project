@@ -108,5 +108,23 @@ namespace RestService
             Method = "POST",
             UriTemplate = "/mediaFiles")]
         void insertMediaFile(Stream file);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            UriTemplate = "/mediaCategory")]
+        int postMediaCategory(string name);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "PUT",
+            UriTemplate = "/mediaCategory/{id}")]
+        void putMediaCategory(string name);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            UriTemplate = "/mediaCategory/{id}")]
+        void deleteMediaCategory();
     }
 }

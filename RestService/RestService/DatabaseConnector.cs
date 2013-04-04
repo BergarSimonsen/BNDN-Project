@@ -117,7 +117,7 @@ namespace RestService
             return user;
         }
 
-        public int NewUser(string email, string password, int[] userData)
+        public int PostUser(string email, string password, int[] userData)
         {
             // created and modified are the same at insertion.
             DateTime created = DateTime.Now;
