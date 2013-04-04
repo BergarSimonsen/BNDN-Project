@@ -310,11 +310,11 @@ namespace RestService
         /// </summary>
         /// <param name="name">The name of the new media category.</param>
         /// <returns>Id of the newly inserted media category</returns>
-        public int postMediaCategory(string name)
+        public int postMediaCategory(MediaCategory mediaCategory)
         {
-            string query = "insert into media_category values('', '" + name + "')";
+            string query = "insert into media_category (name,description) values('" + mediaCategory.name + "','"+mediaCategory.description+"')";
             ExecuteQuery(query, "SMU");
-            return getMediaCategory(name);
+            return getMediaCategoryId(mediaCategory.name);
         }
 
         /// <summary>
@@ -331,7 +331,8 @@ namespace RestService
             {
                 int mId = reader.GetInt32(reader.GetOrdinal("id"));
                 string name = reader.GetString(reader.GetOrdinal("name"));
-                mediaCategory = new MediaCategory(mId, name);
+                string description = reader.GetString(reader.GetOrdinal("description"));
+                mediaCategory = new MediaCategory(mId, name,description);
             }
             return mediaCategory;
         }
@@ -349,7 +350,8 @@ namespace RestService
             {
                 int mId = reader.GetInt32(reader.GetOrdinal("id"));
                 string name = reader.GetString(reader.GetOrdinal("name"));
-                mediaCategories.Add(new MediaCategory(mId, name));
+                string description = reader.GetString(reader.GetOrdinal("description"));
+                mediaCategories.Add(new MediaCategory(mId, name,description));
             }
             return mediaCategories.ToArray();
         }
@@ -360,8 +362,11 @@ namespace RestService
         /// <param name="id">Id of the media category to delete.</param>
         public void deleteMediaCategory(int id)
         {
-            string query = "DELETE * FROM media_category WHERE id = '" + id + "'";
-            ExecuteQuery(query, "SMU");
+            string query = "DELETE FROM media WHERE media_category_id = " + id;
+            ExecuteQuery(query, "SmuDatabase");
+
+            query = "DELETE FROM media_category WHERE id = '" + id + "'";
+            ExecuteQuery(query, "SmuDatabase");
         }
 
         /// <summary>
@@ -381,7 +386,7 @@ namespace RestService
         /// </summary>
         /// <param name="name">the name of the media category</param>
         /// <returns>The id of the media category. Returns -1 if not found.</returns>
-        private int getMediaCategory(string name)
+        private int getMediaCategoryId(string name)
         {
             int id = -1;
             string query = "SELECT id FROM media_category WHERE name = '" + name + "'";
