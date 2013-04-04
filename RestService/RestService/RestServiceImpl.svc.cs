@@ -171,12 +171,12 @@ namespace RestService
             writer.Close();
         }
 
-        public void putMedia(int id)
+        public void putMedia(string id)
         { 
             // TODO
         }
 
-        public void deleteMedia(int id)
+        public void deleteMedia(string id)
         { 
             // TODO
         }
@@ -185,7 +185,7 @@ namespace RestService
         /// Retreives all media categories from the database.
         /// </summary>
         /// <returns>Array of all media categories</returns>
-        public MediaCategory[] getMediaCategory()
+        public MediaCategory[] getMediaCategories()
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
             return database.getMediaCategory();
@@ -196,10 +196,10 @@ namespace RestService
         /// </summary>
         /// <param name="id">The id of the media categoryu</param>
         /// <returns>A media category object.</returns>
-        public MediaCategory getMediaCategory(int id)
+        public MediaCategory getMediaCategory(string id)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            return database.getMediaCategory(id);
+            return database.getMediaCategory(int.Parse(id));
         }
 
         /// <summary>
@@ -207,20 +207,20 @@ namespace RestService
         /// </summary>
         /// <param name="id">The id of the media category to update.</param>
         /// <param name="name">The new name of the media category</param>
-        public void putMediaCategory(int id, string name)
+        public void putMediaCategory(string id, MediaCategory mediaCategory)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            database.putMediaCategory(id, name);
+            database.putMediaCategory(int.Parse(id), mediaCategory.name);
         }
 
         /// <summary>
         /// Deletes a media category from the database based on its id
         /// </summary>
         /// <param name="id">Id of the media category to delete.</param>
-        public void deleteMediaCategory(int id)
+        public void deleteMediaCategory(string id)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            database.deleteMediaCategory(id);
+            database.deleteMediaCategory(int.Parse(id));
         }
 
         /// <summary>
@@ -228,10 +228,10 @@ namespace RestService
         /// </summary>
         /// <param name="name">The name of the media category.</param>
         /// <returns>The id of the media category.</returns>
-        public int postMediaCategory(string name)
+        public int postMediaCategory(MediaCategory mediaCategory)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            return database.postMediaCategory(name);
+            return database.postMediaCategory(mediaCategory);
         }
 
         //==================================== TAGS ===============================================
