@@ -105,9 +105,33 @@ namespace RestService
 
         [OperationContract]
         [WebInvoke(
+            Method = "PUT",
+            UriTemplate = "/media/{id}")]
+        void putMedia(int id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            UriTemplate = "/media/{id}")]
+        void deleteMedia(int id);
+
+        [OperationContract]
+        [WebInvoke(
             Method = "POST",
             UriTemplate = "/mediaFiles")]
         void insertMediaFile(Stream file);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            UriTemplate = "/mediaCategory")]
+        MediaCategory[] getMediaCategory();
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            UriTemplate = "/mediaCategory/{id}")]
+        MediaCategory getMediaCategory(int id);
 
         [OperationContract]
         [WebInvoke(

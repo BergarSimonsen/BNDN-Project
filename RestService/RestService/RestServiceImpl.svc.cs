@@ -169,6 +169,28 @@ namespace RestService
             writer.Close();
         }
 
+        public void putMedia(int id)
+        { 
+            // TODO
+        }
+
+        public void deleteMedia(int id)
+        { 
+            // TODO
+        }
+
+        public MediaCategory[] getMediaCategory()
+        { 
+            // TODO
+            return null;
+        }
+
+        public MediaCategory getMediaCategory(int id)
+        {
+            // TODO
+            return null;
+        }
+
         public void putMediaCategory(string name)
         { 
             // TODO
