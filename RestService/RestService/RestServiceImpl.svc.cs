@@ -128,6 +128,11 @@ namespace RestService
 
         // ================================ MEDIA & MEDIACATEGORY ========================== //
 
+        /// <summary>
+        /// Gets a media from the database.
+        /// </summary>
+        /// <param name="id">The id of the media to get.</param>
+        /// <returns>The media object.</returns>
         public Media getMedia(string id)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
@@ -135,6 +140,16 @@ namespace RestService
             return database.getMedia(int.Parse(id));
         }
 
+        /// <summary>
+        /// Gets all medias in the database.
+        /// </summary>
+        /// <param name="andTags">Filter by matching all tags.</param>
+        /// <param name="orTags">Filter by matching some tags</param>
+        /// <param name="mediaCategoryFilter">Filter by mediaCategory</param>
+        /// <param name="nameFilter">Filter by name</param>
+        /// <param name="page">The page you are on.</param>
+        /// <param name="limit">How many medias per page?</param>
+        /// <returns>List of all medias</returns>
         public MediaList getMedias(string andTags, string orTags, string mediaCategoryFilter, string nameFilter, string page, string limit)
         {
             Media[] mediaList = new Media[] {new Media(2, 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 }),
@@ -157,11 +172,21 @@ namespace RestService
             return new MediaList(pageCount, mediaList);                                
         }
 
-        public int insertMedia(Media media)
+        /// <summary>
+        /// Inserts a media into the database.
+        /// </summary>
+        /// <param name="media">Media object to insert</param>
+        /// <returns>The id of the media</returns>
+        public int postMedia(Media media)
         {
-            return media.id;
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.postMedia(media);
         }
 
+        /// <summary>
+        /// Uploads a media file to the server.
+        /// </summary>
+        /// <param name="file">The file to upload.</param>
         public void insertMediaFile(Stream file)
         {
             FileStream writer = new FileStream(@"C:\Users\christian\Documents\RentItTest\derp.mkv",FileMode.Create,FileAccess.Write);
@@ -179,11 +204,22 @@ namespace RestService
             writer.Close();
         }
 
-        public void putMedia(string id)
+        /// <summary>
+        /// Updates a media.
+        /// </summary>
+        /// <param name="table">The table to update</param>
+        /// <param name="value">The values to insert</param>
+        /// <param name="id">The id of the media to update</param>
+        public void putMedia(string[] table, string[] value, string id)
         { 
-            // TODO
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.putMedia(table, value, int.Parse(id));
         }
 
+        /// <summary>
+        /// Deletes a media from the database.
+        /// </summary>
+        /// <param name="id">The id of the media to delete.</param>
         public void deleteMedia(string id)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;

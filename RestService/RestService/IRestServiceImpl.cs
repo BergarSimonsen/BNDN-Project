@@ -101,7 +101,7 @@ namespace RestService
             RequestFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media")]
-        int insertMedia(Media media);
+        int postMedia(Media media);
 
         [OperationContract]
         [WebInvoke(
@@ -109,7 +109,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media/{id}")]
-        void putMedia(string id);
+        void putMedia(string[] table, string[] value, string id);
 
         [OperationContract]
         [WebInvoke(
@@ -244,7 +244,7 @@ namespace RestService
             UriTemplate = "/tagGroups/{id}")]
         void deleteTagGroup(string id);
 
-        //========================================= TAGS ===================================================//
+        //========================================= RATING ===================================================//
 
         [OperationContract]
         [WebInvoke(
@@ -259,12 +259,12 @@ namespace RestService
             Method = "POST",
             RequestFormat = WebMessageFormat.Json,
             UriTemplate = "/rating")]
-        void postRating(int userId, int mediaId, int stars, string commentTitle, string comment);
+        void postRating(Rating rating);
 
         [OperationContract]
         [WebInvoke(
             Method = "PUT",
             UriTemplate = "/rating/{id}")]
-        void putRating(string id, string commentTitle, string comment, int stars);
+        void putRating(Rating rating);
     }
 }
