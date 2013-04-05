@@ -66,7 +66,7 @@ namespace RestService
         /// </summary>
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute the query on</param>
-        private void ExecuteQuery(string query, string database)
+        public void ExecuteQuery(string query, string database)
         {
             Connect(database);
             if (connection.State != System.Data.ConnectionState.Open) Connect(database);
@@ -85,7 +85,7 @@ namespace RestService
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute query on</param>
         /// <returns>SQLDataReader object with return values</returns>
-        private SqlDataReader ExecuteReader(string query, string database)
+        public SqlDataReader ExecuteReader(string query, string database)
         {
             Connect(database);
             if (connection.State != System.Data.ConnectionState.Open) Connect(database);
