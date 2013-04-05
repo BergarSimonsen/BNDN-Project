@@ -18,11 +18,15 @@ namespace RestService
         [DataMember]
         public string password { get; set; }
 
-        public User(int id, string email, string password)
+        [DataMember]
+        public int[] userData { get; set; }
+
+        public User(int id, string email, string password, int[] userData)
         {
             this.id = id;
             this.password = password;
             this.email = email;
+            this.userData = userData;
         }
     }
 }

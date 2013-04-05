@@ -1,0 +1,2 @@
+C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestService\bin\Debug\ConsoleApplication.exe.config
+C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestService\obj\x86\Debug\RestService.csprojResolveAssemblyReference.cache
