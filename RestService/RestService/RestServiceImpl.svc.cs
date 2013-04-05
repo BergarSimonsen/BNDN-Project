@@ -42,8 +42,11 @@ namespace RestService
 
             //Sanitize searchFields
             //TODO: Implement
-            /*string searchFields_s = null;
-            if (search_fields != null)
+            string searchFields_s = null;
+            /*if (search_fields != null)
+
+             * string searchFields_s = null;
+            /*if (search_fields != null)
             {
                 searchFields_s = search_fields;
             }
@@ -71,10 +74,11 @@ namespace RestService
             }
 
             //Sanitize page
-            int page_s = 0; //Default
+            int page_s = 1; //Default
             if (page != null)
             {
                 page_s = int.Parse(page);
+                if (page_s < 1) page_s = 1;
             }
 
             //Get result
@@ -82,9 +86,9 @@ namespace RestService
 
             User[] returnUsers = database.getUsers(groupId_s, searchString_s, searchFields_s, orderBy_s, order_s, limit_s, page_s);
             int userCount = database.getUsersCount(groupId_s, searchString_s, searchFields_s);
-            int pageCount = Math.Ceiling(userCount / limit);
+            int pageCount = (userCount + limit_s - 1) / limit_s;
 
-            return new UserList(limit, pageCount, returnUsers);
+            return new UserList(limit_s, pageCount, returnUsers);
         }
 
         public int insertUser(User user)

@@ -13,15 +13,15 @@ namespace RestService
         public string token;
 
         [DataMember]
-        public DateTime issued;
+        public string email;
 
         [DataMember]
         public DateTime expires;
 
-        public Token(string token, DateTime issued, DateTime expires)
+        public Token(string token, string email, DateTime expires)
         {
-            this.issued = issued;
             this.token = token;
+            this.email = email;
             this.expires = expires;
         }
     }
