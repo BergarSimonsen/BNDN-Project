@@ -13,7 +13,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestPostMedia()
         {
-            string query = "";
+            string query = "INSERT";
 
         }
         
