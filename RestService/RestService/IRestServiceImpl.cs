@@ -109,7 +109,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media/{id}")]
-        void putMedia(string[] table, string[] value, string id);
+        void putMedia(Media media, string id);
 
         [OperationContract]
         [WebInvoke(

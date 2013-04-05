@@ -234,25 +234,30 @@ namespace RestService
         /// <param name="order_by">Which column to order by</param>
         /// <param name="order">How to order?</param>
         /// <returns>Array of users</returns>
-        public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order)
+        public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order, int limit, int page)
         {
-            string query = null;
+            //MS SHIT to do limit and page...
+            string query = "GO WITH UserResult AS (SELECT ROW_NUMBER() AS 'RowNumber', ";
+            
             if (group_id != 0 && search_string == null && search_fields == null)
             {
-                query = "select user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order;
+                query += "user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order;
             }
             else if(group_id != 0 && search_string != null && search_fields != null)
             {
-                query = "select * from (select user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order+") users where "+search_fields+" = '"+search_string+"'";
+                query += "* from (select user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order+") users where "+search_fields+" = '"+search_string+"'";
             }
             else if(group_id == 0 && search_string != null && search_fields != null)
             {
-                query = "select * from user_account where "+search_fields+" = '"+search_string+"' order by user_account."+order_by+" "+order;
+                query += "* from user_account where "+search_fields+" = '"+search_string+"' order by user_account."+order_by+" "+order;
             }
             else
             {
-                query = "select * from user_account";
+                query += "* from user_account";
             }
+
+            //MORE MS SHIT to do limit and page..
+            query += ") SELECT * FROM UserResult WHERE RowNumber BETWEEN "+(page*limit)+" AND "+((page+1)*limit);
 
             List<User> groupsUsers = null;
             SqlDataReader reader = ExecuteReader(query, "SMU");
@@ -268,6 +273,15 @@ namespace RestService
             CloseConnection();
 
             return groupsUsers.ToArray();
+        }
+
+        public int getUsersCount(int group_id, string search_string, string search_fields) {
+            string query = "SELECT COUNT(*) FROM user_account WHERE group_id="+group_id;
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+            reader.Read();
+            int result = reader.GetInt32(reader.GetValue(0));
+            CloseConnection();
+            return result;
         }
 //*****************************************************************************************************************************************************
 //********************************************************** Media ************************************************************************************
@@ -309,6 +323,11 @@ namespace RestService
             returnMedia.tags = returnMediaTags.ToArray();
 
             return returnMedia;
+        }
+
+        public MediaList getMedias(int tag, int mediaCategoryFilter, string nameFilter, int page, int limit)
+        {
+            return null;
         }
 
         /// <summary>
@@ -521,9 +540,10 @@ namespace RestService
             {
                 query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "'";
             }
-            else if (tagGroupFilter > 0 && limit > 0 && page < 1)
+            else if (tagGroupFilter > 0  && limit > 0 && page < 1)
             {
-                query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT 0, " + limit + "";
+                //query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT 0, " + limit + "";
+                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag WHERE tag_group_id = "+tagGroupFilter+") tagGroupTags) chuck WHERE chuck.rownum BETWEEN 0 AND " + limit;
             }
             else if (tagGroupFilter > 0 && limit > 0 && page > 0)
             { 
@@ -544,7 +564,7 @@ namespace RestService
             SqlDataReader reader = ExecuteReader(query, "SMU");
             while (reader.Read()) {
                 int id = reader.GetInt32(reader.GetOrdinal("id"));
-                int tagGroup = reader.GetInt32(reader.GetOrdinal("tag_group"));
+                int tagGroup = reader.GetInt32(reader.GetOrdinal("tag_group_id"));
                 string name = reader.GetString(reader.GetOrdinal("name"));
                 string shortName = reader.GetString(reader.GetOrdinal("simple_name"));
                 tags.Add(new Tag(id, tagGroup, name, shortName));
