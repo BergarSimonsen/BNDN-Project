@@ -244,6 +244,16 @@ namespace RestService
             UriTemplate = "/tagGroups/{id}")]
         void deleteTagGroup(string id);
 
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tagsByMedia/{media}")]
+        Tag[] getTagByMedia(string media);
+
+        // Get tag by media_id
+
         //========================================= RATING ===================================================//
 
         [OperationContract]
@@ -251,8 +261,8 @@ namespace RestService
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/rating/{media}")]
-        Rating getRating(string media);
+            UriTemplate = "/rating/?media={media}&user={user}")]
+        Rating getRating(string media, string user);
 
         [OperationContract]
         [WebInvoke(

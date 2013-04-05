@@ -414,10 +414,10 @@ namespace RestService
         /// </summary>
         /// <param name="media">The id of the media</param>
         /// <returns>Rating object</returns>
-        public Rating getRating(string media)
+        public Rating getRating(string media, string user)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            return database.getRating(media);
+            return database.getRating(media, user);
         }
 
         /// <summary>

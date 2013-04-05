@@ -66,7 +66,7 @@ namespace RestService
         /// </summary>
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute the query on</param>
-        private void ExecuteQuery(string query, string database)
+        public void ExecuteQuery(string query, string database)
         {
             Connect(database);
             if (connection.State != System.Data.ConnectionState.Open) Connect(database);
@@ -85,7 +85,7 @@ namespace RestService
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute query on</param>
         /// <returns>SQLDataReader object with return values</returns>
-        private SqlDataReader ExecuteReader(string query, string database)
+        public SqlDataReader ExecuteReader(string query, string database)
         {
             Connect(database);
             if (connection.State != System.Data.ConnectionState.Open) Connect(database);
@@ -237,8 +237,7 @@ namespace RestService
         public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order, int limit, int page)
         {
             //MS SHIT to do limit and page...
-            //string query = "GO WITH UserResult AS (SELECT ROW_NUMBER() AS 'RowNumber', ";
-            string query = "SELECT ";
+            string query = "GO WITH UserResult AS (SELECT ROW_NUMBER() AS 'RowNumber', ";
             
             if (group_id != 0 && search_string == null && search_fields == null)
             {
@@ -258,7 +257,7 @@ namespace RestService
             }
 
             //MORE MS SHIT to do limit and page..
-            //query += ") SELECT * FROM UserResult WHERE RowNumber BETWEEN "+((page-1)*limit)+" AND "+(page*limit);
+            query += ") SELECT * FROM UserResult WHERE RowNumber BETWEEN "+(page*limit)+" AND "+((page+1)*limit);
 
             List<User> groupsUsers = null;
             SqlDataReader reader = ExecuteReader(query, "SMU");
@@ -277,13 +276,15 @@ namespace RestService
         }
 
         public int getUsersCount(int group_id, string search_string, string search_fields) {
-            string query = "SELECT COUNT(*) FROM user_account";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            string query = "SELECT COUNT(*) FROM user_account WHERE group_id="+group_id;
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
             reader.Read();
             int result = reader.GetInt32(0);
             CloseConnection();
             return result;
         }
+
+
 //*****************************************************************************************************************************************************
 //********************************************************** Media ************************************************************************************
 
@@ -586,24 +587,23 @@ namespace RestService
             }
             else if (tagGroupFilter > 0  && limit > 0 && page < 1)
             {
-                //query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT 0, " + limit + "";
                 query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag WHERE tag_group_id = "+tagGroupFilter+") tagGroupTags) chuck WHERE chuck.rownum BETWEEN 0 AND " + limit;
             }
             else if (tagGroupFilter > 0 && limit > 0 && page > 0)
             { 
                 int limitStart = limit * page;
                 int limitEnd = limitStart + limit;
-                query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT " + limitStart + "," + limitEnd;
+                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag WHERE tag_group_id = " + tagGroupFilter + ") tagGroupTags) chuck WHERE chuck.rownum BETWEEN " + limitStart + " AND " + limitEnd;
             }
             else if (tagGroupFilter < 1 && limit > 0 && page > 0)
             {
                 int limitStart = limit * page;
                 int limitEnd = limitStart + limit;
-                query = "SELECT * FROM tag LIMIT " + limitStart + "," + limitEnd;
+                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag) tagGroupTags) chuck WHERE chuck.rownum BETWEEN " + limitStart + " AND " + limitEnd;
             }
             else if (tagGroupFilter < 1 && limit > 0 && page < 1)
             {
-                query = "SELECT * FROM tag LIMIT 0, " + limit;
+                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag) tagGroupTags) chuck WHERE chuck.rownum BETWEEN 0 AND " + limit;
             }
             SqlDataReader reader = ExecuteReader(query, "SMU");
             while (reader.Read()) {
@@ -635,6 +635,26 @@ namespace RestService
                 tag = new Tag(tID, tagGroup, name, shortName);
             }
             return tag;
+        }
+
+        /// <summary>
+        /// Gets all tags based on a media
+        /// </summary>
+        /// <param name="media">The media that the tags belong to</param>
+        /// <returns>Array of all tags</returns>
+        public Tag[] getTagByMedia(int media)
+        {
+            List<Tag> tags = new List<Tag>();
+            string query = "SELECT * FROM tag, (SELECT tag_id FROM media_has_tag WHERE media_id = '" + media + "') tId WHERE tId.tag_id = tag.id";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) {
+                int id = reader.GetInt32(reader.GetOrdinal("id"));
+                int tag_group = reader.GetInt32(reader.GetOrdinal("tag_group"));
+                string name = reader.GetString(reader.GetOrdinal("name"));
+                string simple_name = reader.GetString(reader.GetOrdinal("simple_name"));
+                tags.Add(new Tag(id, tag_group, name, simple_name));
+            }
+            return tags.ToArray();
         }
 
         /// <summary>
@@ -677,18 +697,23 @@ namespace RestService
         /// <param name="tagGroup">The new tag group</param>
         public void putTag(string id, string name, string simpleName, int tagGroup)
         {
-            int tagId = int.Parse(id);
-            string query = "";
-            if(name != "" && simpleName == "" && tagGroup < 1) {
-                query = "UPDATE tag SET name = '" + name + "' WHERE id = '" + tagId + "'";
+            if (getTag(id) != null) {
+                int tagId = int.Parse(id);
+                string query = "";
+                if (name != "" && simpleName == "" && tagGroup < 1)
+                {
+                    query = "UPDATE tag SET name = '" + name + "' WHERE id = '" + tagId + "'";
+                }
+                else if (name != "" && simpleName != "" && tagGroup < 1)
+                {
+                    query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "' WHERE id = '" + tagId + "'";
+                }
+                else if (name != "" && simpleName != "" && tagGroup > 0)
+                {
+                    query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "', tag_group = '" + tagGroup + "' WHERE id = '" + tagId + "'";
+                }
+                ExecuteQuery(query, "SMU");
             }
-            else if (name != "" && simpleName != "" && tagGroup < 1) {
-                query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "' WHERE id = '" + tagId + "'";
-            }
-            else if (name != "" && simpleName != "" && tagGroup > 0) {
-                query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "', tag_group = '" + tagGroup + "' WHERE id = '" + tagId + "'";
-            }
-            ExecuteQuery(query, "SMU");
         }
 
         /// <summary>
@@ -697,9 +722,11 @@ namespace RestService
         /// <param name="id">The id of the tag to delete</param>
         public void deleteTag(string id)
         {
-            int tagId = int.Parse(id);
-            string query = "DELETE from tag WHERE id = '" + tagId + "'";
-            ExecuteQuery(query, "SMU");
+            if(getTag(id) != null) {
+                int tagId = int.Parse(id);
+                string query = "DELETE from tag WHERE id = '" + tagId + "'";
+                ExecuteQuery(query, "SMU");
+            }
         }
 
         /// <summary>
@@ -773,9 +800,11 @@ namespace RestService
         /// <param name="name">The new name of the tag group</param>
         public void putTagGroup(string id, string name)
         {
-            int tId = int.Parse(id);
-            string query = "UPDATE tag_group SET name = '" + name + "' WHERE id = '" + tId + "'";
-            ExecuteQuery(query, "SMU");
+            if (getTagGroup(id) != null) {
+                int tId = int.Parse(id);
+                string query = "UPDATE tag_group SET name = '" + name + "' WHERE id = '" + tId + "'";
+                ExecuteQuery(query, "SMU");
+            }
         }
 
         /// <summary>
@@ -784,9 +813,11 @@ namespace RestService
         /// <param name="id">The id of the tag group to delete</param>
         public void deleteTagGroup(string id)
         {
-            int tId = int.Parse(id);
-            string query = "DELETE FROM tag_group WHERE id = '" + tId + "'";
-            ExecuteQuery(query, "SMU");
+            if (getTagGroup(id) != null) {
+                int tId = int.Parse(id);
+                string query = "DELETE FROM tag_group WHERE id = '" + tId + "'";
+                ExecuteQuery(query, "SMU");
+            }
         }
 
         /// <summary>
@@ -813,11 +844,25 @@ namespace RestService
         /// </summary>
         /// <param name="media">The id of the media</param>
         /// <returns>Rating object</returns>
-        public Rating getRating(string media)
+        public Rating getRating(string media, string user)
         {
+            string query = "";
             Rating ratingObj = null;
             int mediaId = int.Parse(media);
-            string query = "SELECT * FROM rating WHERE media_id = '" + mediaId + "'";
+            int userId = int.Parse(user);
+            if (userId < 1 && mediaId > 0)
+            {
+                query = "SELECT * FROM rating WHERE media_id = '" + mediaId + "'";
+            }
+            else if (mediaId < 1 && userId > 0) 
+            {
+                query = "SELECT * FROM rating WHERE user_account_id = '" + userId + "'";
+            }
+            else
+            {
+                query = "SELECT * FROM rating WHERE media_id = '" + mediaId + "' AND user_account_id = '" + userId + "'";
+            }
+            
             SqlDataReader reader = ExecuteReader(query, "SMU");
             while (reader.Read()) { 
                 int id = reader.GetInt32(reader.GetOrdinal("id"));
