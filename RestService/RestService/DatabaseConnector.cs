@@ -595,6 +595,26 @@ namespace RestService
         }
 
         /// <summary>
+        /// Gets all tags based on a media
+        /// </summary>
+        /// <param name="media">The media that the tags belong to</param>
+        /// <returns>Array of all tags</returns>
+        public Tag[] getTagByMedia(int media)
+        {
+            List<Tag> tags = new List<Tag>();
+            string query = "SELECT * FROM tag, (SELECT tag_id FROM media_has_tag WHERE media_id = '" + media + "') tId WHERE tId.tag_id = tag.id";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) {
+                int id = reader.GetInt32(reader.GetOrdinal("id"));
+                int tag_group = reader.GetInt32(reader.GetOrdinal("tag_group"));
+                string name = reader.GetString(reader.GetOrdinal("name"));
+                string simple_name = reader.GetString(reader.GetOrdinal("simple_name"));
+                tags.Add(new Tag(id, tag_group, name, simple_name));
+            }
+            return tags.ToArray();
+        }
+
+        /// <summary>
         /// Inserts a new tag into the database
         /// </summary>
         /// <param name="name">The name of the tag</param>
@@ -781,11 +801,25 @@ namespace RestService
         /// </summary>
         /// <param name="media">The id of the media</param>
         /// <returns>Rating object</returns>
-        public Rating getRating(string media)
+        public Rating getRating(string media, string user)
         {
+            string query = "";
             Rating ratingObj = null;
             int mediaId = int.Parse(media);
-            string query = "SELECT * FROM rating WHERE media_id = '" + mediaId + "'";
+            int userId = int.Parse(user);
+            if (userId < 1 && mediaId > 0)
+            {
+                query = "SELECT * FROM rating WHERE media_id = '" + mediaId + "'";
+            }
+            else if (mediaId < 1 && userId > 0) 
+            {
+                query = "SELECT * FROM rating WHERE user_account_id = '" + userId + "'";
+            }
+            else
+            {
+                query = "SELECT * FROM rating WHERE media_id = '" + mediaId + "' AND user_account_id = '" + userId + "'";
+            }
+            
             SqlDataReader reader = ExecuteReader(query, "SMU");
             while (reader.Read()) { 
                 int id = reader.GetInt32(reader.GetOrdinal("id"));

@@ -308,6 +308,17 @@ namespace RestService
         }
 
         /// <summary>
+        /// Gets all tags that belong to a media
+        /// </summary>
+        /// <param name="media">The media that the tags belong to</param>
+        /// <returns>Array of all tags</returns>
+        public Tag[] getTagByMedia(string media)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getTagByMedia(int.Parse(media));
+        }
+
+        /// <summary>
         /// Inserts a new tag into the database
         /// </summary>
         /// <param name="name">The name of the tag</param>
@@ -405,10 +416,10 @@ namespace RestService
         /// </summary>
         /// <param name="media">The id of the media</param>
         /// <returns>Rating object</returns>
-        public Rating getRating(string media)
+        public Rating getRating(string media, string user)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            return database.getRating(media);
+            return database.getRating(media, user);
         }
 
         /// <summary>
