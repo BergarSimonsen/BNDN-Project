@@ -292,6 +292,8 @@ namespace RestService
             CloseConnection();
             return result;
         }
+
+
 //*****************************************************************************************************************************************************
 //********************************************************** Media ************************************************************************************
 
@@ -558,17 +560,20 @@ namespace RestService
             { 
                 int limitStart = limit * page;
                 int limitEnd = limitStart + limit;
-                query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT " + limitStart + "," + limitEnd;
+                //query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT " + limitStart + "," + limitEnd;
+                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag WHERE tag_group_id = " + tagGroupFilter + ") tagGroupTags) chuck WHERE chuck.rownum BETWEEN " + limitStart + " AND " + limitEnd;
             }
             else if (tagGroupFilter < 1 && limit > 0 && page > 0)
             {
                 int limitStart = limit * page;
                 int limitEnd = limitStart + limit;
-                query = "SELECT * FROM tag LIMIT " + limitStart + "," + limitEnd;
+                //query = "SELECT * FROM tag LIMIT " + limitStart + "," + limitEnd;
+                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag) tagGroupTags) chuck WHERE chuck.rownum BETWEEN " + limitStart + " AND " + limitEnd;
             }
             else if (tagGroupFilter < 1 && limit > 0 && page < 1)
             {
-                query = "SELECT * FROM tag LIMIT 0, " + limit;
+                //query = "SELECT * FROM tag LIMIT 0, " + limit;
+                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag) tagGroupTags) chuck WHERE chuck.rownum BETWEEN 0 AND " + limit;
             }
             SqlDataReader reader = ExecuteReader(query, "SMU");
             while (reader.Read()) {
