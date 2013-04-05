@@ -544,26 +544,22 @@ namespace RestService
             }
             else if (tagGroupFilter > 0  && limit > 0 && page < 1)
             {
-                //query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT 0, " + limit + "";
                 query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag WHERE tag_group_id = "+tagGroupFilter+") tagGroupTags) chuck WHERE chuck.rownum BETWEEN 0 AND " + limit;
             }
             else if (tagGroupFilter > 0 && limit > 0 && page > 0)
             { 
                 int limitStart = limit * page;
                 int limitEnd = limitStart + limit;
-                //query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT " + limitStart + "," + limitEnd;
                 query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag WHERE tag_group_id = " + tagGroupFilter + ") tagGroupTags) chuck WHERE chuck.rownum BETWEEN " + limitStart + " AND " + limitEnd;
             }
             else if (tagGroupFilter < 1 && limit > 0 && page > 0)
             {
                 int limitStart = limit * page;
                 int limitEnd = limitStart + limit;
-                //query = "SELECT * FROM tag LIMIT " + limitStart + "," + limitEnd;
                 query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag) tagGroupTags) chuck WHERE chuck.rownum BETWEEN " + limitStart + " AND " + limitEnd;
             }
             else if (tagGroupFilter < 1 && limit > 0 && page < 1)
             {
-                //query = "SELECT * FROM tag LIMIT 0, " + limit;
                 query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag) tagGroupTags) chuck WHERE chuck.rownum BETWEEN 0 AND " + limit;
             }
             SqlDataReader reader = ExecuteReader(query, "SMU");
@@ -638,18 +634,23 @@ namespace RestService
         /// <param name="tagGroup">The new tag group</param>
         public void putTag(string id, string name, string simpleName, int tagGroup)
         {
-            int tagId = int.Parse(id);
-            string query = "";
-            if(name != "" && simpleName == "" && tagGroup < 1) {
-                query = "UPDATE tag SET name = '" + name + "' WHERE id = '" + tagId + "'";
+            if (getTag(id) != null) {
+                int tagId = int.Parse(id);
+                string query = "";
+                if (name != "" && simpleName == "" && tagGroup < 1)
+                {
+                    query = "UPDATE tag SET name = '" + name + "' WHERE id = '" + tagId + "'";
+                }
+                else if (name != "" && simpleName != "" && tagGroup < 1)
+                {
+                    query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "' WHERE id = '" + tagId + "'";
+                }
+                else if (name != "" && simpleName != "" && tagGroup > 0)
+                {
+                    query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "', tag_group = '" + tagGroup + "' WHERE id = '" + tagId + "'";
+                }
+                ExecuteQuery(query, "SMU");
             }
-            else if (name != "" && simpleName != "" && tagGroup < 1) {
-                query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "' WHERE id = '" + tagId + "'";
-            }
-            else if (name != "" && simpleName != "" && tagGroup > 0) {
-                query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "', tag_group = '" + tagGroup + "' WHERE id = '" + tagId + "'";
-            }
-            ExecuteQuery(query, "SMU");
         }
 
         /// <summary>
@@ -658,9 +659,11 @@ namespace RestService
         /// <param name="id">The id of the tag to delete</param>
         public void deleteTag(string id)
         {
-            int tagId = int.Parse(id);
-            string query = "DELETE from tag WHERE id = '" + tagId + "'";
-            ExecuteQuery(query, "SMU");
+            if(getTag(id) != null) {
+                int tagId = int.Parse(id);
+                string query = "DELETE from tag WHERE id = '" + tagId + "'";
+                ExecuteQuery(query, "SMU");
+            }
         }
 
         /// <summary>
@@ -734,9 +737,11 @@ namespace RestService
         /// <param name="name">The new name of the tag group</param>
         public void putTagGroup(string id, string name)
         {
-            int tId = int.Parse(id);
-            string query = "UPDATE tag_group SET name = '" + name + "' WHERE id = '" + tId + "'";
-            ExecuteQuery(query, "SMU");
+            if (getTagGroup(id) != null) {
+                int tId = int.Parse(id);
+                string query = "UPDATE tag_group SET name = '" + name + "' WHERE id = '" + tId + "'";
+                ExecuteQuery(query, "SMU");
+            }
         }
 
         /// <summary>
@@ -745,9 +750,11 @@ namespace RestService
         /// <param name="id">The id of the tag group to delete</param>
         public void deleteTagGroup(string id)
         {
-            int tId = int.Parse(id);
-            string query = "DELETE FROM tag_group WHERE id = '" + tId + "'";
-            ExecuteQuery(query, "SMU");
+            if (getTagGroup(id) != null) {
+                int tId = int.Parse(id);
+                string query = "DELETE FROM tag_group WHERE id = '" + tId + "'";
+                ExecuteQuery(query, "SMU");
+            }
         }
 
         /// <summary>
@@ -820,4 +827,3 @@ namespace RestService
         }
     }
 }
->>>>>>> cab8bfe8b75d717d80ca903c296811030e221fc1
