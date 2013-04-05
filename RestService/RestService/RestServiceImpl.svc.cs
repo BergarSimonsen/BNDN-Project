@@ -46,14 +46,15 @@ namespace RestService
             if (search_fields != null)
             {
                 searchFields_s = search_fields;
-            }
-            */
+            }*/
+            
  
             //Sanitize orderBy
             string orderBy_s = "email";
             if (order_by != null)
             {
                 orderBy_s = order_by;
+
             }
 
             //Santize Order
@@ -84,7 +85,7 @@ namespace RestService
             int userCount = database.getUsersCount(groupId_s, searchString_s, searchFields_s);
             int pageCount = Math.Ceiling(userCount / limit);
 
-            return new UserList(limit, pageCount, returnUsers);
+            return new UserList(int.Parse(limit), pageCount, returnUsers);
         }
 
         public int insertUser(User user)
