@@ -311,6 +311,11 @@ namespace RestService
             return returnMedia;
         }
 
+        public MediaList getMedias(int tag, int mediaCategoryFilter, string nameFilter, int page, int limit)
+        {
+
+        }
+
         /// <summary>
         /// Inserts a media into the database.
         /// </summary>

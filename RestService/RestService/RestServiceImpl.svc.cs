@@ -140,21 +140,7 @@ namespace RestService
             return database.getMedia(int.Parse(id));
         }
 
-<<<<<<< HEAD
         public MediaList getMedias(string tag, string mediaCategoryFilter, string nameFilter, string page, string limit)
-=======
-        /// <summary>
-        /// Gets all medias in the database.
-        /// </summary>
-        /// <param name="andTags">Filter by matching all tags.</param>
-        /// <param name="orTags">Filter by matching some tags</param>
-        /// <param name="mediaCategoryFilter">Filter by mediaCategory</param>
-        /// <param name="nameFilter">Filter by name</param>
-        /// <param name="page">The page you are on.</param>
-        /// <param name="limit">How many medias per page?</param>
-        /// <returns>List of all medias</returns>
-        public MediaList getMedias(string andTags, string orTags, string mediaCategoryFilter, string nameFilter, string page, string limit)
->>>>>>> 675281e2b08a49082bbe0fd5c554dd52739ca072
         {
             int mediaTag = 0;
             if (tag != null)
@@ -435,7 +421,7 @@ namespace RestService
         public void putRating(string id, Rating rating)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            database.putRating(id, rating.commentTitle, rating.comment, rating.rating);
+            database.putRating(int.Parse(id), rating.commentTitle, rating.comment, rating.rating);
         }
     }
 }
