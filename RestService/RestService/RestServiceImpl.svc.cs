@@ -126,6 +126,8 @@ namespace RestService
             database.DeleteUser(int.Parse(id));
         }
 
+        // ================================ MEDIA & MEDIACATEGORY ========================== //
+
         public Media getMedia(string id)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
@@ -177,8 +179,9 @@ namespace RestService
         }
 
         public void deleteMedia(string id)
-        { 
-            // TODO
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.deleteMedia(int.Parse(id));
         }
 
         /// <summary>

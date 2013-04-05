@@ -265,6 +265,11 @@ namespace RestService
             return returnMedia;
         }
 
+
+        /// <summary>
+        /// Deletes a media from the database.
+        /// </summary>
+        /// <param name="id">The id of the media to delete</param>
         public void deleteMedia(int id)
         {
             string query = "DELETE * FROM media WHERE id = '"+id+"'";
