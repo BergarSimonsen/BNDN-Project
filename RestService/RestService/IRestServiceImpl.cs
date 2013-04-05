@@ -166,6 +166,8 @@ namespace RestService
             UriTemplate = "/mediaCategory/{id}")]
         void deleteMediaCategory(string id);
 
+        
+
         //========================================= TAGS ===================================================//
 
         [OperationContract]
@@ -252,7 +254,14 @@ namespace RestService
             UriTemplate = "/tagsByMedia/{media}")]
         Tag[] getTagByMedia(string media);
 
-        // Get tag by media_id
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tagsByMedia/{media}/{tag}")]
+        void mediaHasTag(string media, string tag);
+
 
         //========================================= RATING ===================================================//
 

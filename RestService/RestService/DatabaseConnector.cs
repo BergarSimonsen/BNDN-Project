@@ -837,6 +837,17 @@ namespace RestService
             return id;
         }
 
+        /// <summary>
+        /// Assigns a tag to a media
+        /// </summary>
+        /// <param name="media">Id of the media</param>
+        /// <param name="tag">Id of the tag</param>
+        public void mediaHasTag(int media, int tag)
+        {
+            string query = "INSERT INTO media_has_tag (media_id, tag_id) VALUES('" + media + "', '" + tag + "')";
+            ExecuteQuery(query, "SMU");
+        }
+
         // ============================================ Rating ======================================= //
 
         /// <summary>
@@ -886,7 +897,7 @@ namespace RestService
         /// <param name="comment">Content of the comment</param>
         public void postRating(int userId, int mediaId, int stars, string commentTitle, string comment)
         {
-            string query = "INSERT INTO rating VALUES('', '" + userId + "', '" + mediaId + "', '" + stars + "', '" + comment + "', '" + commentTitle + "')";
+            string query = "INSERT INTO rating (user_account, media_id, rating, comment, comment_title) VALUES('" + userId + "', '" + mediaId + "', '" + stars + "', '" + comment + "', '" + commentTitle + "')";
             ExecuteQuery(query, "SMU");
         }
 

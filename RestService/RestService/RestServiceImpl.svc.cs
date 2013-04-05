@@ -138,7 +138,7 @@ namespace RestService
         public Media getMedia(string id)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-
+            
             return database.getMedia(int.Parse(id));
         }
 
@@ -416,6 +416,17 @@ namespace RestService
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
             database.deleteTagGroup(id);
+        }
+
+        /// <summary>
+        /// Assigns a tag to a media
+        /// </summary>
+        /// <param name="media">Id of the media</param>
+        /// <param name="tag">Id of the tag</param>
+        public void mediaHasTag(string media, string tag)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.mediaHasTag(int.Parse(media), int.Parse(tag));
         }
 
         //==================================== Ragting ===============================================
