@@ -339,6 +339,10 @@ namespace RestService
                     query += "(SELECT * FROM media) medias)";
                 }
             }
+            if (tag > 0)
+            {
+                query += "(SELECT * FROM media, (SELECT media_id FROM media_has_tag WHERE tag_id = "+tag+") mediaTag WHERE media.id = mediaTag.media_id) medias)";
+            }
 
             query += "chuck WHERE chuck.rownum BETWEEN " + ((page - 1) * limit) + " AND " + (page * limit);
 
@@ -356,7 +360,7 @@ namespace RestService
                 int mediaLength = reader.GetInt32(reader.GetOrdinal("minutes"));
                 string format = reader.GetString(reader.GetOrdinal("format"));
 
-                returnMediaList.Add(MediaHandler.createMedia(mediaId, mediaCategory, user, fileLocation, title, description, mediaLength, format));
+                returnMediaList.Add(MediaHandler.createMedia(mediaId, mediaCategory, user, null, title, description, mediaLength, format));
             }
 
             int mediaCount = getMediaCount();
@@ -386,13 +390,13 @@ namespace RestService
             // TODO TYPE?????
             int mediaCategory = media.mediaCategory;
             int user = media.user;
-            string fileLocation = media.fileLocation;
+            string fileLocation = "";
             string title = media.title;
             string description = media.description;
             int mediaLength = media.mediaLength;
             string format = media.format;
 
-            string query = "INSERT INTO media (title, description, minutes, format, media_category_id, user_account_id) VALUES('" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
+            string query = "INSERT INTO media (file_loaction ,title, description, minutes, format, media_category_id, user_account_id) VALUES('"+fileLocation+"','" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
             ExecuteQuery(query, "SMU");
 
             return getMediaIdByDescription(title, description);
