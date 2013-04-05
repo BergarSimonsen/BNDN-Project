@@ -8,7 +8,7 @@ using System.Data;
 
 namespace RestService
 {
-    class DatabaseConnector
+    public class DatabaseConnector
     {
         private static DatabaseConnector instance;
         private SqlConnection connection;
@@ -318,8 +318,8 @@ namespace RestService
         /// <returns>The id of the media</returns>
         public int postMedia(Media media)
         {
-            // INSERT LENGTH MANUALLY ?????????
-            // TYPE?????
+            // TODO INSERT LENGTH MANUALLY ?????????
+            // TODO TYPE?????
             int mediaCategory = media.mediaCategory;
             int user = media.user;
             string fileLocation = media.fileLocation;
@@ -369,7 +369,7 @@ namespace RestService
 
             query = "DELETE FROM media WHERE id = "+id;
             ExecuteQuery(query, "SmuDatabase");
-            // DELETE MEDIA FILE ?!?!?!?!
+            // TODO DELETE MEDIA FILE ?!?!?!?!
         }
 
         

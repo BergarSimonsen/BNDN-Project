@@ -1,11 +1,22 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RestService;
 
 namespace UnitTestProject1
 {
     [TestClass]
     public class TestDatabaseConnector
     {
+
+        DatabaseConnector dbCon = DatabaseConnector.GetInstance;
+
+        [TestMethod]
+        public void TestPostMedia()
+        {
+            string query = "";
+
+        }
+        
         [TestMethod]
         public void TestGetMedia()
         {
@@ -13,13 +24,13 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void TestDeleteMedia()
+        public void TestPutMedia()
         {
 
         }
 
         [TestMethod]
-        public void TestPutMedia()
+        public void TestDeleteMedia()
         {
 
         }
