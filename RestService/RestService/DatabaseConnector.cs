@@ -518,7 +518,7 @@ namespace RestService
             else if (tagGroupFilter > 0 && limit > 0 && page < 1)
             {
                 //query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT 0, " + limit + "";
-                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum FROM tag) WHERE tag_group = '" + tagGroupFilter + "' BETWEEN 0 AND " + limit;
+                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, id, tag_group, name, simple_name FROM tag) WHERE tag_group = '" + tagGroupFilter + "' BETWEEN 0 AND " + limit;
             }
             else if (tagGroupFilter > 0 && limit > 0 && page > 0)
             { 
