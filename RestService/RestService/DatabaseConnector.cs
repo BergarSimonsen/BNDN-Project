@@ -859,5 +859,35 @@ namespace RestService
             string query = "UPDATE rating SET comment_title = '" + commentTitle + "', comment = '" + comment + "', rating = '" + stars + "' WHERE id = '" + id + "'";
             ExecuteQuery(query, "SMU");
         }
+
+        /// <summary>
+        /// Deletes a rating
+        /// </summary>
+        /// <param name="id">Id of the rating to delete</param>
+        public void deleteRating(int id)
+        {
+            if (getRatingById(id) > 0) {
+                string query = "DELETE from rating WHERE id = " + id;
+                ExecuteQuery(query, "SMU");
+            }
+        }
+
+        /// <summary>
+        /// Private helper method
+        /// Gets a rating based on it's id
+        /// </summary>
+        /// <param name="id">Id of the rating</param>
+        /// <returns>Id of the rating. Returns -1 if not found</returns>
+        private int getRatingById(int id)
+        {
+            int ratingId = -1;
+            string query = "SELECT * FROM rating WHERE id = " + id;
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) {
+                ratingId = reader.GetInt32(reader.GetOrdinal("id"));
+            }
+
+            return ratingId;
+        }
     }
 }

@@ -443,11 +443,20 @@ namespace RestService
         /// <param name="commentTitle">The new title of the comment</param>
         /// <param name="comment">The new content of the comment</param>
         /// <param name="stars">The new amount of stars</param>
-
         public void putRating(string id, Rating rating)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
             database.putRating(int.Parse(id), rating.commentTitle, rating.comment, rating.rating);
+        }
+
+        /// <summary>
+        /// Deletes a rating
+        /// </summary>
+        /// <param name="id">Id of the rating to delete</param>
+        public void deleteRating(string id)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.deleteRating(int.Parse(id));
         }
     }
 }

@@ -276,5 +276,11 @@ namespace RestService
             Method = "PUT",
             UriTemplate = "/rating/{id}")]
         void putRating(string id, Rating rating);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            UriTemplate = "/rating/{id}")]
+        void deleteRating(string id);
     }
 }
