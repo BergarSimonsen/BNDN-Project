@@ -61,6 +61,11 @@ namespace RestService
             else return false;
         }
 
+        /// <summary>
+        /// Executes a query with no return value
+        /// </summary>
+        /// <param name="query">Query to execute</param>
+        /// <param name="database">Database to execute the query on</param>
         private void ExecuteQuery(string query, string database)
         {
             Connect("SMU");
@@ -74,6 +79,12 @@ namespace RestService
             }
         }
 
+        /// <summary>
+        /// Execute a query with a return value
+        /// </summary>
+        /// <param name="query">Query to execute</param>
+        /// <param name="database">Database to execute query on</param>
+        /// <returns>SQLDataReader object with return values</returns>
         private SqlDataReader ExecuteReader(string query, string database)
         {
             Connect("SMU");
@@ -100,6 +111,11 @@ namespace RestService
 
 //******************************************************** User *******************************************************
 
+        /// <summary>
+        /// Gets a user from the database
+        /// </summary>
+        /// <param name="id">The id of the user</param>
+        /// <returns>User object</returns>
         public User getUser(int id)
         {
             string query = "select * from user_account where id = " + id;
@@ -119,6 +135,13 @@ namespace RestService
             return user;
         }
 
+        /// <summary>
+        /// Inserts a new user into the database
+        /// </summary>
+        /// <param name="email">User's email</param>
+        /// <param name="password">User's password</param>
+        /// <param name="userData">User's user data</param>
+        /// <returns>Id of the user</returns>
         public int PostUser(string email, string password, int[] userData)
         {
             // created and modified are the same at insertion.
@@ -142,6 +165,10 @@ namespace RestService
             return curId;
         }
 
+        /// <summary>
+        /// Deletes a user from the database.
+        /// </summary>
+        /// <param name="id">Id of the user to delete</param>
         public void DeleteUser(int id)
         {
             // Check if user exists
@@ -174,6 +201,11 @@ namespace RestService
             ExecuteQuery(query, "SmuDatabase");
         }
 
+        /// <summary>
+        /// Gets a user based on it's email
+        /// </summary>
+        /// <param name="incmail">Email of the user</param>
+        /// <returns>User object</returns>
         public User getUser(string incmail)
         {
             string query = "select * from user_account where email = '" + incmail + "';";
@@ -193,6 +225,15 @@ namespace RestService
             return user;
         }
 
+        /// <summary>
+        /// Gets all users from the database
+        /// </summary>
+        /// <param name="group_id">Filter by group_id</param>
+        /// <param name="search_string">Filter by search_string</param>
+        /// <param name="search_fields">Filter by search_fields</param>
+        /// <param name="order_by">Which column to order by</param>
+        /// <param name="order">How to order?</param>
+        /// <returns>Array of users</returns>
         public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order)
         {
             string query = null;
@@ -231,6 +272,11 @@ namespace RestService
 //*****************************************************************************************************************************************************
 //********************************************************** Media ************************************************************************************
 
+        /// <summary>
+        /// Gets a media from the database
+        /// </summary>
+        /// <param name="id">Id of the media to return</param>
+        /// <returns>Media object</returns>
         public Media getMedia(int id)
         {
             string query = "SELECT * FROM media WHERE id = '"+id+"'";
@@ -265,6 +311,49 @@ namespace RestService
             return returnMedia;
         }
 
+        /// <summary>
+        /// Inserts a media into the database.
+        /// </summary>
+        /// <param name="media">Media object to insert</param>
+        /// <returns>The id of the media</returns>
+        public int postMedia(Media media)
+        {
+            // INSERT LENGTH MANUALLY ?????????
+            // TYPE?????
+            int mediaCategory = media.mediaCategory;
+            int user = media.user;
+            string fileLocation = media.fileLocation;
+            string title = media.title;
+            string description = media.description;
+            int mediaLength = media.mediaLength;
+            string format = media.format;
+            int[] tags = media.tags;
+
+            string query = "INSERT INTO media VALUES('', '', '', '" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
+            ExecuteQuery(query, "SMU");
+
+            return getMediaIdByDescription(title, description);
+        }
+
+        /// <summary>
+        /// Private helper method.
+        /// Returns the id of a media based on it's title and description
+        /// </summary>
+        /// <param name="title">Title of the media</param>
+        /// <param name="description">Description of the media</param>
+        /// <returns>Id of the media</returns>
+        private int getMediaIdByDescription(string title, string description)
+        {
+            int id = -1;
+            string query = "SELECT id FROM media WHERE title = '" + title + "' AND description = '" + description + "'";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+
+            while (reader.Read()) {
+                id = reader.GetInt32(reader.GetOrdinal("id"));
+            }
+            return id;
+        }
+
 
         /// <summary>
         /// Deletes a media from the database.
@@ -274,6 +363,7 @@ namespace RestService
         {
             string query = "DELETE * FROM media WHERE id = '"+id+"'";
             ExecuteQuery(query, "SmuDatabase");
+            // DELETE MEDIA FILE ?!?!?!?!
         }
 
         
