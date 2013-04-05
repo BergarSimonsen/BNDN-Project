@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -43,9 +43,6 @@ namespace RestService
             //Sanitize searchFields
             //TODO: Implement
             string searchFields_s = null;
-            /*if (search_fields != null)
-
-             * string searchFields_s = null;
             /*if (search_fields != null)
             {
                 searchFields_s = search_fields;
@@ -141,7 +138,7 @@ namespace RestService
         public Media getMedia(string id)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-
+            
             return database.getMedia(int.Parse(id));
         }
 
@@ -172,7 +169,19 @@ namespace RestService
             {
                 title = nameFilter;
             }
-            return null;
+            int pageNumber = 1;
+            if (page != null)
+            {
+                pageNumber = int.Parse(page);
+            }
+            int limitNumber = 10;
+            if(limit != null)
+            {
+                limitNumber = int.Parse(limit);
+            }
+
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getMedias(mediaTag,mediaCategory,nameFilter,pageNumber,limitNumber);
         }
 
         /// <summary>
@@ -308,6 +317,17 @@ namespace RestService
         }
 
         /// <summary>
+        /// Gets all tags that belong to a media
+        /// </summary>
+        /// <param name="media">The media that the tags belong to</param>
+        /// <returns>Array of all tags</returns>
+        public Tag[] getTagByMedia(string media)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getTagByMedia(int.Parse(media));
+        }
+
+        /// <summary>
         /// Inserts a new tag into the database
         /// </summary>
         /// <param name="name">The name of the tag</param>
@@ -398,6 +418,17 @@ namespace RestService
             database.deleteTagGroup(id);
         }
 
+        /// <summary>
+        /// Assigns a tag to a media
+        /// </summary>
+        /// <param name="media">Id of the media</param>
+        /// <param name="tag">Id of the tag</param>
+        public void mediaHasTag(string media, string tag)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.mediaHasTag(int.Parse(media), int.Parse(tag));
+        }
+
         //==================================== Ragting ===============================================
 
         /// <summary>
@@ -405,10 +436,10 @@ namespace RestService
         /// </summary>
         /// <param name="media">The id of the media</param>
         /// <returns>Rating object</returns>
-        public Rating getRating(string media)
+        public Rating getRating(string media, string user)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            return database.getRating(media);
+            return database.getRating(media, user);
         }
 
         /// <summary>
@@ -437,6 +468,16 @@ namespace RestService
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
             database.putRating(int.Parse(id), rating.commentTitle, rating.comment, rating.rating);
+        }
+
+        /// <summary>
+        /// Deletes a rating
+        /// </summary>
+        /// <param name="id">Id of the rating to delete</param>
+        public void deleteRating(string id)
+        {
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            database.deleteRating(int.Parse(id));
         }
     }
 }

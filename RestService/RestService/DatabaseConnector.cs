@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -310,26 +310,73 @@ namespace RestService
                 int mediaLength = reader.GetInt32(reader.GetOrdinal("minutes"));
                 string format = reader.GetString(reader.GetOrdinal("format"));
 
-                returnMedia = MediaHandler.createMedia(mediaId, mediaCategory, user, fileLocation, title, description, mediaLength, format,null);
+                returnMedia = MediaHandler.createMedia(mediaId, mediaCategory, user, fileLocation, title, description, mediaLength, format);
             }
-
-            query = "SELECT tag_id from media_has_tag where media_id = " + id;
-            reader = ExecuteReader(query, "SMU");
-
-            List<int> returnMediaTags = new List<int>();
-            while (reader.Read())
-            {
-                returnMediaTags.Add(reader.GetInt32(reader.GetOrdinal("tag_id")));
-            }
-
-            returnMedia.tags = returnMediaTags.ToArray();
 
             return returnMedia;
         }
 
         public MediaList getMedias(int tag, int mediaCategoryFilter, string nameFilter, int page, int limit)
         {
-            return null;
+            string query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, medias.* FROM ";
+
+            if (tag < 1)
+            {
+                if (mediaCategoryFilter > 0 && nameFilter != null)
+                {
+                    query += "(SELECT * FROM media WHERE media_category_id = " + mediaCategoryFilter + " AND title = '" + nameFilter + "') medias)";
+                }
+                if (mediaCategoryFilter < 1 && nameFilter != null)
+                {
+                    query += "(SELECT * FROM media WHERE title = '" + nameFilter + "') medias)";
+                }
+                if (mediaCategoryFilter > 0 && nameFilter == null)
+                {
+                    query += "(SELECT * FROM media WHERE media_category_id = " + mediaCategoryFilter + ") medias)";
+                }
+                if (mediaCategoryFilter < 1 && nameFilter == null)
+                {
+                    query += "(SELECT * FROM media) medias)";
+                }
+            }
+            if (tag > 0)
+            {
+                query += "(SELECT * FROM media, (SELECT media_id FROM media_has_tag WHERE tag_id = "+tag+") mediaTag WHERE media.id = mediaTag.media_id) medias)";
+            }
+
+            query += "chuck WHERE chuck.rownum BETWEEN " + ((page - 1) * limit) + " AND " + (page * limit);
+
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+
+            List<Media> returnMediaList = new List<Media>();
+            while (reader.Read())
+            {
+                int mediaId = reader.GetInt32(reader.GetOrdinal("id"));
+                int mediaCategory = reader.GetInt32(reader.GetOrdinal("media_category_id"));
+                int user = reader.GetInt32(reader.GetOrdinal("user_account_id"));
+                string fileLocation = reader.GetString(reader.GetOrdinal("file_location"));
+                string title = reader.GetString(reader.GetOrdinal("title"));
+                string description = reader.GetString(reader.GetOrdinal("description"));
+                int mediaLength = reader.GetInt32(reader.GetOrdinal("minutes"));
+                string format = reader.GetString(reader.GetOrdinal("format"));
+
+                returnMediaList.Add(MediaHandler.createMedia(mediaId, mediaCategory, user, null, title, description, mediaLength, format));
+            }
+
+            int mediaCount = getMediaCount();
+            int pageCount = (mediaCount + limit - 1) / limit;
+
+            return new MediaList(pageCount,returnMediaList.ToArray());
+        }
+
+        private int getMediaCount()
+        {
+            string query = "SELECT COUNT(*) FROM media";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            reader.Read();
+            int result = reader.GetInt32(0);
+            CloseConnection();
+            return result;
         }
 
         /// <summary>
@@ -343,14 +390,13 @@ namespace RestService
             // TODO TYPE?????
             int mediaCategory = media.mediaCategory;
             int user = media.user;
-            string fileLocation = media.fileLocation;
+            string fileLocation = "";
             string title = media.title;
             string description = media.description;
             int mediaLength = media.mediaLength;
             string format = media.format;
-            int[] tags = media.tags;
 
-            string query = "INSERT INTO media VALUES('', '', '', '" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
+            string query = "INSERT INTO media (file_loaction ,title, description, minutes, format, media_category_id, user_account_id) VALUES('"+fileLocation+"','" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
             ExecuteQuery(query, "SMU");
 
             return getMediaIdByDescription(title, description);
@@ -369,7 +415,8 @@ namespace RestService
             string query = "SELECT id FROM media WHERE title = '" + title + "' AND description = '" + description + "'";
             SqlDataReader reader = ExecuteReader(query, "SMU");
 
-            while (reader.Read()) {
+            while (reader.Read()) 
+            {
                 id = reader.GetInt32(reader.GetOrdinal("id"));
             }
             return id;
@@ -544,26 +591,22 @@ namespace RestService
             }
             else if (tagGroupFilter > 0  && limit > 0 && page < 1)
             {
-                //query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT 0, " + limit + "";
                 query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag WHERE tag_group_id = "+tagGroupFilter+") tagGroupTags) chuck WHERE chuck.rownum BETWEEN 0 AND " + limit;
             }
             else if (tagGroupFilter > 0 && limit > 0 && page > 0)
             { 
                 int limitStart = limit * page;
                 int limitEnd = limitStart + limit;
-                //query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT " + limitStart + "," + limitEnd;
                 query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag WHERE tag_group_id = " + tagGroupFilter + ") tagGroupTags) chuck WHERE chuck.rownum BETWEEN " + limitStart + " AND " + limitEnd;
             }
             else if (tagGroupFilter < 1 && limit > 0 && page > 0)
             {
                 int limitStart = limit * page;
                 int limitEnd = limitStart + limit;
-                //query = "SELECT * FROM tag LIMIT " + limitStart + "," + limitEnd;
                 query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag) tagGroupTags) chuck WHERE chuck.rownum BETWEEN " + limitStart + " AND " + limitEnd;
             }
             else if (tagGroupFilter < 1 && limit > 0 && page < 1)
             {
-                //query = "SELECT * FROM tag LIMIT 0, " + limit;
                 query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag) tagGroupTags) chuck WHERE chuck.rownum BETWEEN 0 AND " + limit;
             }
             SqlDataReader reader = ExecuteReader(query, "SMU");
@@ -596,6 +639,26 @@ namespace RestService
                 tag = new Tag(tID, tagGroup, name, shortName);
             }
             return tag;
+        }
+
+        /// <summary>
+        /// Gets all tags based on a media
+        /// </summary>
+        /// <param name="media">The media that the tags belong to</param>
+        /// <returns>Array of all tags</returns>
+        public Tag[] getTagByMedia(int media)
+        {
+            List<Tag> tags = new List<Tag>();
+            string query = "SELECT * FROM tag, (SELECT tag_id FROM media_has_tag WHERE media_id = '" + media + "') tId WHERE tId.tag_id = tag.id";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) {
+                int id = reader.GetInt32(reader.GetOrdinal("id"));
+                int tag_group = reader.GetInt32(reader.GetOrdinal("tag_group"));
+                string name = reader.GetString(reader.GetOrdinal("name"));
+                string simple_name = reader.GetString(reader.GetOrdinal("simple_name"));
+                tags.Add(new Tag(id, tag_group, name, simple_name));
+            }
+            return tags.ToArray();
         }
 
         /// <summary>
@@ -638,18 +701,23 @@ namespace RestService
         /// <param name="tagGroup">The new tag group</param>
         public void putTag(string id, string name, string simpleName, int tagGroup)
         {
-            int tagId = int.Parse(id);
-            string query = "";
-            if(name != "" && simpleName == "" && tagGroup < 1) {
-                query = "UPDATE tag SET name = '" + name + "' WHERE id = '" + tagId + "'";
+            if (getTag(id) != null) {
+                int tagId = int.Parse(id);
+                string query = "";
+                if (name != "" && simpleName == "" && tagGroup < 1)
+                {
+                    query = "UPDATE tag SET name = '" + name + "' WHERE id = '" + tagId + "'";
+                }
+                else if (name != "" && simpleName != "" && tagGroup < 1)
+                {
+                    query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "' WHERE id = '" + tagId + "'";
+                }
+                else if (name != "" && simpleName != "" && tagGroup > 0)
+                {
+                    query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "', tag_group = '" + tagGroup + "' WHERE id = '" + tagId + "'";
+                }
+                ExecuteQuery(query, "SMU");
             }
-            else if (name != "" && simpleName != "" && tagGroup < 1) {
-                query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "' WHERE id = '" + tagId + "'";
-            }
-            else if (name != "" && simpleName != "" && tagGroup > 0) {
-                query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "', tag_group = '" + tagGroup + "' WHERE id = '" + tagId + "'";
-            }
-            ExecuteQuery(query, "SMU");
         }
 
         /// <summary>
@@ -658,9 +726,11 @@ namespace RestService
         /// <param name="id">The id of the tag to delete</param>
         public void deleteTag(string id)
         {
-            int tagId = int.Parse(id);
-            string query = "DELETE from tag WHERE id = '" + tagId + "'";
-            ExecuteQuery(query, "SMU");
+            if(getTag(id) != null) {
+                int tagId = int.Parse(id);
+                string query = "DELETE from tag WHERE id = '" + tagId + "'";
+                ExecuteQuery(query, "SMU");
+            }
         }
 
         /// <summary>
@@ -734,9 +804,11 @@ namespace RestService
         /// <param name="name">The new name of the tag group</param>
         public void putTagGroup(string id, string name)
         {
-            int tId = int.Parse(id);
-            string query = "UPDATE tag_group SET name = '" + name + "' WHERE id = '" + tId + "'";
-            ExecuteQuery(query, "SMU");
+            if (getTagGroup(id) != null) {
+                int tId = int.Parse(id);
+                string query = "UPDATE tag_group SET name = '" + name + "' WHERE id = '" + tId + "'";
+                ExecuteQuery(query, "SMU");
+            }
         }
 
         /// <summary>
@@ -745,9 +817,11 @@ namespace RestService
         /// <param name="id">The id of the tag group to delete</param>
         public void deleteTagGroup(string id)
         {
-            int tId = int.Parse(id);
-            string query = "DELETE FROM tag_group WHERE id = '" + tId + "'";
-            ExecuteQuery(query, "SMU");
+            if (getTagGroup(id) != null) {
+                int tId = int.Parse(id);
+                string query = "DELETE FROM tag_group WHERE id = '" + tId + "'";
+                ExecuteQuery(query, "SMU");
+            }
         }
 
         /// <summary>
@@ -767,6 +841,17 @@ namespace RestService
             return id;
         }
 
+        /// <summary>
+        /// Assigns a tag to a media
+        /// </summary>
+        /// <param name="media">Id of the media</param>
+        /// <param name="tag">Id of the tag</param>
+        public void mediaHasTag(int media, int tag)
+        {
+            string query = "INSERT INTO media_has_tag (media_id, tag_id) VALUES('" + media + "', '" + tag + "')";
+            ExecuteQuery(query, "SMU");
+        }
+
         // ============================================ Rating ======================================= //
 
         /// <summary>
@@ -774,11 +859,25 @@ namespace RestService
         /// </summary>
         /// <param name="media">The id of the media</param>
         /// <returns>Rating object</returns>
-        public Rating getRating(string media)
+        public Rating getRating(string media, string user)
         {
+            string query = "";
             Rating ratingObj = null;
             int mediaId = int.Parse(media);
-            string query = "SELECT * FROM rating WHERE media_id = '" + mediaId + "'";
+            int userId = int.Parse(user);
+            if (userId < 1 && mediaId > 0)
+            {
+                query = "SELECT * FROM rating WHERE media_id = '" + mediaId + "'";
+            }
+            else if (mediaId < 1 && userId > 0) 
+            {
+                query = "SELECT * FROM rating WHERE user_account_id = '" + userId + "'";
+            }
+            else
+            {
+                query = "SELECT * FROM rating WHERE media_id = '" + mediaId + "' AND user_account_id = '" + userId + "'";
+            }
+            
             SqlDataReader reader = ExecuteReader(query, "SMU");
             while (reader.Read()) { 
                 int id = reader.GetInt32(reader.GetOrdinal("id"));
@@ -802,7 +901,7 @@ namespace RestService
         /// <param name="comment">Content of the comment</param>
         public void postRating(int userId, int mediaId, int stars, string commentTitle, string comment)
         {
-            string query = "INSERT INTO rating VALUES('', '" + userId + "', '" + mediaId + "', '" + stars + "', '" + comment + "', '" + commentTitle + "')";
+            string query = "INSERT INTO rating (user_account, media_id, rating, comment, comment_title) VALUES('" + userId + "', '" + mediaId + "', '" + stars + "', '" + comment + "', '" + commentTitle + "')";
             ExecuteQuery(query, "SMU");
         }
 
@@ -817,6 +916,36 @@ namespace RestService
         {
             string query = "UPDATE rating SET comment_title = '" + commentTitle + "', comment = '" + comment + "', rating = '" + stars + "' WHERE id = '" + id + "'";
             ExecuteQuery(query, "SMU");
+        }
+
+        /// <summary>
+        /// Deletes a rating
+        /// </summary>
+        /// <param name="id">Id of the rating to delete</param>
+        public void deleteRating(int id)
+        {
+            if (getRatingById(id) > 0) {
+                string query = "DELETE from rating WHERE id = " + id;
+                ExecuteQuery(query, "SMU");
+            }
+        }
+
+        /// <summary>
+        /// Private helper method
+        /// Gets a rating based on it's id
+        /// </summary>
+        /// <param name="id">Id of the rating</param>
+        /// <returns>Id of the rating. Returns -1 if not found</returns>
+        private int getRatingById(int id)
+        {
+            int ratingId = -1;
+            string query = "SELECT * FROM rating WHERE id = " + id;
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            while (reader.Read()) {
+                ratingId = reader.GetInt32(reader.GetOrdinal("id"));
+            }
+
+            return ratingId;
         }
     }
 }

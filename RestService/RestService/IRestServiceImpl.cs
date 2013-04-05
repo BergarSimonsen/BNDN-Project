@@ -166,6 +166,8 @@ namespace RestService
             UriTemplate = "/mediaCategory/{id}")]
         void deleteMediaCategory(string id);
 
+        
+
         //========================================= TAGS ===================================================//
 
         [OperationContract]
@@ -244,6 +246,23 @@ namespace RestService
             UriTemplate = "/tagGroups/{id}")]
         void deleteTagGroup(string id);
 
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tagsByMedia/{media}")]
+        Tag[] getTagByMedia(string media);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tagsByMedia/{media}/{tag}")]
+        void mediaHasTag(string media, string tag);
+
+
         //========================================= RATING ===================================================//
 
         [OperationContract]
@@ -251,8 +270,8 @@ namespace RestService
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/rating/{media}")]
-        Rating getRating(string media);
+            UriTemplate = "/rating/?media={media}&user={user}")]
+        Rating getRating(string media, string user);
 
         [OperationContract]
         [WebInvoke(
@@ -266,5 +285,11 @@ namespace RestService
             Method = "PUT",
             UriTemplate = "/rating/{id}")]
         void putRating(string id, Rating rating);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            UriTemplate = "/rating/{id}")]
+        void deleteRating(string id);
     }
 }
