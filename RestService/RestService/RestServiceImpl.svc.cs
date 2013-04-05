@@ -25,65 +25,66 @@ namespace RestService
 
         public UserList getUsersWithParameter(string group_id, string search_string, string search_fields, string limit, string page, string order_by, string order)
         {
-            int groupId = 0;
+            //Sanitize groupID
+            int groupId_s = 0;
             if (group_id != null)
             {
-                groupId = int.Parse(group_id);
+                groupId_s = int.Parse(group_id);
             }
-            string seachString = null;
-            if (search_string != null)
+
+            //Sanitize searchString
+            string searchString_s = null;
+            //TODO: Implement
+            /*if (search_string != null)
             {
-                seachString = search_string;
-            }
-            string searchField = null;
+                searchString_s = search_string;
+            }*/
+
+            //Sanitize searchFields
+            //TODO: Implement
+            /*string searchFields_s = null;
             if (search_fields != null)
             {
-                searchField = search_fields;
+                searchFields_s = search_fields;
             }
-            string orderBy = "email";
+            */
+ 
+            //Sanitize orderBy
+            string orderBy_s = "email";
             if (order_by != null)
             {
-                orderBy = order_by;
+                orderBy_s = order_by;
             }
-            string orders = "ASC";
-            if (order != null)
+
+            //Santize Order
+            string order_s = "ASC";
+            if (order == "DESC")
             {
-                orders = order;
+                order_s = order;
             }
 
-            DatabaseConnector database = DatabaseConnector.GetInstance;
-            User[] users = database.getUsers(groupId, seachString, searchField, orderBy, orders);
-
-            int pageLimit = users.Length;
+            //Sanitize limit
+            int limit_s = 10; //Default
             if (limit != null)
             {
-                pageLimit = int.Parse(limit);
+                limit_s = int.Parse(limit);
             }
-            int pageCount = (users.Length + pageLimit - 1) / pageLimit;
 
-            int pageNumber = 1;
+            //Sanitize page
+            int page_s = 0; //Default
             if (page != null)
             {
-                pageNumber = int.Parse(page);
+                page_s = int.Parse(page);
             }
 
-            User[] returnUsers = new User[pageLimit];
-            int pageCounter = 1;
-            int userCounter = 0;
-            for (int i = 0; i < users.Length; i++)
-            {
-                if (pageCounter == pageNumber)
-                {
-                    returnUsers[userCounter] = users[i];
-                    userCounter++;
-                }
-                if ((i+1) % pageLimit == 0)
-                {
-                    pageCounter++;
-                }
-            }
+            //Get result
+            DatabaseConnector database = DatabaseConnector.GetInstance;
 
-            return new UserList(users.Length, pageCount, returnUsers);     
+            User[] returnUsers = database.getUsers(groupId_s, searchString_s, searchFields_s, orderBy_s, order_s, limit_s, page_s);
+            int userCount = database.getUsersCount(groupId_s, searchString_s, searchFields_s);
+            int pageCount = Math.Ceiling(userCount / limit);
+
+            return new UserList(limit, pageCount, returnUsers);
         }
 
         public int insertUser(User user)
