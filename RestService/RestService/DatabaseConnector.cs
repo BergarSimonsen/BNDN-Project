@@ -272,7 +272,13 @@ namespace RestService
         /// <param name="id">The id of the media to delete</param>
         public void deleteMedia(int id)
         {
-            string query = "DELETE * FROM media WHERE id = '"+id+"'";
+            string query = "DELETE FROM rating WHERE media_id = " + id;
+            ExecuteQuery(query, "SmuDatabase");
+
+            query = "DELETE FROM media_has_tag WHERE media_id = " + id;
+            ExecuteQuery(query, "SmuDatabase");
+
+            query = "DELETE FROM media WHERE id = "+id;
             ExecuteQuery(query, "SmuDatabase");
         }
 
