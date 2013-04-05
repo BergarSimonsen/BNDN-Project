@@ -133,26 +133,24 @@ namespace RestService
             return database.getMedia(int.Parse(id));
         }
 
-        public MediaList getMedias(string andTags, string orTags, string mediaCategoryFilter, string nameFilter, string page, string limit)
+        public MediaList getMedias(string tag, string mediaCategoryFilter, string nameFilter, string page, string limit)
         {
-            Media[] mediaList = new Media[] {new Media(2, 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 }),
-                new Media(3, 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 }),
-                new Media(4, 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 }),
-                new Media(5, 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 }),
-                new Media(5, 1, 2, "derp", "dero", "der", 32, "jgp", new int[] { 2, 3, 4, 5 })};
-
-            int pageCount;
-
-            if (limit != null)
+            int mediaTag = 0;
+            if (tag != null)
             {
-                pageCount = (mediaList.Length + int.Parse(limit) - 1) / int.Parse(limit);
+                mediaTag = int.Parse(tag);
             }
-            else
+            int mediaCategory = 0;
+            if (mediaCategoryFilter != null)
             {
-                pageCount = -1;
+                mediaCategory = int.Parse(mediaCategoryFilter);
             }
-
-            return new MediaList(pageCount, mediaList);                                
+            string title = null;
+            if (nameFilter != null)
+            {
+                title = nameFilter;
+            }
+            return null;
         }
 
         public int insertMedia(Media media)
@@ -272,10 +270,10 @@ namespace RestService
         /// <param name="simpleName">The simple name of the tag</param>
         /// <param name="tagGroups">Tag group that the tag is member of</param>
         /// <returns>Id of the new tag.</returns>
-        public int postTag(string name, string simpleName, int tagGroup)
+        public int postTag(Tag tag)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            return database.postTag(name, simpleName, tagGroup);
+            return database.postTag(tag.name, tag.simple_name, tag.tag_group);
         }
 
         /// <summary>
@@ -285,10 +283,10 @@ namespace RestService
         /// <param name="name">The new name of the tag</param>
         /// <param name="simpleName">The new simple name</param>
         /// <param name="tagGroup">The new tag group</param>
-        public void putTag(string id, string name, string simpleName, int tagGroup)
+        public void putTag(string id, Tag tag)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            database.putTag(id, name, simpleName, tagGroup);
+            database.putTag(id, tag.name, tag.simple_name, tag.tag_group);
         }
 
         /// <summary>
@@ -329,10 +327,10 @@ namespace RestService
         /// </summary>
         /// <param name="name">The name of the tag group</param>
         /// <returns>The id of the newly created tag group</returns>
-        public int postTagGroup(string name)
+        public int postTagGroup(TagGroup tagGroup)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            return database.postTagGroup(name);
+            return database.postTagGroup(tagGroup.name);
         }
 
         /// <summary>
@@ -340,10 +338,10 @@ namespace RestService
         /// </summary>
         /// <param name="id">The id of the tag group to update</param>
         /// <param name="name">The new name of the tag group</param>
-        public void putTagGroup(string id, string name)
+        public void putTagGroup(string id, TagGroup tagGroup)
         {            
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            database.putTagGroup(id, name);
+            database.putTagGroup(id, tagGroup.name);
         }
 
         /// <summary>
@@ -377,10 +375,10 @@ namespace RestService
         /// <param name="stars">Amount of stars to give</param>
         /// <param name="commentTitle">Title of the comment</param>
         /// <param name="comment">Content of the comment</param>
-        public void postRating(int userId, int mediaId, int stars, string commentTitle, string comment)
+        public void postRating(Rating rating)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            database.postRating(userId, mediaId, stars, commentTitle, comment);
+            database.postRating(rating.userId, rating.mediaId, rating.rating, rating.commentTitle, rating.comment);
         }
 
         /// <summary>
@@ -390,10 +388,10 @@ namespace RestService
         /// <param name="commentTitle">The new title of the comment</param>
         /// <param name="comment">The new content of the comment</param>
         /// <param name="stars">The new amount of stars</param>
-        public void putRating(string id, string commentTitle, string comment, int stars)
+        public void putRating(string id, Rating rating)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            database.putRating(id, commentTitle, comment, stars);
+            database.putRating(id, rating.commentTitle, rating.comment, rating.rating);
         }
     }
 }

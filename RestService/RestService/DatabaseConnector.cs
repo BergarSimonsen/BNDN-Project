@@ -440,7 +440,7 @@ namespace RestService
             {
                 query = "SELECT * FROM tag LIMIT 0, " + limit;
             }
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
             while (reader.Read()) {
                 int id = reader.GetInt32(reader.GetOrdinal("id"));
                 int tagGroup = reader.GetInt32(reader.GetOrdinal("tag_group"));
@@ -481,8 +481,8 @@ namespace RestService
         /// <returns>Id of the new tag.</returns>
         public int postTag(string name, string simpleName, int tagGroup)
         {
-            string query = "INSERT INTO tag VALUES('', '" + tagGroup + "', " + name + "', " + simpleName + "'";
-            ExecuteQuery(query, "SMU");
+            string query = "INSERT INTO tag (tag_group_id, name, simple_name) VALUES('" + tagGroup + "', '" + name + "', '" + simpleName + "')";
+            ExecuteQuery(query, "SmuDatabase");
             return getTagByName(name);
         }
 
@@ -496,7 +496,7 @@ namespace RestService
         {
             int id = -1;
             string query = "SELECT * FROM tag WHERE name = '" + name + "'";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
             while (reader.Read()) {
                 id = reader.GetInt32(reader.GetOrdinal("id"));
             }
@@ -596,8 +596,8 @@ namespace RestService
         /// <returns>The id of the newly created tag group</returns>
         public int postTagGroup(string name)
         {
-            string query = "INSERT INTO tag_group VALUES('', '" + name + "')";
-            ExecuteQuery(query, "SMU");
+            string query = "INSERT INTO tag_group (name) VALUES('" + name + "')";
+            ExecuteQuery(query, "SmuDatabase");
             return getTagGroupByName(name);
         }
 
@@ -633,8 +633,8 @@ namespace RestService
         private int getTagGroupByName(string name)
         {
             int id = -1;
-            string query = "SELECT id FROM tag_group WHERE name = '" + name;
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            string query = "SELECT id FROM tag_group WHERE name = '" + name +"'";
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
             while (reader.Read()) {
                 id = reader.GetInt32(reader.GetOrdinal("id"));
             }
