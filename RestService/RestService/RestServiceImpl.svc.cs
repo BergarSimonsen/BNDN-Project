@@ -140,6 +140,16 @@ namespace RestService
             return database.getMedia(int.Parse(id));
         }
 
+        /// <summary>
+        /// Gets all medias in the database.
+        /// </summary>
+        /// <param name="andTags">Filter by matching all tags.</param>
+        /// <param name="orTags">Filter by matching some tags</param>
+        /// <param name="mediaCategoryFilter">Filter by mediaCategory</param>
+        /// <param name="nameFilter">Filter by name</param>
+        /// <param name="page">The page you are on.</param>
+        /// <param name="limit">How many medias per page?</param>
+        /// <returns>List of all medias</returns>
         public MediaList getMedias(string tag, string mediaCategoryFilter, string nameFilter, string page, string limit)
         {
             int mediaTag = 0;
@@ -198,10 +208,10 @@ namespace RestService
         /// <param name="table">The table to update</param>
         /// <param name="value">The values to insert</param>
         /// <param name="id">The id of the media to update</param>
-        public void putMedia(string[] table, string[] value, string id)
+        public void putMedia(Media media, string id)
         { 
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            database.putMedia(table, value, int.Parse(id));
+            //database.putMedia(table, value, int.Parse(id));
         }
 
         /// <summary>
