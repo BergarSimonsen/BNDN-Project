@@ -44,9 +44,6 @@ namespace RestService
             //TODO: Implement
             string searchFields_s = null;
             /*if (search_fields != null)
-
-             * string searchFields_s = null;
-            /*if (search_fields != null)
             {
                 searchFields_s = search_fields;
             }
@@ -172,7 +169,19 @@ namespace RestService
             {
                 title = nameFilter;
             }
-            return null;
+            int pageNumber = 1;
+            if (page != null)
+            {
+                pageNumber = int.Parse(page);
+            }
+            int limitNumber = 10;
+            if(limit != null)
+            {
+                limitNumber = int.Parse(limit);
+            }
+
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getMedias(mediaTag,mediaCategory,nameFilter,pageNumber,limitNumber);
         }
 
         /// <summary>
@@ -443,6 +452,7 @@ namespace RestService
         /// <param name="commentTitle">The new title of the comment</param>
         /// <param name="comment">The new content of the comment</param>
         /// <param name="stars">The new amount of stars</param>
+
         public void putRating(string id, Rating rating)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;

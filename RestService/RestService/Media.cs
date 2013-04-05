@@ -34,10 +34,7 @@ namespace RestService
         [DataMember]
         public string format;
 
-        [DataMember]
-        public int[] tags;
-
-        public Media(int id, int mediaCategory, int user, string fileLocation, string title, string description, int mediaLength, string format, int[] tags)
+        public Media(int id, int mediaCategory, int user, string fileLocation, string title, string description, int mediaLength, string format)
         {
             this.id = id;
             this.mediaCategory = mediaCategory;
@@ -47,7 +44,6 @@ namespace RestService
             this.description = description;
             this.mediaLength = mediaLength;
             this.format = format;
-            this.tags = tags;
         }
     }
 }
