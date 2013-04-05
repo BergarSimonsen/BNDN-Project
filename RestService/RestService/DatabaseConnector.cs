@@ -237,7 +237,8 @@ namespace RestService
         public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order, int limit, int page)
         {
             //MS SHIT to do limit and page...
-            string query = "GO WITH UserResult AS (SELECT ROW_NUMBER() AS 'RowNumber', ";
+            //string query = "GO WITH UserResult AS (SELECT ROW_NUMBER() AS 'RowNumber', ";
+            string query = "SELECT ";
             
             if (group_id != 0 && search_string == null && search_fields == null)
             {
@@ -257,7 +258,7 @@ namespace RestService
             }
 
             //MORE MS SHIT to do limit and page..
-            query += ") SELECT * FROM UserResult WHERE RowNumber BETWEEN "+(page*limit)+" AND "+((page+1)*limit);
+            //query += ") SELECT * FROM UserResult WHERE RowNumber BETWEEN "+((page-1)*limit)+" AND "+(page*limit);
 
             List<User> groupsUsers = null;
             SqlDataReader reader = ExecuteReader(query, "SMU");
@@ -276,10 +277,10 @@ namespace RestService
         }
 
         public int getUsersCount(int group_id, string search_string, string search_fields) {
-            string query = "SELECT COUNT(*) FROM user_account WHERE group_id="+group_id;
-            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+            string query = "SELECT COUNT(*) FROM user_account";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
             reader.Read();
-            int result = reader.GetInt32(reader.GetValue(0));
+            int result = reader.GetInt32(0);
             CloseConnection();
             return result;
         }
