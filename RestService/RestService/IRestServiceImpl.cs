@@ -165,5 +165,106 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaCategory/{id}")]
         void deleteMediaCategory(string id);
+
+        //========================================= TAGS ===================================================//
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tags")]
+        Tag[] getTags(int tagGroupFilter, int limit, int page);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tags/{id}")]
+        Tag getTag(string id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tags")]
+        int postTag(string name, string simpleName, int tagGroup);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "PUT",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tags/{id}")]
+        void putTag(string id, string name, string simpleName, int tagGroup);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "PUT",
+            UriTemplate = "/tags/{id}")]
+        void deleteTag(string id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tagGroups/{id}")]
+        TagGroup getTagGroup(string id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tagGroups?limit={limit}&page={page}")]
+        TagGroup[] getTagGroups(string limit, string page); 
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tagGroups")]
+        int postTagGroup(string name);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "PUT",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tagGroups/{id}")]
+        void putTagGroup(string id, string name);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            UriTemplate = "/tagGroups/{id}")]
+        void deleteTagGroup(string id);
+
+        //========================================= TAGS ===================================================//
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/rating/{media}")]
+        Rating getRating(string media);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            UriTemplate = "/rating")]
+        void postRating(int userId, int mediaId, int stars, string commentTitle, string comment);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "PUT",
+            UriTemplate = "/rating/{id}")]
+        void putRating(string id, string commentTitle, string comment, int stars);
     }
 }
