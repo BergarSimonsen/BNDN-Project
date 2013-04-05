@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -66,7 +66,7 @@ namespace RestService
         /// </summary>
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute the query on</param>
-        private void ExecuteQuery(string query, string database)
+        public void ExecuteQuery(string query, string database)
         {
             Connect(database);
             if (connection.State != System.Data.ConnectionState.Open) Connect(database);
@@ -85,7 +85,7 @@ namespace RestService
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute query on</param>
         /// <returns>SQLDataReader object with return values</returns>
-        private SqlDataReader ExecuteReader(string query, string database)
+        public SqlDataReader ExecuteReader(string query, string database)
         {
             Connect(database);
             if (connection.State != System.Data.ConnectionState.Open) Connect(database);
@@ -237,8 +237,7 @@ namespace RestService
         public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order, int limit, int page)
         {
             //MS SHIT to do limit and page...
-            //string query = "SELECT * FROM (SELECT ROW_NUMBER() AS 'RowNumber', ";
-            string query = "SELECT ";
+            string query = "GO WITH UserResult AS (SELECT ROW_NUMBER() AS 'RowNumber', ";
             
             if (group_id != 0 && search_string == null && search_fields == null)
             {
@@ -258,7 +257,7 @@ namespace RestService
             }
 
             //MORE MS SHIT to do limit and page..
-            //query += ") WHERE RowNumber BETWEEN "+((page-1)*limit)+" AND "+(page*limit);
+            query += ") SELECT * FROM UserResult WHERE RowNumber BETWEEN "+(page*limit)+" AND "+((page+1)*limit);
 
             List<User> groupsUsers = null;
             SqlDataReader reader = ExecuteReader(query, "SMU");
@@ -277,15 +276,24 @@ namespace RestService
         }
 
         public int getUsersCount(int group_id, string search_string, string search_fields) {
-            string query = "SELECT COUNT(*) FROM user_account";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
-            if (!reader.HasRows) return 0;
+            string query = "SELECT COUNT(*) FROM user_account WHERE group_id="+group_id;
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
             reader.Read();
-            int result = reader.GetInt32(0);
+            int result = reader.GetInt32(reader.GetValue(0));
             CloseConnection();
-
             return result;
         }
+
+        public int getUsersCount(int group_id, string search_string, string search_fields) {
+            string query = "SELECT COUNT(*) FROM user_account WHERE group_id="+group_id;
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+            reader.Read();
+            int result = reader.GetInt32(reader.GetValue(0));
+            CloseConnection();
+            return result;
+        }
+
+
 //*****************************************************************************************************************************************************
 //********************************************************** Media ************************************************************************************
 
@@ -552,17 +560,20 @@ namespace RestService
             { 
                 int limitStart = limit * page;
                 int limitEnd = limitStart + limit;
-                query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT " + limitStart + "," + limitEnd;
+                //query = "SELECT * FROM tag WHERE tag_group = '" + tagGroupFilter + "' LIMIT " + limitStart + "," + limitEnd;
+                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag WHERE tag_group_id = " + tagGroupFilter + ") tagGroupTags) chuck WHERE chuck.rownum BETWEEN " + limitStart + " AND " + limitEnd;
             }
             else if (tagGroupFilter < 1 && limit > 0 && page > 0)
             {
                 int limitStart = limit * page;
                 int limitEnd = limitStart + limit;
-                query = "SELECT * FROM tag LIMIT " + limitStart + "," + limitEnd;
+                //query = "SELECT * FROM tag LIMIT " + limitStart + "," + limitEnd;
+                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag) tagGroupTags) chuck WHERE chuck.rownum BETWEEN " + limitStart + " AND " + limitEnd;
             }
             else if (tagGroupFilter < 1 && limit > 0 && page < 1)
             {
-                query = "SELECT * FROM tag LIMIT 0, " + limit;
+                //query = "SELECT * FROM tag LIMIT 0, " + limit;
+                query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag) tagGroupTags) chuck WHERE chuck.rownum BETWEEN 0 AND " + limit;
             }
             SqlDataReader reader = ExecuteReader(query, "SMU");
             while (reader.Read()) {
@@ -818,3 +829,4 @@ namespace RestService
         }
     }
 }
+>>>>>>> cab8bfe8b75d717d80ca903c296811030e221fc1
