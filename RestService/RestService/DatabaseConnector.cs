@@ -782,10 +782,13 @@ namespace RestService
         /// <param name="commentTitle">The new title of the comment</param>
         /// <param name="comment">The new content of the comment</param>
         /// <param name="stars">The new amount of stars</param>
-        public void putRating(string id, string commentTitle, string comment, int stars)
+        public void putRating(Rating rating)
         {
-            int rId = int.Parse(id);
-            string query = "UPDATE rating SET comment_title = '" + commentTitle + "', comment = '" + comment + "', rating = '" + stars + "' WHERE id = '" + rId + "'";
+            int id = rating.id;
+            string commentTitle = rating.commentTitle;
+            string comment = rating.comment;
+            int stars = rating.rating;
+            string query = "UPDATE rating SET comment_title = '" + commentTitle + "', comment = '" + comment + "', rating = '" + stars + "' WHERE id = '" + id + "'";
             ExecuteQuery(query, "SMU");
         }
     }

@@ -429,10 +429,10 @@ namespace RestService
         /// <param name="commentTitle">The new title of the comment</param>
         /// <param name="comment">The new content of the comment</param>
         /// <param name="stars">The new amount of stars</param>
-        public void putRating(string id, string commentTitle, string comment, int stars)
+        public void putRating(Rating rating)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            database.putRating(id, commentTitle, comment, stars);
+            database.putRating(rating);
         }
     }
 }
