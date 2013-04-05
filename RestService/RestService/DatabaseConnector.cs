@@ -309,26 +309,69 @@ namespace RestService
                 int mediaLength = reader.GetInt32(reader.GetOrdinal("minutes"));
                 string format = reader.GetString(reader.GetOrdinal("format"));
 
-                returnMedia = MediaHandler.createMedia(mediaId, mediaCategory, user, fileLocation, title, description, mediaLength, format,null);
+                returnMedia = MediaHandler.createMedia(mediaId, mediaCategory, user, fileLocation, title, description, mediaLength, format);
             }
-
-            query = "SELECT tag_id from media_has_tag where media_id = " + id;
-            reader = ExecuteReader(query, "SMU");
-
-            List<int> returnMediaTags = new List<int>();
-            while (reader.Read())
-            {
-                returnMediaTags.Add(reader.GetInt32(reader.GetOrdinal("tag_id")));
-            }
-
-            returnMedia.tags = returnMediaTags.ToArray();
 
             return returnMedia;
         }
 
         public MediaList getMedias(int tag, int mediaCategoryFilter, string nameFilter, int page, int limit)
         {
-            return null;
+            string query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, medias.* FROM ";
+
+            if (tag < 1)
+            {
+                if (mediaCategoryFilter > 0 && nameFilter != null)
+                {
+                    query += "(SELECT * FROM media WHERE media_category_id = " + mediaCategoryFilter + " AND title = '" + nameFilter + "') medias)";
+                }
+                if (mediaCategoryFilter < 1 && nameFilter != null)
+                {
+                    query += "(SELECT * FROM media WHERE title = '" + nameFilter + "') medias)";
+                }
+                if (mediaCategoryFilter > 0 && nameFilter == null)
+                {
+                    query += "(SELECT * FROM media WHERE media_category_id = " + mediaCategoryFilter + ") medias)";
+                }
+                if (mediaCategoryFilter < 1 && nameFilter == null)
+                {
+                    query += "(SELECT * FROM media) medias)";
+                }
+            }
+
+            query += "chuck WHERE chuck.rownum BETWEEN " + ((page - 1) * limit) + " AND " + (page * limit);
+
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+
+            List<Media> returnMediaList = new List<Media>();
+            while (reader.Read())
+            {
+                int mediaId = reader.GetInt32(reader.GetOrdinal("id"));
+                int mediaCategory = reader.GetInt32(reader.GetOrdinal("media_category_id"));
+                int user = reader.GetInt32(reader.GetOrdinal("user_account_id"));
+                string fileLocation = reader.GetString(reader.GetOrdinal("file_location"));
+                string title = reader.GetString(reader.GetOrdinal("title"));
+                string description = reader.GetString(reader.GetOrdinal("description"));
+                int mediaLength = reader.GetInt32(reader.GetOrdinal("minutes"));
+                string format = reader.GetString(reader.GetOrdinal("format"));
+
+                returnMediaList.Add(MediaHandler.createMedia(mediaId, mediaCategory, user, fileLocation, title, description, mediaLength, format));
+            }
+
+            int mediaCount = getMediaCount();
+            int pageCount = (mediaCount + limit - 1) / limit;
+
+            return new MediaList(pageCount,returnMediaList.ToArray());
+        }
+
+        private int getMediaCount()
+        {
+            string query = "SELECT COUNT(*) FROM media";
+            SqlDataReader reader = ExecuteReader(query, "SMU");
+            reader.Read();
+            int result = reader.GetInt32(0);
+            CloseConnection();
+            return result;
         }
 
         /// <summary>
@@ -347,9 +390,8 @@ namespace RestService
             string description = media.description;
             int mediaLength = media.mediaLength;
             string format = media.format;
-            int[] tags = media.tags;
 
-            string query = "INSERT INTO media VALUES('', '', '', '" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
+            string query = "INSERT INTO media (title, description, minutes, format, media_category_id, user_account_id) VALUES('" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
             ExecuteQuery(query, "SMU");
 
             return getMediaIdByDescription(title, description);
@@ -368,7 +410,8 @@ namespace RestService
             string query = "SELECT id FROM media WHERE title = '" + title + "' AND description = '" + description + "'";
             SqlDataReader reader = ExecuteReader(query, "SMU");
 
-            while (reader.Read()) {
+            while (reader.Read()) 
+            {
                 id = reader.GetInt32(reader.GetOrdinal("id"));
             }
             return id;

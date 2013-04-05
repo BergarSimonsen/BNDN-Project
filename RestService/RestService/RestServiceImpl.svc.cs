@@ -169,7 +169,19 @@ namespace RestService
             {
                 title = nameFilter;
             }
-            return null;
+            int pageNumber = 1;
+            if (page != null)
+            {
+                pageNumber = int.Parse(page);
+            }
+            int limitNumber = 10;
+            if(limit != null)
+            {
+                limitNumber = int.Parse(limit);
+            }
+
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            return database.getMedias(mediaTag,mediaCategory,nameFilter,pageNumber,limitNumber);
         }
 
         /// <summary>
