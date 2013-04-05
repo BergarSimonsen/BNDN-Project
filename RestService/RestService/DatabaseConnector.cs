@@ -66,7 +66,7 @@ namespace RestService
         /// </summary>
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute the query on</param>
-        private void ExecuteQuery(string query, string database)
+        public void ExecuteQuery(string query, string database)
         {
             Connect(database);
             if (connection.State != System.Data.ConnectionState.Open) Connect(database);
@@ -85,7 +85,7 @@ namespace RestService
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute query on</param>
         /// <returns>SQLDataReader object with return values</returns>
-        private SqlDataReader ExecuteReader(string query, string database)
+        public SqlDataReader ExecuteReader(string query, string database)
         {
             Connect(database);
             if (connection.State != System.Data.ConnectionState.Open) Connect(database);
@@ -276,10 +276,19 @@ namespace RestService
         }
 
         public int getUsersCount(int group_id, string search_string, string search_fields) {
-            string query = "SELECT COUNT(*) FROM user_account";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            string query = "SELECT COUNT(*) FROM user_account WHERE group_id="+group_id;
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
             reader.Read();
-            int result = reader.GetInt32(0);
+            int result = reader.GetInt32(reader.GetValue(0));
+            CloseConnection();
+            return result;
+        }
+
+        public int getUsersCount(int group_id, string search_string, string search_fields) {
+            string query = "SELECT COUNT(*) FROM user_account WHERE group_id="+group_id;
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+            reader.Read();
+            int result = reader.GetInt32(reader.GetValue(0));
             CloseConnection();
             return result;
         }
