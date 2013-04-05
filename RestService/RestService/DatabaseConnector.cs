@@ -279,16 +279,7 @@ namespace RestService
             string query = "SELECT COUNT(*) FROM user_account WHERE group_id="+group_id;
             SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
             reader.Read();
-            int result = reader.GetInt32(reader.GetValue(0));
-            CloseConnection();
-            return result;
-        }
-
-        public int getUsersCount(int group_id, string search_string, string search_fields) {
-            string query = "SELECT COUNT(*) FROM user_account WHERE group_id="+group_id;
-            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
-            reader.Read();
-            int result = reader.GetInt32(reader.GetValue(0));
+            int result = reader.GetInt32(0);
             CloseConnection();
             return result;
         }
@@ -829,4 +820,3 @@ namespace RestService
         }
     }
 }
->>>>>>> cab8bfe8b75d717d80ca903c296811030e221fc1
