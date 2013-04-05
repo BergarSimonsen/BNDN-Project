@@ -1,28 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Runtime.Serialization;
-using System.Web;
 
 namespace RestService
 {
     [DataContract]
-    public class MediaCategory
+    public class Tag
     {
         [DataMember]
         public int id;
 
         [DataMember]
+        public int tag_group;
+
+        [DataMember]
         public string name;
 
         [DataMember]
-        public string description;
+        public string simple_name;
 
-        public MediaCategory(int id, string name, string description)
+        public Tag(int id, int tag_group, string name, string simple_name)
         {
             this.id = id;
             this.name = name;
-            this.description = description;
+            this.tag_group = tag_group;
+            this.simple_name = simple_name;
         }
     }
 }
