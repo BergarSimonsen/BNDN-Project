@@ -234,25 +234,30 @@ namespace RestService
         /// <param name="order_by">Which column to order by</param>
         /// <param name="order">How to order?</param>
         /// <returns>Array of users</returns>
-        public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order)
+        public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order, int limit, int page)
         {
-            string query = null;
+            //MS SHIT to do limit and page...
+            string query = "GO WITH UserResult AS (SELECT ROW_NUMBER() AS 'RowNumber', ";
+            
             if (group_id != 0 && search_string == null && search_fields == null)
             {
-                query = "select user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order;
+                query += "user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order;
             }
             else if(group_id != 0 && search_string != null && search_fields != null)
             {
-                query = "select * from (select user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order+") users where "+search_fields+" = '"+search_string+"'";
+                query += "* from (select user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order+") users where "+search_fields+" = '"+search_string+"'";
             }
             else if(group_id == 0 && search_string != null && search_fields != null)
             {
-                query = "select * from user_account where "+search_fields+" = '"+search_string+"' order by user_account."+order_by+" "+order;
+                query += "* from user_account where "+search_fields+" = '"+search_string+"' order by user_account."+order_by+" "+order;
             }
             else
             {
-                query = "select * from user_account";
+                query += "* from user_account";
             }
+
+            //MORE MS SHIT to do limit and page..
+            query += ") SELECT * FROM UserResult WHERE RowNumber BETWEEN "+(page*limit)+" AND "+((page+1)*limit);
 
             List<User> groupsUsers = null;
             SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
@@ -268,6 +273,15 @@ namespace RestService
             CloseConnection();
 
             return groupsUsers.ToArray();
+        }
+
+        public int getUsersCount(int group_id, string search_string, string search_fields) {
+            string query = "SELECT COUNT(*) FROM user_account WHERE group_id="+group_id;
+            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+            reader.Read();
+            int result = reader.GetInt32(reader.GetValue(0));
+            CloseConnection();
+            return result;
         }
 //*****************************************************************************************************************************************************
 //********************************************************** Media ************************************************************************************
