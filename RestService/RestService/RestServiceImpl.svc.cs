@@ -162,12 +162,18 @@ namespace RestService
 
         public void insertMediaFile(Stream file)
         {
-            StreamReader reader = new StreamReader(file);
-            string fileContent = reader.ReadToEnd();
-            reader.Close();
+            FileStream writer = new FileStream(@"C:\Users\christian\Documents\RentItTest\derp.mkv",FileMode.Create,FileAccess.Write);
 
-            StreamWriter writer = new StreamWriter(@"C:\Users\christian\Documents\RentItTest\derp.mkv");
-            writer.Write(fileContent);
+            byte[] bytes = new Byte[4096];
+
+            int bytesRead = 0;
+
+            while ((bytesRead = file.Read(bytes, 0, bytes.Length)) != 0)
+            {
+                writer.Write(bytes,0,bytesRead);
+            }
+
+            file.Close();
             writer.Close();
         }
 
