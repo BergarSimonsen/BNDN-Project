@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -23,7 +23,7 @@ namespace RestService
             return database.getUser(int.Parse(id));
         }
 
-        public UserList getUsersWithParameter(string group_id, string search_string, string search_fields, string limit, string page, string order_by, string order)
+        public UserList getUsersWithParameter(string group_id, string emailFilter, string limit, string page, string order_by, string order)
         {
             //Sanitize groupID
             int groupId_s = 0;
@@ -33,22 +33,13 @@ namespace RestService
             }
 
             //Sanitize searchString
-            string searchString_s = null;
+            string email = null;
             //TODO: Implement
-            /*if (search_string != null)
+            if (emailFilter != null)
             {
-                searchString_s = search_string;
-            }*/
-
-            //Sanitize searchFields
-            //TODO: Implement
-            string searchFields_s = null;
-            /*if (search_fields != null)
-            {
-                searchFields_s = search_fields;
+                email = emailFilter;
             }
-            */
- 
+
             //Sanitize orderBy
             string orderBy_s = "email";
             if (order_by != null)
@@ -81,8 +72,8 @@ namespace RestService
             //Get result
             DatabaseConnector database = DatabaseConnector.GetInstance;
 
-            User[] returnUsers = database.getUsers(groupId_s, searchString_s, searchFields_s, orderBy_s, order_s, limit_s, page_s);
-            int userCount = database.getUsersCount(groupId_s, searchString_s, searchFields_s);
+            User[] returnUsers = database.getUsers(groupId_s, emailFilter, orderBy_s, order_s, limit_s, page_s);
+            int userCount = database.getUsersCount();
             int pageCount = (userCount + limit_s - 1) / limit_s;
 
             return new UserList(limit_s, pageCount, returnUsers);
