@@ -396,7 +396,7 @@ namespace RestService
             int mediaLength = media.mediaLength;
             string format = media.format;
 
-            string query = "INSERT INTO media (file_loaction ,title, description, minutes, format, media_category_id, user_account_id) VALUES('"+fileLocation+"','" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
+            string query = "INSERT INTO media (file_location ,title, description, minutes, format, media_category_id, user_account_id) VALUES('"+fileLocation+"','" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
             ExecuteQuery(query, "SMU");
 
             return getMediaIdByDescription(title, description);
