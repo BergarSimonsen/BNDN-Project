@@ -123,8 +123,8 @@ namespace RestService
         [WebInvoke(
             Method = "POST",
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/mediaFiles")]
-        void insertMediaFile(Stream file);
+            UriTemplate = "/mediaFiles/{id}")]
+        void insertMediaFile(Stream file, string id);
 
         [OperationContract]
         [WebInvoke(

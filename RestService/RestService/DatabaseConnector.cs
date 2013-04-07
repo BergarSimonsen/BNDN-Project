@@ -396,7 +396,7 @@ namespace RestService
             int mediaLength = media.mediaLength;
             string format = media.format;
 
-            string query = "INSERT INTO media (file_loaction ,title, description, minutes, format, media_category_id, user_account_id) VALUES('"+fileLocation+"','" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
+            string query = "INSERT INTO media (file_location ,title, description, minutes, format, media_category_id, user_account_id) VALUES('"+fileLocation+"','" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
             ExecuteQuery(query, "SMU");
 
             return getMediaIdByDescription(title, description);
@@ -456,7 +456,7 @@ namespace RestService
             for (int i = 0; i < table.Length; i++)
             {
                 // this will give: "SET title = 'tempTitle'" (used when this is the last "SET" operation)
-                if (i == table.Length - 1) updates.Add(table[i] + " = '" + value[i] + "'");
+                if (i == table.Length - 1) updates.Add("SET "+table[i] + " = '" + value[i] + "'");
 
                 // this will give: "SET title = 'tempTitle'," (used when this is NOT the last "SET" operation)
                 else updates.Add("SET "+table[i] + " = '" + value[i] + "',");

@@ -199,9 +199,16 @@ namespace RestService
         /// Uploads a media file to the server.
         /// </summary>
         /// <param name="file">The file to upload.</param>
-        public void insertMediaFile(Stream file)
+        public void insertMediaFile(Stream file, string id)
         {
-            FileStream writer = new FileStream(@"C:\Users\christian\Documents\RentItTest\derp.mkv",FileMode.Create,FileAccess.Write);
+            DatabaseConnector database = DatabaseConnector.GetInstance;
+            Media mediaMeta = database.getMedia(int.Parse(id));
+
+            string fileLocation = @"C:\RentItServices\Rentit26\MediaFiles\"+id;
+            System.IO.Directory.CreateDirectory(fileLocation);
+            string fileDir = fileLocation + @"\" + mediaMeta.title + "." +mediaMeta.format;
+ 
+            FileStream writer = new FileStream(fileDir,FileMode.Create,FileAccess.Write);
 
             byte[] bytes = new Byte[4096];
 
@@ -214,6 +221,10 @@ namespace RestService
 
             file.Close();
             writer.Close();
+
+            string fileStream = "http://rentit.itu.dk/RentIt26/MediaFiles/" + id + "/" + mediaMeta.title + "." + mediaMeta.format;
+
+            database.putMedia(new string[] { "file_location" }, new string[] { fileStream }, int.Parse(id));
         }
 
         /// <summary>
