@@ -2,6 +2,8 @@
 *.csproj.user
 *.suo
 *.sln
+RestService/app.config
+RestService/RestService/obj/*
 RestService/RestService/obj/Debug/**/*
 RestService/RestService/obj/Release/**/*
 RestService/RestService/bin/*
