@@ -39,7 +39,7 @@ namespace RestService
 
         private SqlConnection Connect(string s)
         { 
-            connectionString = "Server=rentit.itu.dk;DATABASE="+databases[s]+";UID=Rentit26db;PASSWORD=ZAQ12wsx;";
+            connectionString = "Server=rentit.itu.dk;DATABASE=SmuDatabase;UID=Rentit26db;PASSWORD=ZAQ12wsx;";
             connection = new SqlConnection(connectionString);
             try
             {
@@ -632,7 +632,7 @@ namespace RestService
             SqlDataReader reader = ExecuteReader(query, "SMU");
             while (reader.Read()) { 
                 int tID = reader.GetInt32(reader.GetOrdinal("id"));
-                int tagGroup = reader.GetInt32(reader.GetOrdinal("tag_group"));
+                int tagGroup = reader.GetInt32(reader.GetOrdinal("tag_group_id"));
                 string name = reader.GetString(reader.GetOrdinal("name"));
                 string shortName = reader.GetString(reader.GetOrdinal("simple_name"));
                 tag = new Tag(tID, tagGroup, name, shortName);
