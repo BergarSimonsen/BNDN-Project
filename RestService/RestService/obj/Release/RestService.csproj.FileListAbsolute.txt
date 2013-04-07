@@ -1,9 +1,0 @@
-C:\Users\christian\Documents\3rd Semester\RestService\RestService\bin\RestService.dll
-C:\Users\christian\Documents\3rd Semester\RestService\RestService\bin\RestService.pdb
-C:\Users\christian\Documents\3rd Semester\RestService\RestService\obj\Release\RestService.dll
-C:\Users\christian\Documents\3rd Semester\RestService\RestService\obj\Release\RestService.pdb
-C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestService\bin\RestService.dll
-C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestService\bin\RestService.pdb
-C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestService\obj\Release\RestService.csprojResolveAssemblyReference.cache
-C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestService\obj\Release\RestService.dll
-C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestService\obj\Release\RestService.pdb

@@ -39,7 +39,7 @@ namespace RestService
 
         private SqlConnection Connect(string s)
         { 
-            connectionString = "Server=rentit.itu.dk;DATABASE="+databases[s]+";UID=Rentit26db;PASSWORD=ZAQ12wsx;";
+            connectionString = "Server=rentit.itu.dk;DATABASE=SmuDatabase;UID=Rentit26db;PASSWORD=ZAQ12wsx;";
             connection = new SqlConnection(connectionString);
             try
             {
@@ -234,30 +234,29 @@ namespace RestService
         /// <param name="order_by">Which column to order by</param>
         /// <param name="order">How to order?</param>
         /// <returns>Array of users</returns>
-        public User[] getUsers(int group_id, string search_string, string search_fields, string order_by, string order, int limit, int page)
+        public User[] getUsers(int group_id, string emailFilter, string order_by, string order, int limit, int page)
         {
-            //MS SHIT to do limit and page...
-            string query = "GO WITH UserResult AS (SELECT ROW_NUMBER() AS 'RowNumber', ";
-            
-            if (group_id != 0 && search_string == null && search_fields == null)
+            string query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY email) AS rownum, users.* FROM ";
+ 
+            if (emailFilter != null && group_id < 1)
             {
-                query += "user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order;
+                query += "(SELECT * FROM user_account WHERE email = '" + emailFilter + "') users)";
             }
-            else if(group_id != 0 && search_string != null && search_fields != null)
+            if (emailFilter == null && group_id > 0)
             {
-                query += "* from (select user_account.id, user_account.email, user_account.password_hash from user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account."+order_by+" "+order+") users where "+search_fields+" = '"+search_string+"'";
+                query += "(SELECT * FROM user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id order by user_account." + order_by + " " + order + ") users)";
             }
-            else if(group_id == 0 && search_string != null && search_fields != null)
+            if (emailFilter != null && group_id > 0)
             {
-                query += "* from user_account where "+search_fields+" = '"+search_string+"' order by user_account."+order_by+" "+order;
+                query += "(SELECT * FROM user_account, (select user_account_id from user_account_in_user_group where user_group_id = " + group_id + ") uid where uid.user_account_id = user_account.id AND user_account.email = '"+emailFilter+"' order by user_account." + order_by + " " + order + ") users)";
             }
-            else
+            if (emailFilter == null && group_id < 1)
             {
-                query += "* from user_account";
+                query += "(SELECT * FROM user_account) users)";
             }
 
-            //MORE MS SHIT to do limit and page..
-            query += ") SELECT * FROM UserResult WHERE RowNumber BETWEEN "+(page*limit)+" AND "+((page+1)*limit);
+            query += "chuck WHERE chuck.rownum BETWEEN " + ((page - 1) * limit) + " AND " + (page * limit);
+            
 
             List<User> groupsUsers = null;
             SqlDataReader reader = ExecuteReader(query, "SMU");
@@ -275,8 +274,8 @@ namespace RestService
             return groupsUsers.ToArray();
         }
 
-        public int getUsersCount(int group_id, string search_string, string search_fields) {
-            string query = "SELECT COUNT(*) FROM user_account WHERE group_id="+group_id;
+        public int getUsersCount() {
+            string query = "SELECT COUNT(*) FROM user_account";
             SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
             reader.Read();
             int result = reader.GetInt32(0);
@@ -456,7 +455,7 @@ namespace RestService
             for (int i = 0; i < table.Length; i++)
             {
                 // this will give: "SET title = 'tempTitle'" (used when this is the last "SET" operation)
-                if (i == table.Length - 1) updates.Add(table[i] + " = '" + value[i] + "'");
+                if (i == table.Length - 1) updates.Add("SET "+table[i] + " = '" + value[i] + "'");
 
                 // this will give: "SET title = 'tempTitle'," (used when this is NOT the last "SET" operation)
                 else updates.Add("SET "+table[i] + " = '" + value[i] + "',");
@@ -633,7 +632,7 @@ namespace RestService
             SqlDataReader reader = ExecuteReader(query, "SMU");
             while (reader.Read()) { 
                 int tID = reader.GetInt32(reader.GetOrdinal("id"));
-                int tagGroup = reader.GetInt32(reader.GetOrdinal("tag_group"));
+                int tagGroup = reader.GetInt32(reader.GetOrdinal("tag_group_id"));
                 string name = reader.GetString(reader.GetOrdinal("name"));
                 string shortName = reader.GetString(reader.GetOrdinal("simple_name"));
                 tag = new Tag(tID, tagGroup, name, shortName);
