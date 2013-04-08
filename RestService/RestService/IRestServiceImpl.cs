@@ -21,14 +21,18 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/{id}")]
         User getUser(string id);
+        // Working
 
         [OperationContract]
         [WebInvoke(
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
+//            UriTemplate = "/user?group_id={group_id}&search_string={search_string}&search_fields={search_fields}&limit={limit}&page={page}&order_by={order_by}&order={order}")]
+//        UserList getUsersWithParameter(string group_id, string search_string, string search_fields, string limit, string page, string order_by, string order);
+//        // Can't really test
             UriTemplate = "/user?group_id={group_id}&emailFilter={emailFilter}&limit={limit}&page={page}&order_by={order_by}&order={order}")]
-        UserList getUsersWithParameter(string group_id, string emailFilter, string limit, string page, string order_by, string order);
+            UserList getUsersWithParameter(string group_id, string emailFilter, string limit, string page, string order_by, string order);
 
         [OperationContract]
         [WebInvoke(
@@ -46,6 +50,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/me")]
         User getLoggedUser();
+        // Bad request .. no user logged in tho
 
         [OperationContract]
         [WebInvoke(
@@ -86,6 +91,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media/{id}")]
         Media getMedia(string id);
+        // Working
 
         [OperationContract]
         [WebInvoke(
@@ -94,6 +100,9 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media?tag={tag}&mediaCategoryFilter={mediaCategoryFilter}&nameFilter={nameFilter}&page={page}&limit={limit}")]
         MediaList getMedias(string tag,string mediaCategoryFilter, string nameFilter, string page, string limit);
+        // Almost working.
+        // Paging doesn't work 100%.
+        // Didn't test tag
 
         [OperationContract]
         [WebInvoke(
@@ -102,6 +111,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media")]
         int postMedia(Media media);
+        // Working
 
         [OperationContract]
         [WebInvoke(
@@ -110,6 +120,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media/{id}")]
         void putMedia(Media media, string id);
+        // No error, but won't update
 
         [OperationContract]
         [WebInvoke(
@@ -118,6 +129,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media/{id}")]
         void deleteMedia(string id);
+        // Working
 
         [OperationContract]
         [WebInvoke(
@@ -133,6 +145,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaCategory")]
         MediaCategory[] getMediaCategories();
+        // Working
 
         [OperationContract]
         [WebInvoke(
@@ -141,6 +154,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaCategory/{id}")]
         MediaCategory getMediaCategory(string id);
+        // Working
 
         [OperationContract]
         [WebInvoke(
@@ -149,6 +163,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaCategory")]
         int postMediaCategory(MediaCategory mediaCategory);
+        // Working
 
         [OperationContract]
         [WebInvoke(
@@ -157,6 +172,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaCategory/{id}")]
         void putMediaCategory(string id, MediaCategory mediaCategory);
+        // Almost working. Doesn't update description, only name
 
         [OperationContract]
         [WebInvoke(
@@ -165,6 +181,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaCategory/{id}")]
         void deleteMediaCategory(string id);
+        // Working
 
         
 
@@ -185,6 +202,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tags/{id}")]
         Tag getTag(string id);
+        // BAD REQUEST
 
         [OperationContract]
         [WebInvoke(
@@ -193,6 +211,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tags")]
         int postTag(Tag tag);
+        // Working
 
         [OperationContract]
         [WebInvoke(
@@ -201,12 +220,14 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tags/{id}")]
         void putTag(string id, Tag tag);
+        // Bad request
 
         [OperationContract]
         [WebInvoke(
             Method = "DELETE",
             UriTemplate = "/tags/{id}")]
         void deleteTag(string id);
+        // Bad request
 
         [OperationContract]
         [WebInvoke(
@@ -215,6 +236,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tagGroups/{id}")]
         TagGroup getTagGroup(string id);
+        // Working
 
         [OperationContract]
         [WebInvoke(
@@ -223,6 +245,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tagGroups?limit={limit}&page={page}")]
         TagGroup[] getTagGroups(string limit, string page); 
+        // Bad request
 
         [OperationContract]
         [WebInvoke(
@@ -231,6 +254,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tagGroups")]
         int postTagGroup(TagGroup tagGroup);
+        // Working
 
         [OperationContract]
         [WebInvoke(
@@ -239,12 +263,14 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tagGroups/{id}")]
         void putTagGroup(string id, TagGroup tagGroup);
+        // WORKING
 
         [OperationContract]
         [WebInvoke(
             Method = "DELETE",
             UriTemplate = "/tagGroups/{id}")]
         void deleteTagGroup(string id);
+        // WORKING
 
         [OperationContract]
         [WebInvoke(
@@ -253,6 +279,8 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tagsByMedia/{media}")]
         Tag[] getTagByMedia(string media);
+        // Works but doesn't return anything. Are there any entries?
+        // Hmm... ??
 
         [OperationContract]
         [WebInvoke(
@@ -261,6 +289,7 @@ namespace RestService
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tagsByMedia/{media}/{tag}")]
         void mediaHasTag(string media, string tag);
+        // Think it's working :p
 
 
         //========================================= RATING ===================================================//
@@ -279,17 +308,20 @@ namespace RestService
             RequestFormat = WebMessageFormat.Json,
             UriTemplate = "/rating")]
         void postRating(Rating rating);
+        // Bad Request
 
         [OperationContract]
         [WebInvoke(
             Method = "PUT",
             UriTemplate = "/rating/{id}")]
         void putRating(string id, Rating rating);
+        // Not tested
 
         [OperationContract]
         [WebInvoke(
             Method = "DELETE",
             UriTemplate = "/rating/{id}")]
         void deleteRating(string id);
+        // Not tested
     }
 }
