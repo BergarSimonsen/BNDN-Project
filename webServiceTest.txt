@@ -2,54 +2,54 @@
                             ==============
 
 Author: 
-Date: 2013-04-07 21:32:14 Romance Daylight Time
+Date: 2013-04-08 15:16:26 Romance Daylight Time
 
 
-  Method   C# method                                            Status           Comment                                                   
- --------+----------------------------------------------------+----------------+----------------------------------------------------------
-           USER & TOKEN                                                                                                                    
- --------+----------------------------------------------------+----------------+----------------------------------------------------------
-  GET      User getUser(string id)                              WORKING                                                                    
-  GET      UserList getUserWithParameter( ... )                 NOT TESTED                                                                 
-  POST     int insertUser(User user)                            NOT TESTED                                                                 
-  GET      getLoggedUser()                                      NOT TESTED                                                                 
-  POST     Token getToken(string email, string password)        NOT TESTED                                                                 
-  POST     Token renewToken()                                   NOT TESTED                                                                 
-  PUT      void updateUser( ... )                               NOT TESTED                                                                 
-  DELETE   void deleteUser(string id)                           NOT TESTED                                                                 
- --------+----------------------------------------------------+----------------+----------------------------------------------------------
-           MEDIA & MEDIA CATEGORY                                                                                                          
- --------+----------------------------------------------------+----------------+----------------------------------------------------------
-  GET      Media getMedia(string id)                            WORKING                                                                    
-  GET      MediaList getMedias( ... )                           ALMOST WORKING   Paging has some errors. Didn't test with "tag" parameter  
-  POST     int postMedia(Media media)                           WORKING                                                                    
-  PUT      void putMedia(Media media, string id)                ERROR            Gets no error but doesn't update db.                      
-  DELETE   void deleteMedia(string id)                          WORKING                                                                    
-  POST     void insertMediaFile(Stream file)                    NOT TESTED       Think christian tested this?                              
-  GET      MediaCategory[] getMediaCategories()                 WORKING                                                                    
-  GET      MediaCategory getMediaCategory(string id)            WORKING                                                                    
-  POST     int postMediaCategory(MediaCategory mediaCategory)   WORKING                                                                    
-  PUT      void putMediaCategory(id, mediaCategory)             ALMOST WORKING   Doesn't update "description", only "name"                 
-  DELETE   void deleteMediaCategory(string id)                  WORKING                                                                    
- --------+----------------------------------------------------+----------------+----------------------------------------------------------
-           TAGS                                                                                                                            
- --------+----------------------------------------------------+----------------+----------------------------------------------------------
-  GET      Tag[] getTags( ... )                                 WORKING                                                                    
-  GET      Tag getTag(string id)                                ERROR            BAD REQUEST                                               
-  POST     int postTag(Tag tag)                                 WORKING                                                                    
-  PUT      void putTag(string id, Tag tag)                      ERROR            BAD REQUEST                                               
-  DELETE   void deleteTag(string id)                            ERROR            BAD REQUEST                                               
-  GET      TagGroup getTagGroup(string id)                      WORKING                                                                    
-  GET      TagGroup[] getTagGroups( ... )                       ERROR            BAD REQUEST                                               
-  POST     int postTagGroup(TagGroup tagGroup)                  WORKING                                                                    
-  PUT      void putTagGroup(string id, TagGroup tagGroup)       WORKING                                                                    
-  DELETE   void deleteTagGroup(string id)                       WORKING                                                                    
-  GET      Tag[] getTagByMedia(string media)                    ?????            Doesn't return anything. Not sure if db empty?            
-  POST     void MediaHasTag(string media, string tag)           ???              Not sure if working or..                                  
- --------+----------------------------------------------------+----------------+----------------------------------------------------------
-           RATING                                                                                                                          
- --------+----------------------------------------------------+----------------+----------------------------------------------------------
-  GET      Rating getRating(string media, string user)          ???              No error but doesn't return. Empty db?                    
-  POST     void postRating(Rating rating)                       ERROR            BAD REQUEST                                               
-  PUT      void putRating(string id, Rating rating)             NOT TESTED                                                                 
-  DELETE   void deleteRating(string id)                         NOT TESTED                                                                 
+  Method   C# method                                            Status       Comment  
+ --------+----------------------------------------------------+------------+---------
+           USER & TOKEN                                                               
+ --------+----------------------------------------------------+------------+---------
+  GET      User getUser(string id)                              WORKING               
+  GET      UserList getUserWithParameter( ... )                 WORKING               
+  POST     int insertUser(User user)                            WORKING               
+  GET      getLoggedUser()                                      NOT TESTED            
+  POST     Token getToken(string email, string password)        NOT TESTED            
+  POST     Token renewToken()                                   NOT TESTED            
+  PUT      void updateUser( ... )                               NOT TESTED            
+  DELETE   void deleteUser(string id)                           NOT TESTED            
+ --------+----------------------------------------------------+------------+---------
+           MEDIA & MEDIA CATEGORY                                                     
+ --------+----------------------------------------------------+------------+---------
+  GET      Media getMedia(string id)                            WORKING               
+  GET      MediaList getMedias( ... )                           WORKING               
+  POST     int postMedia(Media media)                           WORKING               
+  PUT      void putMedia(Media media, string id)                WORKING               
+  DELETE   void deleteMedia(string id)                          WORKING               
+  POST     void insertMediaFile(Stream file)                    WORKING               
+  GET      MediaCategory[] getMediaCategories()                 WORKING               
+  GET      MediaCategory getMediaCategory(string id)            WORKING               
+  POST     int postMediaCategory(MediaCategory mediaCategory)   WORKING               
+  PUT      void putMediaCategory(id, mediaCategory)             WORKING               
+  DELETE   void deleteMediaCategory(string id)                  WORKING               
+ --------+----------------------------------------------------+------------+---------
+           TAGS                                                                       
+ --------+----------------------------------------------------+------------+---------
+  GET      Tag[] getTags( ... )                                 WORKING               
+  GET      Tag getTag(string id)                                WORKING               
+  POST     int postTag(Tag tag)                                 WORKING               
+  PUT      void putTag(string id, Tag tag)                      WORKING               
+  DELETE   void deleteTag(string id)                            WORKING               
+  GET      TagGroup getTagGroup(string id)                      WORKING               
+  GET      TagGroup[] getTagGroups( ... )                       WORKING               
+  POST     int postTagGroup(TagGroup tagGroup)                  WORKING               
+  PUT      void putTagGroup(string id, TagGroup tagGroup)       WORKING               
+  DELETE   void deleteTagGroup(string id)                       WORKING               
+  GET      Tag[] getTagByMedia(string media)                    WORKING               
+  POST     void MediaHasTag(string media, string tag)           WORKING               
+ --------+----------------------------------------------------+------------+---------
+           RATING                                                                     
+ --------+----------------------------------------------------+------------+---------
+  GET      Rating getRating(string media, string user)          WORKING               
+  POST     void postRating(Rating rating)                       WORKING               
+  PUT      void putRating(string id, Rating rating)             WORKING               
+  DELETE   void deleteRating(string id)                         WORKING               
