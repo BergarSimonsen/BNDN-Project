@@ -225,9 +225,28 @@ namespace RestService
         /// <param name="value">The values to insert</param>
         /// <param name="id">The id of the media to update</param>
         public void putMedia(Media media, string id)
-        { 
+        {   
+            List<string> table = new List<string>();
+            List<string> value = new List<string>();
+
+            if (media.description != null)
+            {
+                table.Add("description");
+                value.Add(media.description);
+            }
+            if (media.mediaCategory != 0)
+            {
+                table.Add("media_category_id");
+                value.Add(media.mediaCategory.ToString());
+            }
+            if (media.title != null)
+            {
+                table.Add("title");
+                value.Add(media.title);
+            }
+
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            //database.putMedia(table, value, int.Parse(id));
+            database.putMedia(table.ToArray(), value.ToArray(), int.Parse(id));
         }
 
         /// <summary>
@@ -269,7 +288,7 @@ namespace RestService
         public void putMediaCategory(string id, MediaCategory mediaCategory)
         {
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            database.putMediaCategory(int.Parse(id), mediaCategory.name);
+            database.putMediaCategory(int.Parse(id), mediaCategory);
         }
 
         /// <summary>
@@ -301,10 +320,26 @@ namespace RestService
         /// <param name="limit">Amount of tags per page.</param>
         /// <param name="page">The page number</param>
         /// <returns></returns>
-        public Tag[] getTags(int tagGroupFilter, int limit, int page)
+        public Tag[] getTags(string tagGroupFilter, string limit, string page)
         {
+            int tagGroup = 0;
+            if(tagGroupFilter != null)
+            {
+                tagGroup = int.Parse(tagGroupFilter);
+            }
+            int limitNumber = 10;
+            if (limit != null)
+            {
+                limitNumber = int.Parse(limit);
+            }
+            int pageNumber = 1;
+            if (page != null)
+            {
+                pageNumber = int.Parse(page);
+            }
+            
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            return database.getTags(tagGroupFilter, limit, page);
+            return database.getTags(tagGroup, limitNumber, pageNumber);
         }
 
         /// <summary>
@@ -384,8 +419,19 @@ namespace RestService
         /// <returns>Array of tagGroups</returns>
         public TagGroup[] getTagGroups(string limit, string page)
         {
+            int limitNumber = 10;
+            if (limit != null)
+            {
+                limitNumber = int.Parse(limit);
+            }
+            int pageNumber = 1;
+            if (page != null)
+            {
+                pageNumber = int.Parse(page);
+            }
+
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            return database.getTagGroups(limit, page);
+            return database.getTagGroups(limitNumber, pageNumber);
         }
 
         /// <summary>
@@ -438,10 +484,21 @@ namespace RestService
         /// </summary>
         /// <param name="media">The id of the media</param>
         /// <returns>Rating object</returns>
-        public Rating getRating(string media, string user)
+        public Rating[] getRating(string media, string user)
         {
+            int mediaId = 0;
+            if (media != null)
+            {
+                mediaId = int.Parse(media);
+            }
+            int userId = 0;
+            if (user != null)
+            {
+                userId = int.Parse(user);
+            }
+
             DatabaseConnector database = DatabaseConnector.GetInstance;
-            return database.getRating(media, user);
+            return database.getRating(mediaId, userId);
         }
 
         /// <summary>

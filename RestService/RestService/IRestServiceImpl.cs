@@ -176,7 +176,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tags?tagGroupFilter={tagGroupFilter}&limit={limit}&page={page}")]
-        Tag[] getTags(int tagGroupFilter, int limit, int page);
+        Tag[] getTags(string tagGroupFilter, string limit, string page);
 
         [OperationContract]
         [WebInvoke(
@@ -270,8 +270,8 @@ namespace RestService
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/rating/?media={media}&user={user}")]
-        Rating getRating(string media, string user);
+            UriTemplate = "/rating?media={media}&user={user}")]
+        Rating[] getRating(string media, string user);
 
         [OperationContract]
         [WebInvoke(
