@@ -1,0 +1,638 @@
+* api spec
+** M6, Movie Distribution Web Service API Specs
+The web service uses RESTful concepts to provide a standardized and stateless programming interface, for interacting with the system.
+
+*Standard response*
+All responses consists of the following data:
+|---------------+----------------------------------------------------------|
+| Message       | Description                                              |
+|---------------+----------------------------------------------------------|
+| error_number  | 0 on success, otherwise a number indicating the relevant |
+|               | error. NOT TO BE CONFUSED WITH HTTP-Response-code! This  |
+|               | is assuming the HTTP-Response-code is 200.               |
+|---------------+----------------------------------------------------------|
+| error_message | A message in english, describing the eventual error.     |
+|---------------+----------------------------------------------------------|
+
+*Security and encoding*
+All requests should be made with a valid API-key, and values hashed into a “Checksum”. (TODO: Describe hashing details). Requests should be accompanied by a UTC timestamp and a nonce. All authenticated requests should contain an access token.
+
+So every request should look something like: 
+
+[Resource]?auth=[AUTH-STRING]&parama=xxx&paramb=yyy
+
+Where [AUTH-STRING] is something similar to:
+{ “api-key” : ”AB14” , ”hmac” : ”XZ45” , ”time” : ”213” , “nonce” : “XC98” ; “token” = “DE95” }
+
+The only optional part of this auth object, is the token, which is only used after the user has successfully logged in.
+
+*Objects*
+Every area of the application has some certain objects with a well defined structure. These are described initially in the relevant section, and utilized throughout the API. This allows for client to receive and process these objects in a uniform manner.
+*Params (Parameters)*
+Are GET or POST arguments, depending on the request-type. The left side column of the table shows the argument name, while the right one describes the argument.
+*Response*
+Is an associative JSON object, with fields corresponding to the left side column of the table. The right side of the column describes the data in the field of the returned response.
+
+** Users (users, tokens & user data types)
+The users are at the heart of the system. All actions are performed by users, and their identities are associated with both actions and data entities within the system. Users are very simple, but can be extended to application specific needs. This is done by creating new user data types (unique text indexes, that can be used to store data for each user), and assigning data to the users. Tokens are used for accessing the application as a specific user, and is given upon submission of a valid email and password combination.
+
+Objects
+|-----------+------------------------------------------|
+| Field     | Description                              |
+|-----------+------------------------------------------|
+| id        | The users id                             |
+| email     | E-mail of the user. False if currently   |
+|           | logged in user is not permitted to read. |
+| user_data | All data that exists for this user as an |
+|           | associative structure                    |
+|-----------+------------------------------------------|
+
+Token
+|---------+-----------------------------------------------|
+| Field   | Description                                   |
+|---------+-----------------------------------------------|
+| token   | A token string, to be used in further queries |
+| issued  | Date and time for issuance                    |
+| expires | Date and time for expiration                  |
+|---------+-----------------------------------------------|
+
+GET /user/<ID>
+_Description_
+Who is the user with the id <ID>?
+_Parameters_
+None
+_Response_
+|-------+-------------|
+| Field | Description |
+|-------+-------------|
+| user  | user        |
+|-------+-------------|
+
+GET /user/me
+_Description_
+Who is the currently logged in user?
+_Parameters_
+None
+_Authorization_
+Token
+_Response_
+|-------+-------------|
+| Field | Description |
+|-------+-------------|
+| user  | user        |
+|-------+-------------|
+
+GET /user
+_Description_
+Who are the users that match the given parameters
+_Parameters_
+|---------------+---------------------------------------------------------------|
+| Field         | Description                                                   |
+|---------------+---------------------------------------------------------------|
+| group_ids     | Comma separated list of group-ids. Only show users            |
+|               | who are members of this/these group(s)                        |
+| search_string | The string to search for                                      |
+| search_fields | Comma separated list of fields to use for matching the string |
+| limit         | How many users to return?                                     |
+| page          | Should there be an offset? Default = 1 means no offset.       |
+| order_by      | Order by what column? Default = e-mail                        |
+| order         | Order which way? Default = ASC                                |
+|---------------+---------------------------------------------------------------|
+_Response_
+|-------------+-----------------------------------------------------|
+| Field       | Description                                         |
+|-------------+-----------------------------------------------------|
+| users       | array[User]                                         |
+| count       | Number of users in total, regardless of limit       |
+| count_pages | Number of pages needed for users with current limit |
+|-------------+-----------------------------------------------------|
+
+POST /user/token
+_Description_
+Can i have an access-token with these credentials?
+_Parameters_
+|----------+------------------------------------|
+| Field    | Description                        |
+|----------+------------------------------------|
+| email    | The users e-mail                   |
+| password | An sha1 hash of the users password |
+|----------+------------------------------------|
+_Response_
+|-------+-------------|
+| Field | Description |
+|-------+-------------|
+| token | Token       |
+|-------+-------------|
+
+POST /user/token/renew
+_Description_
+Can I renew this token?
+_Parameters_
+None
+_Response_
+|-------+-------------|
+| Field | Description |
+|-------+-------------|
+| token | Token       |
+|-------+-------------|
+
+POST /user
+_Description_
+Create a new user with this data
+_Parameters_
+|-----------+---------------------------------------------------------|
+| Field     | Description                                             |
+|-----------+---------------------------------------------------------|
+| e-mail    | The user e-mail- Doubles as a username                  |
+| password  | The user password, SHA-1 hashed.                        |
+| user_data | Other data for this user as an associative array.       |
+|           | NB: All data must already be present as user data types |
+|-----------+---------------------------------------------------------|
+_Response_
+None
+
+DELETE /user/<ID>
+_Description_
+Delete the user with this id
+_Parameters_
+None
+_Response_
+None
+
+PUT /user/<ID>
+_Description_ 
+Update this user with this data
+_Parameters_
+|-------------------------+---------------------------------------------------------|
+| Field                   | Description                                             |
+|-------------------------+---------------------------------------------------------|
+| e-mail (optional)       | The users new e-mail                                    |
+| old-password (optional) | The users current password. SHA-1 hashed                |
+| password (optional)     | The users new password. SHA-1 hashed                    |
+| user_data               | Other data for this user as an associative array.       |
+|                         | NB: All data must already be present as user data types |
+|-------------------------+---------------------------------------------------------|
+
+GET /userdatatype
+_Description_
+Get all user data types for this system
+_Parameters_
+|-------+---------------------------------------------------------------------------------|
+| Field | Description                                                                     |
+|-------+---------------------------------------------------------------------------------|
+| name  | Select user data type with this name - used to test if a given data type exists |
+|-------+---------------------------------------------------------------------------------|
+_Response_
+|---------------+----------------------------------------|
+| Field         | Description                            |
+|---------------+----------------------------------------|
+| userdatatypes | An array of user data types as strings |
+|---------------+----------------------------------------|
+
+POST /userdatatype/<NAME>
+_Description_
+Make a new user data type
+_Parameters_
+|-------+------------------------------------|
+| Field | Description                        |
+|-------+------------------------------------|
+| name  | The name of the new user data type |
+|-------+------------------------------------|
+_Response_
+None
+
+DELETE /userdatatype/<NAME>
+_Description_
+Delete user data type with this name <NAME>
+_Parameters_
+None
+_Response_
+None
+** Media (Media & Media Category)
+Objects
+Media 
+|---------------------+---------------------------------------|
+| Field               | Description                           |
+|---------------------+---------------------------------------|
+| id                  | A unique id of the media              |
+| media_category      | The id of the media's category        |
+| media_category_name | The name of the media's category      |
+| user                | The id of the user who uploaded       |
+| file_location       | The location of the connected file    |
+| title               | The title of the media                |
+| description         | The description of the media          |
+| media_length        | The length of the media in minutes    |
+| format              | The format of the file                |
+| tags                | A list of tags connected to the media |
+|---------------------+---------------------------------------|
+MediaCategory
+|-------+--------------------------------|
+| Field | Description                    |
+|-------+--------------------------------|
+| id    | A unique id                    |
+| name  | The name of the media category |
+|-------+--------------------------------|
+
+GET /media/<ID>
+Get a specific media, based on it's id
+_Params_ 
+None
+_Response_
+|-------+-------------|
+| Field | Description |
+|-------+-------------|
+| media | Media       |
+|-------+-------------|
+
+GET /media
+Get all media matching the giver criteria. Can be used for listings and searches.
+_Params_
+|---------------------+---------------------------------------------------------|
+| Field               | Description                                             |
+|---------------------+---------------------------------------------------------|
+| andTags             | A list of tags where the media has to match all of them |
+| orTags              | A list of tags where the media has to match one of them |
+| mediaCategoryFilter | A media category id that filters the medias             |
+| nameFilter          | A string that filters the medias                        |
+| page                | The page you are on                                     |
+| limit               | The amount of medias per page                           |
+|---------------------+---------------------------------------------------------|
+_Response_
+|-----------+-----------------|
+| Field     | Description     |
+|-----------+-----------------|
+| pageCount | Amount of pages |
+| medias    | array[Media]    |
+|-----------+-----------------|
+
+POST /media
+_Description_
+Create a new media and get a path for your upload. This will only create an entry in the database with the metadata provided. Returns id.
+_Params_
+None
+_Content-Type_
+application/json
+|----------------+---------------------------------------|
+| Field          | Description                           |
+|----------------+---------------------------------------|
+| media_category | The id of the media's category        |
+| title          | The title of the media                |
+| description    | The description of the media          |
+| media_length   | The length of the media in minutes    |
+| format         | The format of the file                |
+| tags           | A list of tags connected to the media |
+|----------------+---------------------------------------|
+_Response_
+|-------+-------------------------|
+| Field | Description             |
+|-------+-------------------------|
+| id    | The id of the new media |
+|-------+-------------------------|
+
+POST /mediaFiles/<ID>
+_Description_
+Upload a media file. You give the ID connected the posted metadata and the file you want to upload.
+_Params_
+None
+_Content-Type_
+File Stream
+_Response_
+Response message
+
+PUT /media/<ID>
+_Description_
+Update the metadata of a media
+_Parameters_
+None
+_Content-Type_
+application/json
+|----------------+---------------------------------------|
+| Field          | Description                           |
+|----------------+---------------------------------------|
+| media_category | The id of the media's category        |
+| title          | The title of the media                |
+| description    | The description of the media          |
+| media_length   | The length of the media in minutes    |
+| format         | The format of the file                |
+| tags           | A list of tags connected to the media |
+|----------------+---------------------------------------|
+_Response_
+Response message
+
+DELETE /media/<ID>
+_Description_
+Delete a media. This will also delete the file connected to the media
+_Parameters_
+None
+_Response_
+Response message
+
+GET /mediaCategory
+_Description_
+Get a list of all media categories
+_Parameters_
+None
+_Response_
+|------------------+----------------------|
+| Field            | Description          |
+|------------------+----------------------|
+| media_categories | array[MediaCategory] |
+|------------------+----------------------|
+
+GET /mediaCategory/<ID>
+_Description_
+Get a media category
+_Parameters_
+None
+_Response_
+|------------------+---------------|
+| Field            | Description   |
+|------------------+---------------|
+| media_categories | MediaCategory |
+|------------------+---------------|
+
+POST /mediaCategory
+_Description_
+Creates a new media category
+_Parameters_
+None
+_Content-Type_
+application/json
+|-------+--------------------------------|
+| Field | Description                    |
+|-------+--------------------------------|
+| name  | The name of the media category |
+|-------+--------------------------------|
+_Response_
+|-------+--------------------------------------------|
+| Field | Description                                |
+|-------+--------------------------------------------|
+| id    | The unique id of the media category posted |
+|-------+--------------------------------------------|
+
+PUT /mediaCategory/<ID>
+_Description_
+Update media category
+_Parameters_
+None
+_Content-Type_
+application/json
+|-------+--------------------------------|
+| Field | Description                    |
+|-------+--------------------------------|
+| name  | The name of the media category |
+|-------+--------------------------------|
+_Response_
+Response message
+
+DELETE /mediaCategory/<ID>
+_Description_
+Delete media category
+_Parameters_
+None
+_Response_
+Response message
+** Tags
+Objects
+Tag
+|-------------+-------------------------------|
+| Field       | Description                   |
+|-------------+-------------------------------|
+| id          | A unique id                   |
+| name        | The name of the tag           |
+| simple_name | The short version of the name |
+| tag-group   | Tag group                     |
+|-------------+-------------------------------|
+
+TagGroup
+|-------------+---------------------------|
+| Field       | Description               |
+|-------------+---------------------------|
+| id          | A unique id               |
+| name        | The name of the tag group |
+| description | The tag group description |
+|-------------+---------------------------|
+Calls
+GET /tags
+
+Description
+Get a list of all tags
+
+Params:
+|-----------+---------------------|
+| Field     | Description         |
+|-----------+---------------------|
+| countPage | The amount of pages |
+| tags      | array[Tag]          |
+|-----------+---------------------|
+
+GET /tags/<ID>
+
+Description
+Get a tag
+
+Params:
+None
+
+|-------+-------------|
+| Field | Description |
+|-------+-------------|
+| Tag   | Tag         |
+|-------+-------------|
+
+POST /tags
+_Description_
+Create a new tag
+_Parameter_
+None
+_Content-type_
+application/json
+|-------------+-------------------------------|
+| Field       | Description                   |
+|-------------+-------------------------------|
+| name        | The name of the tag           |
+| simple_name | The short version of the name |
+| tag-groups  | A list of tag groups          |
+|-------------+-------------------------------|
+
+_Response_
+|-------+------------------------------|
+| Field | Description                  |
+|-------+------------------------------|
+| id    | The unique of the posted tag |
+|-------+------------------------------|
+
+PUT /tags/<ID>
+_Description_
+Update tag
+_Parameter_
+None
+_Content-type_
+application/json
+|-------------+-------------------------------|
+| Field       | Description                   |
+|-------------+-------------------------------|
+| name        | The name of the tag           |
+| simple_name | The short version of the name |
+| tag-groups  | A list of tag groups          |
+|-------------+-------------------------------|
+_Response_
+Response message
+
+DELETE /tags/<ID>
+_Description_
+Delete a tag
+_Parameter_
+None
+_Response_
+Response message
+
+GET /tagGroups/<ID>
+_Description_
+Get a tag group
+_Parameter_
+|-------+-------------------------|
+| Field | Description             |
+|-------+-------------------------|
+| limit | Amount of tags per page |
+| page  | The page number         |
+|-------+-------------------------|
+
+_Response_
+|------------+-----------------|
+| Field      | Description     |
+|------------+-----------------|
+| tag_groups | array[TagGroup] |
+|------------+-----------------|
+
+POST /tagGroups
+_Description_
+Get a list of tag groups
+_Parameter_
+|-------+-------------------------|
+| Field | Description             |
+|-------+-------------------------|
+| limit | Amount of tags per page |
+| page  | The page number         |
+|-------+-------------------------|
+
+_Content-type_
+application/json
+|-------------+---------------------------|
+| Field       | Description               |
+|-------------+---------------------------|
+| name        | The name of the tag group |
+| description | The tag group description |
+|-------------+---------------------------|
+_Response_
+|-------+------------------------------------|
+| Field | Description                        |
+|-------+------------------------------------|
+| id    | The unique id of the new tag group |
+|-------+------------------------------------|
+
+PUT /tagGroups/<ID>
+_Description_
+Update tag group
+_Parameter_
+None
+_Content-Type_
+application/json
+|-------------+---------------------------|
+| Field       | Description               |
+|-------------+---------------------------|
+| name        | The name of the tag group |
+| description | The tag group description |
+|-------------+---------------------------|
+_Response_
+Response message
+
+DELETE /tagGroups/<ID>
+_Description_
+Delete a tag group (this will also delete tags connected to the tag group, or delete the connection)
+_Paramater_
+None
+_Response_
+Response message
+** Orders
+GET /transactionHistory/user/
+Params:
+|-------+---------------------------|
+| Field | Description               |
+|-------+---------------------------|
+| User  | The "owner" of the orders |
+|-------+---------------------------|
+
+Response:
+|-------------+--------------------------------------------------|
+| Field       | Description                                      |
+|-------------+--------------------------------------------------|
+| Transaction | array[Transaction] All transactions for the user |
+| Order       | array[order] All orders for the user             |
+| Promise     | array[promise] All promises for the user         |
+|-------------+--------------------------------------------------|
+Description:
+Get transaction history for a user.
+
+POST /transaction
+_Content-Type_
+application/json
+|------------+----------------------------------|
+| Field      | Description                      |
+|------------+----------------------------------|
+| Promise    | array[promise] Array of promises |
+| Order      | array[order] Array of orders     |
+| Order_line | Order line containing all orders |
+|------------+----------------------------------|
+
+Response
+|----------------+-----------------------------------------------|
+| Field          | Description                                   |
+|----------------+-----------------------------------------------|
+| Transaction_id | Id of the posted transaction                  |
+| Response_data  | Text describing the status of the transaction |
+|----------------+-----------------------------------------------|
+Description:
+Creates a new transaction for when the user wants to purchase additional functionality.
+** rating
+GET rating/<media>
+
+Response
+|---------------+--------------------------------------------|
+| Field         | Description                                |
+|---------------+--------------------------------------------|
+| user_id       | The user who has rated                     |
+| media_id      | Id of the media that the rating belongs to |
+| starts        | Amount of stars given in the rating        |
+| comment_title | Title of the comment                       |
+| comment       | Content of the comment                     |
+|---------------+--------------------------------------------|
+Description
+Returns all the ratings / comments on a specific media.
+
+POST rating/
+Parameters:
+|---------------+--------------------------------------|
+| Field         | Description                          |
+|---------------+--------------------------------------|
+| user_id       | The id of the user (current user)    |
+| media_id      | Id of the media to comment on        |
+| stars         | Number of stars to give to the media |
+| comment_title | Title of the comment                 |
+| comment       | The content of the comment           |
+|---------------+--------------------------------------|
+Description
+Posts a new rating for a media
+
+PUT rating/<id>
+Parameters:
+|--------------+----------------------------|
+| Field        | Description                |
+|--------------+----------------------------|
+| id           | Id of the rating to edit   |
+| coment_title | Title of the new comment   |
+| comment      | Content of the new comment |
+| stars        | New amount of stars        |
+|--------------+----------------------------|
+Description:
+Edits an already existing comment.

@@ -1,0 +1,1022 @@
+% Created 2013-04-03 Wed 12:53
+\documentclass[11pt]{article}
+\usepackage[AUTO]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{api-spec}
+\author{Bergar Simonsen}
+\date{\today}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.8.11}}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+\vspace*{1cm}
+\section{api spec}
+\label{sec-1}
+\subsection{M6, Movie Distribution Web Service API Specs}
+\label{sec-1-1}
+
+The web service uses RESTful concepts to provide a standardized and stateless programming interface, for interacting with the system.
+
+\textbf{Standard response}
+All responses consists of the following data:
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Message                     &  Description                                               \\
+\hline
+ error$_{\mathrm{number}}$   &  0 on success, otherwise a number indicating the relevant  \\
+                             &  error. NOT TO BE CONFUSED WITH HTTP-Response-code! This   \\
+                             &  is assuming the HTTP-Response-code is 200.                \\
+\hline
+ error$_{\mathrm{message}}$  &  A message in english, describing the eventual error.      \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\textbf{Security and encoding}
+All requests should be made with a valid API-key, and values hashed into a “Checksum”. (TODO: Describe hashing details). Requests should be accompanied by a UTC timestamp and a nonce. All authenticated requests should contain an access token.
+
+So every request should look something like: 
+
+[Resource]?auth=[AUTH-STRING]\&parama=xxx\&paramb=yyy
+
+Where [AUTH-STRING] is something similar to:
+\{ “api-key” : ”AB14” , ”hmac” : ”XZ45” , ”time” : ”213” , “nonce” : “XC98” ; “token” = “DE95” \}
+
+The only optional part of this auth object, is the token, which is only used after the user has successfully logged in.
+
+\textbf{Objects}
+Every area of the application has some certain objects with a well defined structure. These are described initially in the relevant section, and utilized throughout the API. This allows for client to receive and process these objects in a uniform manner.
+\textbf{Params (Parameters)}
+Are GET or POST arguments, depending on the request-type. The left side column of the table shows the argument name, while the right one describes the argument.
+\textbf{Response}
+Is an associative JSON object, with fields corresponding to the left side column of the table. The right side of the column describes the data in the field of the returned response.
+\subsection{Users (users, tokens \& user data types)}
+\label{sec-1-2}
+
+The users are at the heart of the system. All actions are performed by users, and their identities are associated with both actions and data entities within the system. Users are very simple, but can be extended to application specific needs. This is done by creating new user data types (unique text indexes, that can be used to store data for each user), and assigning data to the users. Tokens are used for accessing the application as a specific user, and is given upon submission of a valid email and password combination.
+
+Objects
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                   &  Description                               \\
+\hline
+ id                      &  The users id                              \\
+ email                   &  E-mail of the user. False if currently    \\
+                         &  logged in user is not permitted to read.  \\
+ user$_{\mathrm{data}}$  &  All data that exists for this user as an  \\
+                         &  associative structure                     \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+Token
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field    &  Description                                    \\
+\hline
+ token    &  A token string, to be used in further queries  \\
+ issued   &  Date and time for issuance                     \\
+ expires  &  Date and time for expiration                   \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+GET /user/<ID>
+\underline{Description}
+Who is the user with the id <ID>?
+\underline{Parameters}
+None
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description  \\
+\hline
+ user   &  user         \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+GET /user/me
+\underline{Description}
+Who is the currently logged in user?
+\underline{Parameters}
+None
+\underline{Authorization}
+Token
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description  \\
+\hline
+ user   &  user         \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+GET /user
+\underline{Description}
+Who are the users that match the given parameters
+\underline{Parameters}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                       &  Description                                                    \\
+\hline
+ group$_{\mathrm{ids}}$      &  Comma separated list of group-ids. Only show users             \\
+                             &  who are members of this/these group(s)                         \\
+ search$_{\mathrm{string}}$  &  The string to search for                                       \\
+ search$_{\mathrm{fields}}$  &  Comma separated list of fields to use for matching the string  \\
+ limit                       &  How many users to return?                                      \\
+ page                        &  Should there be an offset? Default = 1 means no offset.        \\
+ order$_{\mathrm{by}}$       &  Order by what column? Default = e-mail                         \\
+ order                       &  Order which way? Default = ASC                                 \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                     &  Description                                          \\
+\hline
+ users                     &  array[User]                                          \\
+ count                     &  Number of users in total, regardless of limit        \\
+ count$_{\mathrm{pages}}$  &  Number of pages needed for users with current limit  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+POST /user/token
+\underline{Description}
+Can i have an access-token with these credentials?
+\underline{Parameters}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field     &  Description                         \\
+\hline
+ email     &  The users e-mail                    \\
+ password  &  An sha1 hash of the users password  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description  \\
+\hline
+ token  &  Token        \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+POST /user/token/renew
+\underline{Description}
+Can I renew this token?
+\underline{Parameters}
+None
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description  \\
+\hline
+ token  &  Token        \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+POST /user
+\underline{Description}
+Create a new user with this data
+\underline{Parameters}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                   &  Description                                              \\
+\hline
+ e-mail                  &  The user e-mail- Doubles as a username                   \\
+ password                &  The user password, SHA-1 hashed.                         \\
+ user$_{\mathrm{data}}$  &  Other data for this user as an associative array.        \\
+                         &  NB: All data must already be present as user data types  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+None
+
+DELETE /user/<ID>
+\underline{Description}
+Delete the user with this id
+\underline{Parameters}
+None
+\underline{Response}
+None
+
+PUT /user/<ID>
+\underline{Description} 
+Update this user with this data
+\underline{Parameters}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                    &  Description                                              \\
+\hline
+ e-mail (optional)        &  The users new e-mail                                     \\
+ old-password (optional)  &  The users current password. SHA-1 hashed                 \\
+ password (optional)      &  The users new password. SHA-1 hashed                     \\
+ user$_{\mathrm{data}}$   &  Other data for this user as an associative array.        \\
+                          &  NB: All data must already be present as user data types  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+GET /userdatatype
+\underline{Description}
+Get all user data types for this system
+\underline{Parameters}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description                                                                      \\
+\hline
+ name   &  Select user data type with this name - used to test if a given data type exists  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field          &  Description                             \\
+\hline
+ userdatatypes  &  An array of user data types as strings  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+POST /userdatatype/<NAME>
+\underline{Description}
+Make a new user data type
+\underline{Parameters}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description                         \\
+\hline
+ name   &  The name of the new user data type  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+None
+
+DELETE /userdatatype/<NAME>
+\underline{Description}
+Delete user data type with this name <NAME>
+\underline{Parameters}
+None
+\underline{Response}
+None
+\subsection{Media (Media \& Media Category)}
+\label{sec-1-3}
+
+Objects
+Media 
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                                          &  Description                            \\
+\hline
+ id                                             &  A unique id of the media               \\
+ media$_{\mathrm{category}}$                    &  The id of the media's category         \\
+ media$_{\mathrm{category}}$$_{\mathrm{name}}$  &  The name of the media's category       \\
+ user                                           &  The id of the user who uploaded        \\
+ file$_{\mathrm{location}}$                     &  The location of the connected file     \\
+ title                                          &  The title of the media                 \\
+ description                                    &  The description of the media           \\
+ media$_{\mathrm{length}}$                      &  The length of the media in minutes     \\
+ format                                         &  The format of the file                 \\
+ tags                                           &  A list of tags connected to the media  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+MediaCategory
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description                     \\
+\hline
+ id     &  A unique id                     \\
+ name   &  The name of the media category  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+GET /media/<ID>
+Get a specific media, based on it's id
+\underline{Params} 
+None
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description  \\
+\hline
+ media  &  Media        \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+GET /media
+Get all media matching the giver criteria. Can be used for listings and searches.
+\underline{Params}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                &  Description                                              \\
+\hline
+ andTags              &  A list of tags where the media has to match all of them  \\
+ orTags               &  A list of tags where the media has to match one of them  \\
+ mediaCategoryFilter  &  A media category id that filters the medias              \\
+ nameFilter           &  A string that filters the medias                         \\
+ page                 &  The page you are on                                      \\
+ limit                &  The amount of medias per page                            \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field      &  Description      \\
+\hline
+ pageCount  &  Amount of pages  \\
+ medias     &  array[Media]     \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+POST /media
+\underline{Description}
+Create a new media and get a path for your upload. This will only create an entry in the database with the metadata provided. Returns id.
+\underline{Params}
+None
+\underline{Content-Type}
+application/json
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                        &  Description                            \\
+\hline
+ media$_{\mathrm{category}}$  &  The id of the media's category         \\
+ title                        &  The title of the media                 \\
+ description                  &  The description of the media           \\
+ media$_{\mathrm{length}}$    &  The length of the media in minutes     \\
+ format                       &  The format of the file                 \\
+ tags                         &  A list of tags connected to the media  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description              \\
+\hline
+ id     &  The id of the new media  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+POST /mediaFiles/<ID>
+\underline{Description}
+Upload a media file. You give the ID connected the posted metadata and the file you want to upload.
+\underline{Params}
+None
+\underline{Content-Type}
+File Stream
+\underline{Response}
+Response message
+
+PUT /media/<ID>
+\underline{Description}
+Update the metadata of a media
+\underline{Parameters}
+None
+\underline{Content-Type}
+application/json
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                        &  Description                            \\
+\hline
+ media$_{\mathrm{category}}$  &  The id of the media's category         \\
+ title                        &  The title of the media                 \\
+ description                  &  The description of the media           \\
+ media$_{\mathrm{length}}$    &  The length of the media in minutes     \\
+ format                       &  The format of the file                 \\
+ tags                         &  A list of tags connected to the media  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+Response message
+
+DELETE /media/<ID>
+\underline{Description}
+Delete a media. This will also delete the file connected to the media
+\underline{Parameters}
+None
+\underline{Response}
+Response message
+
+GET /mediaCategory
+\underline{Description}
+Get a list of all media categories
+\underline{Parameters}
+None
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                          &  Description           \\
+\hline
+ media$_{\mathrm{categories}}$  &  array[MediaCategory]  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+GET /mediaCategory/<ID>
+\underline{Description}
+Get a media category
+\underline{Parameters}
+None
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                          &  Description    \\
+\hline
+ media$_{\mathrm{categories}}$  &  MediaCategory  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+POST /mediaCategory
+\underline{Description}
+Creates a new media category
+\underline{Parameters}
+None
+\underline{Content-Type}
+application/json
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description                     \\
+\hline
+ name   &  The name of the media category  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description                                 \\
+\hline
+ id     &  The unique id of the media category posted  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+PUT /mediaCategory/<ID>
+\underline{Description}
+Update media category
+\underline{Parameters}
+None
+\underline{Content-Type}
+application/json
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description                     \\
+\hline
+ name   &  The name of the media category  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+Response message
+
+DELETE /mediaCategory/<ID>
+\underline{Description}
+Delete media category
+\underline{Parameters}
+None
+\underline{Response}
+Response message
+\subsection{Tags}
+\label{sec-1-4}
+
+Objects
+Tag
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                     &  Description                    \\
+\hline
+ id                        &  A unique id                    \\
+ name                      &  The name of the tag            \\
+ simple$_{\mathrm{name}}$  &  The short version of the name  \\
+ tag-group                 &  Tag group                      \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+TagGroup
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field        &  Description                \\
+\hline
+ id           &  A unique id                \\
+ name         &  The name of the tag group  \\
+ description  &  The tag group description  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+Calls
+GET /tags
+
+Description
+Get a list of all tags
+
+Params:
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field      &  Description          \\
+\hline
+ countPage  &  The amount of pages  \\
+ tags       &  array[Tag]           \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+GET /tags/<ID>
+
+Description
+Get a tag
+
+Params:
+None
+
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description  \\
+\hline
+ Tag    &  Tag          \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+POST /tags
+\underline{Description}
+Create a new tag
+\underline{Parameter}
+None
+\underline{Content-type}
+application/json
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                     &  Description                    \\
+\hline
+ name                      &  The name of the tag            \\
+ simple$_{\mathrm{name}}$  &  The short version of the name  \\
+ tag-groups                &  A list of tag groups           \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description                   \\
+\hline
+ id     &  The unique of the posted tag  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+PUT /tags/<ID>
+\underline{Description}
+Update tag
+\underline{Parameter}
+None
+\underline{Content-type}
+application/json
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                     &  Description                    \\
+\hline
+ name                      &  The name of the tag            \\
+ simple$_{\mathrm{name}}$  &  The short version of the name  \\
+ tag-groups                &  A list of tag groups           \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+Response message
+
+DELETE /tags/<ID>
+\underline{Description}
+Delete a tag
+\underline{Parameter}
+None
+\underline{Response}
+Response message
+
+GET /tagGroups/<ID>
+\underline{Description}
+Get a tag group
+\underline{Parameter}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description              \\
+\hline
+ limit  &  Amount of tags per page  \\
+ page   &  The page number          \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                    &  Description      \\
+\hline
+ tag$_{\mathrm{groups}}$  &  array[TagGroup]  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+POST /tagGroups
+\underline{Description}
+Get a list of tag groups
+\underline{Parameter}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description              \\
+\hline
+ limit  &  Amount of tags per page  \\
+ page   &  The page number          \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\underline{Content-type}
+application/json
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field        &  Description                \\
+\hline
+ name         &  The name of the tag group  \\
+ description  &  The tag group description  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description                         \\
+\hline
+ id     &  The unique id of the new tag group  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+PUT /tagGroups/<ID>
+\underline{Description}
+Update tag group
+\underline{Parameter}
+None
+\underline{Content-Type}
+application/json
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field        &  Description                \\
+\hline
+ name         &  The name of the tag group  \\
+ description  &  The tag group description  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\underline{Response}
+Response message
+
+DELETE /tagGroups/<ID>
+\underline{Description}
+Delete a tag group (this will also delete tags connected to the tag group, or delete the connection)
+\underline{Paramater}
+None
+\underline{Response}
+Response message
+\subsection{Orders}
+\label{sec-1-5}
+
+GET \emph{transactionHistory/user}
+Params:
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field  &  Description                  \\
+\hline
+ User   &  The ``owner'' of the orders  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+Response:
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field        &  Description                                       \\
+\hline
+ Transaction  &  array[Transaction] All transactions for the user  \\
+ Order        &  array[order] All orders for the user              \\
+ Promise      &  array[promise] All promises for the user          \\
+\hline
+\end{tabular}
+\end{center}
+
+
+Description:
+Get transaction history for a user.
+
+POST /transaction
+\underline{Content-Type}
+application/json
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                    &  Description                       \\
+\hline
+ Promise                  &  array[promise] Array of promises  \\
+ Order                    &  array[order] Array of orders      \\
+ Order$_{\mathrm{line}}$  &  Order line containing all orders  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+Response
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                        &  Description                                    \\
+\hline
+ Transaction$_{\mathrm{id}}$  &  Id of the posted transaction                   \\
+ Response$_{\mathrm{data}}$   &  Text describing the status of the transaction  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+Description:
+Creates a new transaction for when the user wants to purchase additional functionality.
+\subsection{rating}
+\label{sec-1-6}
+
+GET rating/<media>
+
+Response
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                       &  Description                                 \\
+\hline
+ user$_{\mathrm{id}}$        &  The user who has rated                      \\
+ media$_{\mathrm{id}}$       &  Id of the media that the rating belongs to  \\
+ starts                      &  Amount of stars given in the rating         \\
+ comment$_{\mathrm{title}}$  &  Title of the comment                        \\
+ comment                     &  Content of the comment                      \\
+\hline
+\end{tabular}
+\end{center}
+
+
+Description
+Returns all the ratings / comments on a specific media.
+
+POST rating/
+Parameters:
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                       &  Description                           \\
+\hline
+ user$_{\mathrm{id}}$        &  The id of the user (current user)     \\
+ media$_{\mathrm{id}}$       &  Id of the media to comment on         \\
+ stars                       &  Number of stars to give to the media  \\
+ comment$_{\mathrm{title}}$  &  Title of the comment                  \\
+ comment                     &  The content of the comment            \\
+\hline
+\end{tabular}
+\end{center}
+
+
+Description
+Posts a new rating for a media
+
+PUT rating/<id>
+Parameters:
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Field                      &  Description                 \\
+\hline
+ id                         &  Id of the rating to edit    \\
+ coment$_{\mathrm{title}}$  &  Title of the new comment    \\
+ comment                    &  Content of the new comment  \\
+ stars                      &  New amount of stars         \\
+\hline
+\end{tabular}
+\end{center}
+
+
+Description:
+Edits an already existing comment.
+
+\end{document}
