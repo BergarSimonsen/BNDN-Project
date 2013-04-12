@@ -9,8 +9,8 @@ namespace RestServiceTest
     public class MediaTest
     {
         RestServiceImpl restService = new RestServiceImpl();
-        List<int> idList = new List<int>();
-        List<int> mediaCatIdList = new List<int>();
+        static List<int> idList = new List<int>();
+        static List<int> mediaCatIdList = new List<int>();
 
         /// <summary>
         /// Test if the insertMedia and getMedia methods work.
