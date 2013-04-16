@@ -434,7 +434,7 @@ Responsibilities
       <x>56</x>
       <y>152</y>
       <w>376</w>
-      <h>160</h>
+      <h>176</h>
     </coordinates>
     <panel_attributes>*DatabaseConnection*
 --
@@ -444,6 +444,7 @@ Responsibilities
 +Prepare(string query): PreparedStmt
 +StartTransaction(): void
 +Rollback(): void
++CloseConnection(): void
 --
 Responsibilities
 -- Connect to the database
@@ -455,12 +456,12 @@ Responsibilities
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>240</x>
-      <y>288</y>
+      <y>304</y>
       <w>336</w>
-      <h>120</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>24;24;320;104</additional_attributes>
+    <additional_attributes>24;24;320;88</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -566,12 +567,12 @@ Responsibilities
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>224</x>
-      <y>288</y>
+      <y>304</y>
       <w>288</w>
-      <h>296</h>
+      <h>280</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>24;24;272;280</additional_attributes>
+    <additional_attributes>24;24;272;264</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
