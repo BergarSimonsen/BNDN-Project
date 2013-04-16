@@ -359,7 +359,7 @@ namespace RestService
                 int mediaLength = reader.GetInt32(reader.GetOrdinal("minutes"));
                 string format = reader.GetString(reader.GetOrdinal("format"));
 
-                returnMediaList.Add(MediaHandler.createMedia(mediaId, mediaCategory, user, null, title, description, mediaLength, format));
+                returnMediaList.Add(MediaHandler.createMedia(mediaId, mediaCategory, user, fileLocation, title, description, mediaLength, format));
             }
 
             int mediaCount = getMediaCount();
