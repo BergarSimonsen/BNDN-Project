@@ -49,7 +49,7 @@ Responsibilities
       <x>888</x>
       <y>336</y>
       <w>176</w>
-      <h>96</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>*MainController*
 
@@ -58,22 +58,24 @@ Responsibilities
 -- Call Validation
 -- User Authentication
 -- User to request object
--- Route call to correct controller</panel_attributes>
+-- Route call to correct controller
+-- Db to request object</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>992</x>
-      <y>88</y>
+      <y>80</y>
       <w>176</w>
-      <h>64</h>
+      <h>72</h>
     </coordinates>
     <panel_attributes>*Request*
 --
 +url: string
 +data: HashMap&lt;string, string&gt;
-+user: User</panel_attributes>
++user: User
++db: DatabaseConnection</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -111,12 +113,12 @@ Responsibilities
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>952</x>
-      <y>408</y>
+      <y>416</y>
       <w>48</w>
-      <h>112</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>32;96;24;24</additional_attributes>
+    <additional_attributes>32;88;24;24</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -434,7 +436,7 @@ Responsibilities
       <x>56</x>
       <y>152</y>
       <w>376</w>
-      <h>160</h>
+      <h>176</h>
     </coordinates>
     <panel_attributes>*DatabaseConnection*
 --
@@ -444,6 +446,7 @@ Responsibilities
 +Prepare(string query): PreparedStmt
 +StartTransaction(): void
 +Rollback(): void
++CloseConnection(): void
 --
 Responsibilities
 -- Connect to the database
@@ -455,12 +458,12 @@ Responsibilities
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>240</x>
-      <y>288</y>
+      <y>304</y>
       <w>336</w>
-      <h>120</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>24;24;320;104</additional_attributes>
+    <additional_attributes>24;24;320;88</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -566,12 +569,12 @@ Responsibilities
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>224</x>
-      <y>288</y>
+      <y>304</y>
       <w>288</w>
-      <h>296</h>
+      <h>280</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>24;24;272;280</additional_attributes>
+    <additional_attributes>24;24;272;264</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
