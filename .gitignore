@@ -9,3 +9,5 @@ RestService/RestService/obj/Release/**/*
 RestService/RestService/bin/*
 RestService/RestService/bin/**/*
 RestService/RestService/Properties/**/*
+**.DS_Store*
+**~

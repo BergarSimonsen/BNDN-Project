@@ -1,0 +1,814 @@
+% Created 2013-04-03 Wed 12:53
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\tolerance=1000
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{api-spec}
+\author{Bergar Simonsen}
+\date{\today}
+\setlength{\parindent}{0cm}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.8.11}}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+\vspace*{1cm}
+\section{api spec}
+\label{sec-1}
+\subsection{M6, Movie Distribution Web Service API Specs}
+\label{sec-1-1}
+
+The web service uses RESTful concepts to provide a standardized and stateless programming interface, for interacting with the system. \\
+
+\textbf{Standard response} \\
+All responses consists of the following data:
+
+\begin{table}[H]
+\caption{Response message objects}
+\begin{center}
+\begin{tabular}{|c|l|}
+\hline
+ Message                     &  Description                                               \\
+\hline
+ error\_number   &  0 on success, otherwise a number indicating the relevant error.  \\
+                             &  NOT TO BE CONFUSED WITH HTTP-Response-code! This   \\
+                             &  is assuming the HTTP-Response-code is 200.                \\
+\hline
+ error\_message  &  A message in English, describing the eventual error.      \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+\textbf{Security and encoding} \\
+All requests should be made with a valid API-key, and values hashed into a “Checksum”. (TODO: Describe hashing details). Requests should be accompanied by a UTC timestamp and a nonce. All authenticated requests should contain an access token.
+
+So every request should look something like: 
+
+\verb[Resource]?auth=[AUTH-STRING]\&parama=xxx\&paramb=yyy \\
+
+Where [AUTH-STRING] is something similar to:
+\{ “api-key” : ”AB14” , ”hmac” : ”XZ45” , ”time” : ”213” , “nonce” : “XC98” ; “token” = “DE95” \} \\
+
+The only optional part of this auth object, is the token, which is only used after the user has successfully logged in. \\
+
+\textbf{Objects} \\
+Every area of the application has some certain objects with a well defined structure. These are described initially in the relevant section, and utilized throughout the API. This allows for client to receive and process these objects in a uniform manner.\\
+
+\textbf{Parameters} \\
+Are GET or POST arguments, depending on the request-type. The left side column of the table shows the argument name, while the right one describes the argument. \\
+
+\textbf{Response} \\
+Is an associative JSON object, with fields corresponding to the left side column of the table. The right side of the column describes the data in the field of the returned response.
+
+\subsection{Users (users, tokens \& user data types)}
+\label{sec-1-2}
+
+The users are at the heart of the system. All actions are performed by users, and their identities are associated with both actions and data entities within the system. Users are very simple, but can be extended to application specific needs. This is done by creating new user data types (unique text indexes, that can be used to store data for each user), and assigning data to the users. Tokens are used for accessing the application as a specific user, and is given upon submission of a valid email and password combination.
+
+\begin{table}[H]
+\caption{User objects}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+ Field                   &  Description                               \\
+\hline
+ id                      &  The users id                              \\
+ \hline
+ email                   &  E-mail of the user. False if currently    \\
+                         &  logged in user is not permitted to read.  \\
+\hline                         
+ user\_data  &  All data that exists for this user as an  \\
+                         &  associative structure                     \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\caption{Token objects}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+ Field    &  Description                                    \\
+\hline
+ token    &  A token string, to be used in further queries  \\
+ issued   &  Date and time for issuance                     \\
+ expires  &  Date and time for expiration                   \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+ 
+\begin{tabbing}
+\textbf{Get user} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /user/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Who is the user with the id <ID>? \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}}  \> None \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field  &  Description  \\
+\hline
+ user   &  user         \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Get currently logged in user} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /user/me \\
+\textcolor{black!60}{\textbf{Description:}}  \> Who is the currently logged in user? \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}}  \> None \\
+\textcolor{black!60}{\textbf{Authorization:}} \> Token \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field  &  Description  \\
+\hline
+ user   &  user         \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Get all users (with parameters)} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /user/ \\
+\textcolor{black!60}{\textbf{Description:}}  \> Who are the users that match the given parameters \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{group\_ids} Comma separated list of group-ids. \\ \> Only show users who are members of this/these group(s) \\
+\> \textbf{search\_string} The string to search for \\
+\> \textbf{search\_fields} Comma separated list of fields to use for \\ \> matching the string \\
+\> \textbf{limit} How many users to return? \\
+\> \textbf{page} Should there be an offset? Default = 1 means no offset. \\
+\> \textbf{order\_by} Order by what column? Default = e-mail. \\
+\> \textbf{order} Order which way? Default = ASC. \\
+\textcolor{black!60}{\textbf{Authorization:}} \> Token \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field                     &  Description                                          \\
+\hline
+ users                     &  array[User]                                          \\
+ count                     &  Number of users in total, regardless of limit        \\
+ count\_pages  &  Number of pages needed for users with current limit  \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Post user access token} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /user/token \\
+\textcolor{black!60}{\textbf{Description:}}  \> Can i have an access-token with these credentials? \\
+\textcolor{black!60}{\textbf{Method:}} \> POST \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{email} The users e-mail \\
+\> \textbf{password} An SHA-1 hash of the users password. \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field  &  Description  \\
+\hline
+ token  &  Token        \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Renew user access token} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /user/token/renew \\
+\textcolor{black!60}{\textbf{Description:}}  \> Can I renew this token? \\
+\textcolor{black!60}{\textbf{Method:}} \> POST \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field  &  Description  \\
+\hline
+ token  &  Token        \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Create new user} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /user \\
+\textcolor{black!60}{\textbf{Description:}}  \> Create a new user with this data \\
+\textcolor{black!60}{\textbf{Method:}} \> POST \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{e-mail} The users e-mail. Doubles as a username. \\
+\> \textbf{password} The users password. SHA-1 hashed. \\
+\> \textbf{user\_data} Other data for this user as an associative array.\\ \> NB: All data must already be present as user data types. \\
+\textcolor{black!60}{\textbf{Response:}} \> None
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Delete user} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /user/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Delete the user with this id \\
+\textcolor{black!60}{\textbf{Method:}} \> DELETE \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Response:}} \> None
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Update user} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /user/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Update this user with this data \\
+\textcolor{black!60}{\textbf{Method:}} \> PUT \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{e-mail (optional)} The users new e-mail \\
+\> \textbf{old-password (optional)} The users current password. \\ \> SHA-1 hashed. \\
+\> \textbf{password (optional)} The users new password. \\ \> SHA-1 hashed. \\
+\> \textbf{user\_data} Other data for this user as an associative array. \\
+\> NB: All data must already be present as user data types. \\
+\textcolor{black!60}{\textbf{Response:}} \> None
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Get a list of all user data types} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /userdatatype \\
+\textcolor{black!60}{\textbf{Description:}}  \> Get all user data types for this system \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{name} Select all user data types with this name. \\ \>
+Used to test if a given data type exists. \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field          &  Description                             \\
+\hline
+ userdatatypes  &  An array of user data types as strings  \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Create a new user data type} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /userdatatype/<NAME> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Make a new user data type \\
+\textcolor{black!60}{\textbf{Method:}} \> POST \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{name} The name of the new user data type. \\
+\textcolor{black!60}{\textbf{Response:}} \> None
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Delete a user data type} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /userdatatype/<NAME> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Delete user data type with this name <NAME> \\
+\textcolor{black!60}{\textbf{Method:}} \> DELETE \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Response:}} \> None
+\end{tabbing}
+
+
+\subsection{Media (Media \& Media Category)}
+\label{sec-1-3}
+
+\begin{table}[H]
+\caption{Media objects}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+ Field                                          &  Description                            \\
+\hline
+ id                                             &  A unique id of the media               \\
+ media\_category                    &  The id of the media's category         \\
+ media\_category\_name  &  The name of the media's category       \\
+ user                                           &  The id of the user who uploaded        \\
+ file\_location                     &  The location of the connected file     \\
+ title                                          &  The title of the media                 \\
+ description                                    &  The description of the media           \\
+ media\_length                      &  The length of the media in minutes     \\
+ format                                         &  The format of the file                 \\
+ tags                                           &  A list of tags connected to the media  \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+MediaCategory
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+ Field  &  Description                     \\
+\hline
+ id     &  A unique id                     \\
+ name   &  The name of the media category  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{tabbing}
+\textbf{Get media with specific id} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /media/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Get a specific media, based on it's id \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field  &  Description  \\
+\hline
+ media  &  Media        \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Get all medias (with parameters)} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /media \\
+\textcolor{black!60}{\textbf{Description:}}  \> Get all media matching the giver criteria. \\ \> Can be used for listings and searches. \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{andTags} A list of tags where the media has to match all of them \\
+\> \textbf{orTags} A list of tags where the media has to match one of them \\
+\> \textbf{mediaCategoryFilter} A media category id that filters the medias. \\
+\> \textbf{nameFilter} A string that filters the medias \\
+\> \textbf{page} The page you are on \\
+\> \textbf{limit} The amount of medias per page \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field      &  Description      \\
+\hline
+ pageCount  &  Amount of pages  \\
+ medias     &  array[Media]     \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Create a new media} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /media \\
+\textcolor{black!60}{\textbf{Description:}}  \> Create a new media and get a path for your upload. \\ \> This will only create an entry in the database with the meta data \\ \> provided. Returns id. \\
+\textcolor{black!60}{\textbf{Method:}} \> POST \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
+\> \textbf{media\_category} The id of the media's category \\
+\> \textbf{title} The title of the media \\
+\> \textbf{description} The description of the media \\
+\> \textbf{media\_length} The length of the media in minutes \\
+\> \textbf{format} The format of the media file \\
+\> \textbf{tags} A list of tags connected to the media \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field  &  Description              \\
+\hline
+ id     &  The id of the new media  \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Upload a media file associated with a media} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /mediaFiles/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Upload a media file. You give the ID connected the posted \\ \> meta data and the file you want to upload. \\
+\textcolor{black!60}{\textbf{Method:}} \> POST \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Content-Type}} \> File Stream \\
+\textcolor{black!60}{\textbf{Response:}} \> Response message
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Update media} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /media/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Update the metadata of a media. \\
+\textcolor{black!60}{\textbf{Method:}} \> PUT \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
+\> \textbf{media\_category} The id of the media's category \\
+\> \textbf{title} The title of the media \\
+\> \textbf{description} The description of the media \\
+\> \textbf{media\_length} The length of the media in minutes \\
+\> \textbf{format} The format of the media file \\
+\> \textbf{tags} A list of tags connected to the media \\
+\textcolor{black!60}{\textbf{Response:}} \> Response message.
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Delete media} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /media/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Delete a media. This will also delete the file connected to the media. \\
+\textcolor{black!60}{\textbf{Method:}} \> DELETE \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Response:}} \> Response message.
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Get all media categories} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /mediaCategory \\
+\textcolor{black!60}{\textbf{Description:}}  \> Get a list of all media categories \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field                          &  Description           \\
+\hline
+ media\_categories  &  array[MediaCategory]  \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Get media category with specific id} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /mediaCategory/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Get a media category \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field                          &  Description    \\
+\hline
+ media\_categories  &  MediaCategory  \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{New media category} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /mediaCategory \\
+\textcolor{black!60}{\textbf{Description:}}  \> Creates a new media category \\
+\textcolor{black!60}{\textbf{Method:}} \> POST \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
+\> \textbf{name} The name of the media category. \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field  &  Description                                 \\
+\hline
+ id     &  The unique id of the media category posted  \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Update media category} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /mediaCategory/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Update media category \\
+\textcolor{black!60}{\textbf{Method:}} \> PUT \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
+\> \textbf{name} The name of the media category. \\
+\textcolor{black!60}{\textbf{Response:}} \> Response message
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Delete media category} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /mediaCategory/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Delete media category \\
+\textcolor{black!60}{\textbf{Method:}} \> DELETE \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Response:}} \> Response message
+\end{tabbing}
+
+
+\subsection{Tags}
+\label{sec-1-4}
+
+\begin{table}[H]
+\caption{Tag objects}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+ Field                     &  Description                    \\
+\hline
+ id                        &  A unique id                    \\
+ name                      &  The name of the tag            \\
+ simple\_name  &  The short version of the name  \\
+ tag-group                 &  Tag group                      \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\caption{Tag group objects}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+ Field        &  Description                \\
+\hline
+ id           &  A unique id                \\
+ name         &  The name of the tag group  \\
+ description  &  The tag group description  \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{tabbing}
+\textbf{Get all tags} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /tags \\
+\textcolor{black!60}{\textbf{Description:}}  \> Get a list of all tags\\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{tagGroupFilter} The id of the tag group you want to filter by \\
+\> \textbf{limit} Amount of tags per page \\
+\> \textbf{page} The page number \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field      &  Description          \\
+\hline
+ countPage  &  The amount of pages  \\
+ tags       &  array[Tag]           \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Get tag with specific id} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /tags/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Get a tag \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field  &  Description  \\
+\hline
+ Tag    &  Tag          \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{New tag} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /tags \\
+\textcolor{black!60}{\textbf{Description:}}  \> Create a new tag \\
+\textcolor{black!60}{\textbf{Method:}} \> POST \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
+\> \textbf{name} The name of the tag \\
+\> \textbf{simple\_name} The short version of the name \\
+\> \textbf{tag-groups} A list of tag groups \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field  &  Description                   \\
+\hline
+ id     &  The unique of the posted tag  \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Update tag} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /tags/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Update a tag \\
+\textcolor{black!60}{\textbf{Method:}} \> PUT \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
+\> \textbf{name} The name of the tag \\
+\> \textbf{simple\_name} The short version of the name \\
+\> \textbf{tag-groups} A list of tag groups \\
+\textcolor{black!60}{\textbf{Response:}} \> Response message
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Delete tag} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /tags/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Delete a tag \\
+\textcolor{black!60}{\textbf{Method:}} \> DELETE \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Response:}} \> Response message
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Get tag group} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /tagGroups/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Get a tag group \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{limit} Amount of tags per page. \\
+\> \textbf{page} The page number. \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field                    &  Description      \\
+\hline
+ tag\_groups  &  array[TagGroup]  \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{New tag group} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /tagGroups \\
+\textcolor{black!60}{\textbf{Description:}}  \> Create a new tag group \\
+\textcolor{black!60}{\textbf{Method:}} \> POST \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application /json} \\
+\> \textbf{name} The name of the new tag group \\
+\> \textbf{description} The tag group description \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field  &  Description                         \\
+\hline
+ id     &  The unique id of the new tag group  \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Update tag group} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /tagGroups/<ID> \\
+\textcolor{black!60}{\textbf{Description:}} \> Update a tag group \\
+\textcolor{black!60}{\textbf{Method:}} \> PUT \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application /json} \\
+\> \textbf{name} The name of the new tag group \\
+\> \textbf{description} The tag group description \\
+\textcolor{black!60}{\textbf{Response:}} \> Response message.
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Delete tag group} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /tagGroups/<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Delete a tag group (this will also delete tags connected \\ \> to the tag group, or delete the connection) \\
+\textcolor{black!60}{\textbf{Method:}} \> DELETE \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None \\
+\textcolor{black!60}{\textbf{Response:}} \> Response message.
+\end{tabbing}
+
+\subsection{Orders}
+\label{sec-1-5}
+
+\begin{tabbing}
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /transactionHistory \\
+\textcolor{black!60}{\textbf{Description:}}  \> Get transaction history for a user. \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{user} The "owner" of the transaction history. \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field        &  Description                                       \\
+\hline
+ Transaction  &  array[Transaction] All transactions for the user  \\
+ Order        &  array[order] All orders for the user              \\
+ Promise      &  array[promise] All promises for the user          \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /transaction \\
+\textcolor{black!60}{\textbf{Description:}}  \> Creates a new transaction for when the user wants to purchase \\ \> additional functionality. \\
+\textcolor{black!60}{\textbf{Method:}} \> POST \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None. \\
+\textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
+\> \textbf{promise} array[promise] \\
+\> \textbf{order} array[order] \\
+\> \textbf{order\_line} Order line containing all orders \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field        &  Description                                       \\
+\hline
+ Field                        &  Description                                    \\
+\hline
+ Transaction\_id  &  Id of the posted transaction                   \\
+ Response\_data   &  Text describing the status of the transaction  \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+
+
+\subsection{rating}
+\label{sec-1-6}
+
+\begin{tabbing}
+\textbf{Get all rating for specific media} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /rating/<media> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Returns all the ratings / comments on a specific media. \\
+\textcolor{black!60}{\textbf{Method:}} \> GET \\
+\textcolor{black!60}{\textbf{Parameters:}} \> None. \\
+\textcolor{black!60}{\textbf{Response:}} \\ \>
+\begin{tabular}{|l|l|}
+\hline
+ Field                       &  Description                                 \\
+\hline
+ user\_id        &  The user who has rated                      \\
+ media\_id       &  Id of the media that the rating belongs to  \\
+ starts                      &  Amount of stars given in the rating         \\
+ comment\_title  &  Title of the comment                        \\
+ comment                     &  Content of the comment                      \\
+\hline
+\end{tabular}
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{New rating for media} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /rating \\
+\textcolor{black!60}{\textbf{Description:}}  \> Posts a new rating for a media \\
+\textcolor{black!60}{\textbf{Method:}} \> POST \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{user\_id} The id of the user (current user) \\
+\> \textbf{media\_id} Id of the media to comment on \\
+\> \textbf{stars} Number of stars to give to the media \\
+\> \textbf{comment\_title} Title of the comment \\
+\> \textbf{comment} Content of the comment \\
+\textcolor{black!60}{\textbf{Response:}} \> Response message
+\end{tabbing}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{tabbing}
+\textbf{Edit rating} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /rating<ID> \\
+\textcolor{black!60}{\textbf{Description:}}  \> Edits an already existing comment. \\
+\textcolor{black!60}{\textbf{Method:}} \> PUT \\
+\textcolor{black!60}{\textbf{Parameters:}} \> \textbf{id} Id of the rating to edit \\
+\> \textbf{comment\_title} Title of the new comment \\
+\> \textbf{comment} Content of the new comment \\
+\> \textbf{stars} New amount of stars \\
+\textcolor{black!60}{\textbf{Response:}} \> Response message
+\end{tabbing}
+
+\end{document}
