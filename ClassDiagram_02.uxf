@@ -610,7 +610,7 @@ Responsibilities
 --
 +PreparedStmt(SqlCommand cmd, int secret)
 +GetCmd(): SqlCommand
-+SecretIs(int secret): bool
++CheckSecret(int secret): bool
 --
 Responsibilities
 -- Represent a prepared statement
