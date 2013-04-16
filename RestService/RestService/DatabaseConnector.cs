@@ -10,36 +10,28 @@ namespace RestService
 {
     public class DatabaseConnection
     {
-        private static DatabaseConnection instance;
+        Random rnd = new Random();
+        private int secret = rnd.Next(1,int.MaxValue);
         private SqlConnection connection;
         private string connectionString;
         private Dictionary<string, string> databases;
 
-        public static DatabaseConnection GetInstance
-        {
-            get
-            {
-                if (instance == null) instance = new DatabaseConnection();
-                return instance;
-            }
-        }
 
-        private DatabaseConnection()
+        public DatabaseConnection(string database)
         {
             Initialize();
+            connectionString = "Server=rentit.itu.dk;DATABASE=" + databases[database] + ";UID=Rentit26db;PASSWORD=ZAQ12wsx;";
         }
 
         private void Initialize()
-        { 
-            //load info about databases and apps into dictionary here
+        {
             databases = new Dictionary<string,string>();
             databases.Add("ITU", "ItuDatabase");
-            databases.Add("SMU", "SmuDatabase");
+            databases.Add("SMU", "SmuDatabase");   
         }
 
-        private SqlConnection Connect(string s)
-        { 
-            connectionString = "Server=rentit.itu.dk;DATABASE=SmuDatabase;UID=Rentit26db;PASSWORD=ZAQ12wsx;";
+        private SqlConnection Connect()
+        {             
             connection = new SqlConnection(connectionString);
             try
             {
@@ -55,6 +47,13 @@ namespace RestService
             
         }
 
+        public PreparedStatement Prepare(string query)
+        { 
+            SqlCommand cmd = new SqlCommand(query, connection);
+            cmd.Prepare();
+            return new PreparedStatement(cmd, secret);
+        }
+
         public bool CloseConnection()
         {
             if (connection.State != System.Data.ConnectionState.Closed) { connection.Close(); return true; }
@@ -66,10 +65,10 @@ namespace RestService
         /// </summary>
         /// 
         /// <param name="database">Database to execute the query on</param>
-        public void Command(Dictionary<string, string> data, SqlCommand command, string database)
+        public void Command(Dictionary<string, string> data, PreparedStatement statement)
         {
-            Connect(database);
-            if (connection.State != System.Data.ConnectionState.Open) Connect(database);
+            Connect();
+            if (connection.State != System.Data.ConnectionState.Open) Connect();
             if (connection.State != System.Data.ConnectionState.Open) ErrorMessage("Cannot open connection to server");
             else
             {
@@ -86,10 +85,10 @@ namespace RestService
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute query on</param>
         /// <returns>SQLDataReader object with return values</returns>
-        public SqlDataReader Query(string query, string database)
+        public SqlDataReader Query(string query)
         {
-            Connect(database);
-            if (connection.State != System.Data.ConnectionState.Open) Connect(database);
+            Connect();
+            if (connection.State != System.Data.ConnectionState.Open) Connect();
             if (connection.State != System.Data.ConnectionState.Open) ErrorMessage("Cannot open connection to server");
             else
             {
@@ -109,7 +108,9 @@ namespace RestService
         {
             Console.Write(s);
         }
-
+    }
+}
+/*
 //******************************************************** User *******************************************************
 
         /// <summary>
@@ -120,7 +121,7 @@ namespace RestService
         public User getUser(int id)
         {
             string query = "select * from user_account where id = " + id;
-            SqlDataReader reader = Query(query, "SMU");
+            SqlDataReader reader = Query(query);
 
             User user = null;
             while (reader.Read())
@@ -149,7 +150,7 @@ namespace RestService
             DateTime created = DateTime.Now;
             // Insert into user_account
             string query = "insert into user_account(email, password_hash, created, modified) values('"+email+"','"+password+"','"+created+"','"+created+"')";
-            Command("SMU");
+            Command();
             // Get user back from database in order to get the id
             User curUser = getUser(email);
             int curId = curUser.id;
@@ -159,7 +160,7 @@ namespace RestService
                 foreach (int i in userData)
                 {
                     string newQuery = "insert into user_account_data values('','" + curId + "','" + i + "','')";
-                    Command("SMU");
+                    Command();
                 }
             }
 
@@ -931,3 +932,4 @@ namespace RestService
         }
     }
 }
+*/
