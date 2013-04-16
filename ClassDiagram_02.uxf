@@ -49,7 +49,7 @@ Responsibilities
       <x>888</x>
       <y>336</y>
       <w>176</w>
-      <h>96</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>*MainController*
 
@@ -58,22 +58,24 @@ Responsibilities
 -- Call Validation
 -- User Authentication
 -- User to request object
--- Route call to correct controller</panel_attributes>
+-- Route call to correct controller
+-- Db to request object</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>992</x>
-      <y>88</y>
+      <y>80</y>
       <w>176</w>
-      <h>64</h>
+      <h>72</h>
     </coordinates>
     <panel_attributes>*Request*
 --
 +url: string
 +data: HashMap&lt;string, string&gt;
-+user: User</panel_attributes>
++user: User
++db: DatabaseConnection</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -111,12 +113,12 @@ Responsibilities
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>952</x>
-      <y>408</y>
+      <y>416</y>
       <w>48</w>
-      <h>112</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>32;96;24;24</additional_attributes>
+    <additional_attributes>32;88;24;24</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
