@@ -109,6 +109,7 @@ namespace RestService
         {
             Console.Write(s);
         }
+/*
 
 //******************************************************** User *******************************************************
 
@@ -929,5 +930,6 @@ namespace RestService
 
             return ratingId;
         }
+ */
     }
 }

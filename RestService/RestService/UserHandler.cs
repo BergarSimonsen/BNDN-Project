@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
-using System.Data;
 
 namespace RestService
 {
@@ -23,5 +22,25 @@ namespace RestService
         }
 
 
+
+        public override void Create(Dictionary<string, string> data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Read(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update(int id, Dictionary<string, string> data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

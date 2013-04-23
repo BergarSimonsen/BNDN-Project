@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using RestService.Web_Service;
+using RestService.Entities;
 
 namespace RestService.IO_Messages
 {
@@ -11,7 +12,7 @@ namespace RestService.IO_Messages
         /// <summary>
         /// The uri of the call
         /// </summary>
-        public string uri {get; set;}
+        public LinkedList<string> uri {get; set;}
 
         /// <summary>
         /// The method of the call
@@ -29,7 +30,7 @@ namespace RestService.IO_Messages
         public User user {get; set;}
 
         //Contructor
-        public Request(string uri, RestMethods method, Dictionary<string, string> data, User user)
+        public Request(LinkedList<string> uri, RestMethods method, Dictionary<string, string> data, User user)
         {
             this.uri = uri;
             this.method = method;
