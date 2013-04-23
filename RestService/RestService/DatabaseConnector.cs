@@ -8,38 +8,30 @@ using System.Data;
 
 namespace RestService
 {
-    public class DatabaseConnector
+    public class DatabaseConnection
     {
-        private static DatabaseConnector instance;
+        Random rnd = new Random();
+        private int secret = rnd.Next(1,int.MaxValue);
         private SqlConnection connection;
         private string connectionString;
         private Dictionary<string, string> databases;
 
-        public static DatabaseConnector GetInstance
-        {
-            get
-            {
-                if (instance == null) instance = new DatabaseConnector();
-                return instance;
-            }
-        }
 
-        private DatabaseConnector()
+        public DatabaseConnection(string database)
         {
             Initialize();
+            connectionString = "Server=rentit.itu.dk;DATABASE=" + databases[database] + ";UID=Rentit26db;PASSWORD=ZAQ12wsx;";
         }
 
         private void Initialize()
-        { 
-            //load info about databases and apps into dictionary here
+        {
             databases = new Dictionary<string,string>();
             databases.Add("ITU", "ItuDatabase");
-            databases.Add("SMU", "SmuDatabase");
+            databases.Add("SMU", "SmuDatabase");   
         }
 
-        private SqlConnection Connect(string s)
-        { 
-            connectionString = "Server=rentit.itu.dk;DATABASE=SmuDatabase;UID=Rentit26db;PASSWORD=ZAQ12wsx;";
+        private SqlConnection Connect()
+        {             
             connection = new SqlConnection(connectionString);
             try
             {
@@ -55,6 +47,13 @@ namespace RestService
             
         }
 
+        public PreparedStatement Prepare(string query)
+        { 
+            SqlCommand cmd = new SqlCommand(query, connection);
+            cmd.Prepare();
+            return new PreparedStatement(cmd, secret);
+        }
+
         public bool CloseConnection()
         {
             if (connection.State != System.Data.ConnectionState.Closed) { connection.Close(); return true; }
@@ -64,16 +63,17 @@ namespace RestService
         /// <summary>
         /// Executes a query with no return value
         /// </summary>
-        /// <param name="query">Query to execute</param>
+        /// 
         /// <param name="database">Database to execute the query on</param>
-        public void ExecuteQuery(string query, string database)
+        public void Command(Dictionary<string, string> data, PreparedStatement statement)
         {
-            Connect(database);
-            if (connection.State != System.Data.ConnectionState.Open) Connect(database);
+            Connect();
+            if (connection.State != System.Data.ConnectionState.Open) Connect();
             if (connection.State != System.Data.ConnectionState.Open) ErrorMessage("Cannot open connection to server");
             else
             {
-                SqlCommand cmd = new SqlCommand(query, connection);
+                command.
+                //SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.ExecuteNonQuery();
                 CloseConnection();
             }
@@ -85,10 +85,10 @@ namespace RestService
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute query on</param>
         /// <returns>SQLDataReader object with return values</returns>
-        public SqlDataReader ExecuteReader(string query, string database)
+        public SqlDataReader Query(string query)
         {
-            Connect(database);
-            if (connection.State != System.Data.ConnectionState.Open) Connect(database);
+            Connect();
+            if (connection.State != System.Data.ConnectionState.Open) Connect();
             if (connection.State != System.Data.ConnectionState.Open) ErrorMessage("Cannot open connection to server");
             else
             {
@@ -108,7 +108,9 @@ namespace RestService
         {
             Console.Write(s);
         }
-
+    }
+}
+/*
 //******************************************************** User *******************************************************
 
         /// <summary>
@@ -119,7 +121,7 @@ namespace RestService
         public User getUser(int id)
         {
             string query = "select * from user_account where id = " + id;
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query);
 
             User user = null;
             while (reader.Read())
@@ -148,7 +150,7 @@ namespace RestService
             DateTime created = DateTime.Now;
             // Insert into user_account
             string query = "insert into user_account(email, password_hash, created, modified) values('"+email+"','"+password+"','"+created+"','"+created+"')";
-            ExecuteQuery(query, "SMU");
+            Command();
             // Get user back from database in order to get the id
             User curUser = getUser(email);
             int curId = curUser.id;
@@ -158,7 +160,7 @@ namespace RestService
                 foreach (int i in userData)
                 {
                     string newQuery = "insert into user_account_data values('','" + curId + "','" + i + "','')";
-                    ExecuteQuery(newQuery, "SMU");
+                    Command();
                 }
             }
 
@@ -175,10 +177,10 @@ namespace RestService
             if (getUser(id) != null)
             {
                 string userGroupQuery = "delete from user_account_in_user_group where user_account_id = " + id;
-                ExecuteQuery(userGroupQuery, "SMU");
+                Command("SMU");
                 // Delete user from database
                 string userQuery = "delete from user_account where id = " + id;
-                ExecuteQuery(userQuery, "SMU");
+                Command("SMU");
             }
             else
             {
@@ -198,7 +200,7 @@ namespace RestService
             else if (newUser.email == null && newUser.password != null)
                 query = "UPDATE user_account SET password_hash = '" + newUser.password + "' where id = '" + id + "'";
 
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
         }
 
         /// <summary>
@@ -209,7 +211,7 @@ namespace RestService
         public User getUser(string incmail)
         {
             string query = "select * from user_account where email = '" + incmail + "';";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
 
             User user = null;
             while (reader.Read())
@@ -259,7 +261,7 @@ namespace RestService
             
 
             List<User> groupsUsers = null;
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             groupsUsers = new List<User>();
             while (reader.Read())
             {
@@ -276,7 +278,7 @@ namespace RestService
 
         public int getUsersCount() {
             string query = "SELECT COUNT(*) FROM user_account";
-            SqlDataReader reader = ExecuteReader(query, "SmuDatabase");
+            SqlDataReader reader = Query(query, "SmuDatabase");
             reader.Read();
             int result = reader.GetInt32(0);
             CloseConnection();
@@ -295,7 +297,7 @@ namespace RestService
         public Media getMedia(int id)
         {
             string query = "SELECT * FROM media WHERE id = '"+id+"'";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
 
             Media returnMedia = null;
             while(reader.Read())
@@ -345,7 +347,7 @@ namespace RestService
 
             query += "chuck WHERE chuck.rownum BETWEEN " + ((page - 1) * limit+1) + " AND " + (page * limit);
 
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
 
             List<Media> returnMediaList = new List<Media>();
             while (reader.Read())
@@ -359,7 +361,7 @@ namespace RestService
                 int mediaLength = reader.GetInt32(reader.GetOrdinal("minutes"));
                 string format = reader.GetString(reader.GetOrdinal("format"));
 
-                returnMediaList.Add(MediaHandler.createMedia(mediaId, mediaCategory, user, null, title, description, mediaLength, format));
+                returnMediaList.Add(MediaHandler.createMedia(mediaId, mediaCategory, user, fileLocation, title, description, mediaLength, format));
             }
 
             int mediaCount = getMediaCount();
@@ -371,7 +373,7 @@ namespace RestService
         private int getMediaCount()
         {
             string query = "SELECT COUNT(*) FROM media";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             reader.Read();
             int result = reader.GetInt32(0);
             CloseConnection();
@@ -396,7 +398,7 @@ namespace RestService
             string format = media.format;
 
             string query = "INSERT INTO media (file_location ,title, description, minutes, format, media_category_id, user_account_id) VALUES('"+fileLocation+"','" + title + "', '" + description + "', '" + mediaLength + "', '" + format + "', '" + mediaCategory + "', '" + user + "')";
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
 
             return getMediaIdByDescription(title, description);
         }
@@ -412,7 +414,7 @@ namespace RestService
         {
             int id = -1;
             string query = "SELECT id FROM media WHERE title = '" + title + "' AND description = '" + description + "'";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
 
             while (reader.Read()) 
             {
@@ -429,13 +431,13 @@ namespace RestService
         public void deleteMedia(int id)
         {
             string query = "DELETE FROM rating WHERE media_id = " + id;
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
 
             query = "DELETE FROM media_has_tag WHERE media_id = " + id;
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
 
             query = "DELETE FROM media WHERE id = "+id;
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
             // TODO DELETE MEDIA FILE ?!?!?!?!
         }
 
@@ -470,7 +472,7 @@ namespace RestService
             }
 
             string query = "UPDATE media "+doneUpdate+" WHERE id = '"+id+"'";
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
         }
 
         /// <summary>
@@ -481,7 +483,7 @@ namespace RestService
         public int postMediaCategory(MediaCategory mediaCategory)
         {
             string query = "insert into media_category (name,description) values('" + mediaCategory.name + "','"+mediaCategory.description+"')";
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
             return getMediaCategoryId(mediaCategory.name);
         }
 
@@ -494,7 +496,7 @@ namespace RestService
         {
             MediaCategory mediaCategory = null;
             string query = "SELECT * FROM media_category WHERE id = '" + id + "'";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read())
             {
                 int mId = reader.GetInt32(reader.GetOrdinal("id"));
@@ -513,7 +515,7 @@ namespace RestService
         {
             List<MediaCategory> mediaCategories = new List<MediaCategory>();
             string query = "SELECT * FROM media_category";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read())
             {
                 int mId = reader.GetInt32(reader.GetOrdinal("id"));
@@ -531,10 +533,10 @@ namespace RestService
         public void deleteMediaCategory(int id)
         {
             string query = "DELETE FROM media WHERE media_category_id = " + id;
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
 
             query = "DELETE FROM media_category WHERE id = '" + id + "'";
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
         }
 
         /// <summary>
@@ -559,7 +561,7 @@ namespace RestService
                 query = "UPDATE media_category SET description = '" + mediaCategory.description + "' WHERE id = '" + id + "'";
             }
 
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
         }
 
         /// <summary>
@@ -573,7 +575,7 @@ namespace RestService
             int id = -1;
             string query = "SELECT id FROM media_category WHERE name = '" + name + "'";
 
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read())
             {
                 id = reader.GetInt32(reader.GetOrdinal("id"));
@@ -602,7 +604,7 @@ namespace RestService
             {
                 query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroupTags.* FROM (SELECT * FROM tag) tagGroupTags) chuck WHERE chuck.rownum BETWEEN " + ((page - 1) * limit + 1) + " AND " + (page * limit);
             }
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read()) {
                 int id = reader.GetInt32(reader.GetOrdinal("id"));
                 int tagGroup = reader.GetInt32(reader.GetOrdinal("tag_group_id"));
@@ -623,7 +625,7 @@ namespace RestService
             Tag tag = null;
             int tagId = int.Parse(id);
             string query = "SELECT * FROM tag WHERE id = '" + tagId + "'";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read()) { 
                 int tID = reader.GetInt32(reader.GetOrdinal("id"));
                 int tagGroup = reader.GetInt32(reader.GetOrdinal("tag_group_id"));
@@ -643,7 +645,7 @@ namespace RestService
         {
             List<Tag> tags = new List<Tag>();
             string query = "SELECT * FROM tag, (SELECT tag_id FROM media_has_tag WHERE media_id = '" + media + "') tId WHERE tId.tag_id = tag.id";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read()) {
                 int id = reader.GetInt32(reader.GetOrdinal("id"));
                 int tag_group = reader.GetInt32(reader.GetOrdinal("tag_group_id"));
@@ -664,7 +666,7 @@ namespace RestService
         public int postTag(string name, string simpleName, int tagGroup)
         {
             string query = "INSERT INTO tag (tag_group_id, name, simple_name) VALUES('" + tagGroup + "', '" + name + "', '" + simpleName + "')";
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
             return getTagByName(name);
         }
 
@@ -678,7 +680,7 @@ namespace RestService
         {
             int id = -1;
             string query = "SELECT * FROM tag WHERE name = '" + name + "'";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read()) {
                 id = reader.GetInt32(reader.GetOrdinal("id"));
             }
@@ -709,7 +711,7 @@ namespace RestService
                 {
                     query = "UPDATE tag SET name = '" + name + "', simple_name = '" + simpleName + "', tag_group_id = '" + tagGroup + "' WHERE id = '" + tagId + "'";
                 }
-                ExecuteQuery(query, "SMU");
+                Command("SMU");
             }
         }
 
@@ -722,7 +724,7 @@ namespace RestService
             if(getTag(id) != null) {
                 int tagId = int.Parse(id);
                 string query = "DELETE from tag WHERE id = '" + tagId + "'";
-                ExecuteQuery(query, "SMU");
+                Command("SMU");
             }
         }
 
@@ -736,7 +738,7 @@ namespace RestService
             TagGroup tagGroup = null;
             int tgId = int.Parse(id);
             string query = "SELECT * FROM tag_group WHERE id = '" + tgId + "'";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read()) {
                 int tId = reader.GetInt32(reader.GetOrdinal("id"));
                 string name = reader.GetString(reader.GetOrdinal("name"));
@@ -755,7 +757,7 @@ namespace RestService
         {
             List<TagGroup> tagGroups = new List<TagGroup>();
             string query = "SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, tagGroups.* FROM (SELECT * FROM tag_group) tagGroups) chuck WHERE chuck.rownum BETWEEN " + ((page - 1) * limit+1) + " AND " + (page * limit); ;
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read()) {
                 int tgId = reader.GetInt32(reader.GetOrdinal("id"));
                 string name = reader.GetString(reader.GetOrdinal("name"));
@@ -772,7 +774,7 @@ namespace RestService
         public int postTagGroup(string name)
         {
             string query = "INSERT INTO tag_group (name) VALUES('" + name + "')";
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
             return getTagGroupByName(name);
         }
 
@@ -786,7 +788,7 @@ namespace RestService
             if (getTagGroup(id) != null) {
                 int tId = int.Parse(id);
                 string query = "UPDATE tag_group SET name = '" + name + "' WHERE id = '" + tId + "'";
-                ExecuteQuery(query, "SMU");
+                Command("SMU");
             }
         }
 
@@ -799,7 +801,7 @@ namespace RestService
             if (getTagGroup(id) != null) {
                 int tId = int.Parse(id);
                 string query = "DELETE FROM tag_group WHERE id = '" + tId + "'";
-                ExecuteQuery(query, "SMU");
+                Command("SMU");
             }
         }
 
@@ -813,7 +815,7 @@ namespace RestService
         {
             int id = -1;
             string query = "SELECT id FROM tag_group WHERE name = '" + name +"'";
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read()) {
                 id = reader.GetInt32(reader.GetOrdinal("id"));
             }
@@ -828,7 +830,7 @@ namespace RestService
         public void mediaHasTag(int media, int tag)
         {
             string query = "INSERT INTO media_has_tag (media_id, tag_id) VALUES('" + media + "', '" + tag + "')";
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
         }
 
         // ============================================ Rating ======================================= //
@@ -859,7 +861,7 @@ namespace RestService
                 query = "SELECT * FROM rating";
             }
             
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read()) { 
                 int id = reader.GetInt32(reader.GetOrdinal("id"));
                 int userAccount = reader.GetInt32(reader.GetOrdinal("user_account_id"));
@@ -883,7 +885,7 @@ namespace RestService
         public void postRating(int userId, int mediaId, int stars, string commentTitle, string comment)
         {
             string query = "INSERT INTO rating (user_account_id, media_id, rating, comment, comment_title) VALUES('" + userId + "', '" + mediaId + "', '" + stars + "', '" + comment + "', '" + commentTitle + "')";
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
         }
 
         /// <summary>
@@ -896,7 +898,7 @@ namespace RestService
         public void putRating(int id,string commentTitle,string comment,int stars)
         {
             string query = "UPDATE rating SET comment_title = '" + commentTitle + "', comment = '" + comment + "', rating = '" + stars + "' WHERE id = '" + id + "'";
-            ExecuteQuery(query, "SMU");
+            Command("SMU");
         }
 
         /// <summary>
@@ -907,7 +909,7 @@ namespace RestService
         {
             if (getRatingById(id) > 0) {
                 string query = "DELETE from rating WHERE id = " + id;
-                ExecuteQuery(query, "SMU");
+                Command("SMU");
             }
         }
 
@@ -921,7 +923,7 @@ namespace RestService
         {
             int ratingId = -1;
             string query = "SELECT * FROM rating WHERE id = " + id;
-            SqlDataReader reader = ExecuteReader(query, "SMU");
+            SqlDataReader reader = Query(query, "SMU");
             while (reader.Read()) {
                 ratingId = reader.GetInt32(reader.GetOrdinal("id"));
             }
@@ -930,3 +932,4 @@ namespace RestService
         }
     }
 }
+*/

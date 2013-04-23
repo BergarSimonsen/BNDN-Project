@@ -28,11 +28,8 @@ namespace RestService
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-//            UriTemplate = "/user?group_id={group_id}&search_string={search_string}&search_fields={search_fields}&limit={limit}&page={page}&order_by={order_by}&order={order}")]
-//        UserList getUsersWithParameter(string group_id, string search_string, string search_fields, string limit, string page, string order_by, string order);
-//        // Can't really test
             UriTemplate = "/user?group_id={group_id}&emailFilter={emailFilter}&limit={limit}&page={page}&order_by={order_by}&order={order}")]
-            UserList getUsersWithParameter(string group_id, string emailFilter, string limit, string page, string order_by, string order);
+         UserList getUsersWithParameter(string group_id, string emailFilter, string limit, string page, string order_by, string order);
 
         [OperationContract]
         [WebInvoke(
@@ -108,6 +105,7 @@ namespace RestService
         [WebInvoke(
             Method = "POST",
             RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media")]
         int postMedia(Media media);

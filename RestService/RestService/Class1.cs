@@ -9,7 +9,7 @@ namespace RestService
     {
         public static void Main(string[] args)
         {
-            DatabaseConnector database = DatabaseConnector.GetInstance;
+            DatabaseConnection database = DatabaseConnection.GetInstance;
             //Rating r1 = database.getRating("4", "18");
             //Console.WriteLine(r1.id);
             //Console.WriteLine(r1.userId);
