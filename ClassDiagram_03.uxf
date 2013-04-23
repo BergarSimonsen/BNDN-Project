@@ -81,13 +81,14 @@ Responsibilities
     <coordinates>
       <x>880</x>
       <y>480</y>
-      <w>192</w>
-      <h>56</h>
+      <w>200</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Abstract&gt;&gt;
-*AbstractController*
+*AbstractController&lt;T&gt;*
 --
-+Call(Request request): Response</panel_attributes>
++Call(Request request): Response&lt;T&gt;
++Validate(Request request) : bool</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
