@@ -4,43 +4,70 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
+using RestService.Security;
 
 namespace RestService
 {
     public class UserHandler : AbstractHandler
     {
-        public static User createUser(int id, string email, string password, int[] userData)
+        DatabaseConnection dbCon;
+        Permissions permission;
+
+        public UserHandler(DatabaseConnection incDbCon, Permissions perm) : base(incDbCon, perm) { }
+
+        /*public User createUser(int id, string email, string password, int[] userData)
         {
-            DatabaseConnection db = DatabaseConnection.GetInstance;
-            SqlCommand s = db.Prepare("INSERT INTO user (name, email, password) VALUES (@name, @email, @password)");
-            db.Command(new Dictionary<string,string>{
+            
+            PreparedStatement s = dbCon.Prepare("INSERT INTO user (name, email, password) VALUES (@name, @email, @password)");
+            dbCon.Command(new Dictionary<string,string>{
                 {"email", email},
                 {"password", password}
-            }, s, "SMU");
+            }, s);
 
             return new User(id,email,password, userData);
+        }*/
+
+        public void Create(Dictionary<string, string> data)
+        {
+            Validate(data);
+
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO user_account (email, password_hash, created, modified) " +
+            "VALUES (@email, @password, @created, @modified)", new List<string> { "email", "password", "created", "modified" });
+            dbCon.Command(data, stat);
         }
 
-
-
-        public override void Create(Dictionary<string, string> data)
+        public SqlDataReader Read(int id)
         {
-            throw new NotImplementedException();
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where id = '" + id + "'", 
+            new List<string> { });
+
+            return null;
         }
 
-        public override void Read(int id)
+        public void Update(int id, Dictionary<string, string> data)
         {
-            throw new NotImplementedException();
+            Validate(data);
+
+            PreparedStatement stat = dbCon.Prepare("UPDATE user_account (email, password_hash, created, modified)" +
+            "VALUES (@email, @password, @created, @modified)", new List<string> { "email", "password", "created", "modified"});
+            dbCon.Command(data, stat);
         }
 
-        public override void Update(int id, Dictionary<string, string> data)
+        public void Delete(int id)
         {
-            throw new NotImplementedException();
+            PreparedStatement stat = dbCon.Prepare("DELETE FROM user_account where id = '"+id+"'",new List<string>());
+
+            dbCon.Command(new Dictionary<string, string>(), stat);
         }
 
-        public override void Delete(int id)
+        public void Search(Dictionary<string, string> data);
+
+        public void Validate(Dictionary<string, string> data)
         {
-            throw new NotImplementedException();
+            if (!data.ContainsKey("email"))
+                throw new Exception("User is missing 'email' data");
+            if (!data.ContainsKey("password"))
+                throw new Exception("User is missing 'password' data");
         }
     }
 }
