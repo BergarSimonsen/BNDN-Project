@@ -10,6 +10,41 @@ namespace RestService
 {
     public class AuthHandler
     {
+        private static Dictionary<string, UserTokenData> UserTokenMap = new Dictionary<string, UserTokenData>();
+
+        public static int AddUserToMap(string token, UserTokenData user)
+        {
+            try
+            {
+                if (!UserTokenMap.ContainsKey(token))
+                {
+                    UserTokenMap.Add(token, user);
+                    return 0;
+                }
+                else
+                {
+                    UserTokenMap.Remove(token);
+                    UserTokenMap.Add(token, user);
+                    return 1;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return -1;
+            }
+        }
+        public static UserTokenData GetUserFromMap(string token)
+        {
+            UserTokenData value;
+            if (UserTokenMap.TryGetValue(token, out value))
+            { return value; }
+            else
+            {
+                return null;
+            }
+        }
+
         private class TokenHandler
         {
             private readonly long tokenLifetime = 900000000000;
@@ -20,26 +55,34 @@ namespace RestService
                 return instance;
             }
 
-            public Token CreateToken(string username)
+            public string CreateUserToken(string email)
             {
-                return CreateToken(username, DateTime.UtcNow.Add(new TimeSpan(tokenLifetime)));
+                CryptoHandler crypto = AuthHandler.CryptoHandler.GetInstance();
+                DateTime now = DateTime.UtcNow.Add(new TimeSpan(tokenLifetime));
+                string encryptedTarget = crypto.RSAEncrypt(
+                    email + "|" + now.ToString(),
+                    crypto.GetKey().ExportParameters(true)
+                    );
+                AuthHandler.AddUserToMap(encryptedTarget, new UserTokenData(email, now)); 
+
+                return encryptedTarget;
             }
 
-            private Token CreateToken(string email, DateTime expires)
+            public string ReturnUser(string token)
             {
-                string hash = (email.GetHashCode() * expires.GetHashCode()).ToString();
-                CryptoHandler cryptoHandler = AuthHandler.CryptoHandler.GetInstance();
-                return new Token(cryptoHandler.RSAEncrypt(hash, cryptoHandler.GetUserFromCrypto(email).ExportParameters(false)), email, expires);
-            }
-
-            public bool VerifyToken(string username, Token token)
-            {
-                if (DateTime.UtcNow.Ticks > token.expires.Ticks)
+                try
                 {
-                    Token verificationToken = CreateToken(username, token.expires);
-                    return token.Equals(verificationToken);
+                    UserTokenData userToken = AuthHandler.GetUserFromMap(token);
+                    if (userToken.expires.Ticks > DateTime.UtcNow.Ticks)
+                    { return userToken.email; }
+                    else
+                    { return null; }
                 }
-                else return false;
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                    return null;
+                }
             }
         }
 
@@ -52,27 +95,12 @@ namespace RestService
                 return instance;
             }
             
+            private Dictionary<string, string> UserTokenMap = new Dictionary<string,string>();
             private Dictionary<string, RSACryptoServiceProvider> userHashMap = new Dictionary<string,RSACryptoServiceProvider>();
             private UnicodeEncoding ByteConverter = new UnicodeEncoding();
 
-            public void AddUserToCrypto(string email)
-            {
-                if (!userHashMap.ContainsKey(email)) { 
-                    userHashMap.Add(email, new RSACryptoServiceProvider());
-                } else {
-                    userHashMap.Remove(email);
-                    userHashMap.Add(email, new RSACryptoServiceProvider());
-                }
-            }
-
-            public RSACryptoServiceProvider GetUserFromCrypto(string email)
-            {
-                RSACryptoServiceProvider KeyInfo;
-                if (userHashMap.TryGetValue(email, out KeyInfo))
-                    return KeyInfo;
-
-                return null;
-            }
+            public RSACryptoServiceProvider GetKey()
+            { return new RSACryptoServiceProvider(); }
 
             public string RSAEncrypt(string target, RSAParameters RSAKeyInfo)
             {
@@ -125,7 +153,18 @@ namespace RestService
                     return null;
                 }
             }
+        }
 
+        public class UserTokenData
+        {
+            public string email;
+            public DateTime expires;
+
+            public UserTokenData(string email, DateTime expires)
+            {
+                this.email = email;
+                this.expires = expires;
+            }
         }
     }
 }
