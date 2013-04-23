@@ -49,9 +49,14 @@ namespace RestService
             
         }
 
-        public PreparedStatement Prepare(string query)
+        public PreparedStatement Prepare(string query, List<String> parameters)
         { 
             SqlCommand cmd = new SqlCommand(query, connection);
+            foreach (string p in parameters)
+            {
+                SqlParameter parameter = cmd.Parameters.Add(new SqlParameter("@" + p, SqlDbType.Text));
+                parameter.Value = "";
+            }
             cmd.Prepare();
             return new PreparedStatement(cmd, secret);
         }
@@ -69,8 +74,16 @@ namespace RestService
         /// <param name="database">Database to execute the query on</param>
         public void Command(Dictionary<string, string> data, PreparedStatement statement)
         {
-            ValidateStatement(statement)
+            ValidateStatement(statement);
             SqlCommand cmd = statement.GetCmd();
+            foreach(SqlParameter p in cmd.Parameters)
+            {
+                if(data.ContainsKey(p.ParameterName)){
+                    p.Value = data[p.ParameterName];
+                }else{
+                    //TODO: throw new Datasadflasjfdælk
+                }
+            }
             Connect();
             if (connection.State != System.Data.ConnectionState.Open) Connect();
             if (connection.State != System.Data.ConnectionState.Open) ErrorMessage("Cannot open connection to server");
