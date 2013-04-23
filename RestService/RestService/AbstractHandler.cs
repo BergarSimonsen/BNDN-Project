@@ -12,7 +12,7 @@ namespace RestService
         public DatabaseConnection dbCon;
         public Permissions permission;
 
-        public virtual AbstractHandler( DatabaseConnection incDbCon, Permissions perm)
+        public AbstractHandler( DatabaseConnection incDbCon, Permissions perm)
         {
             this.dbCon = incDbCon;
             this.permission = perm;

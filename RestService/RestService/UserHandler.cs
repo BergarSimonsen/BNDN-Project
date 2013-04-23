@@ -28,7 +28,7 @@ namespace RestService
             return new User(id,email,password, userData);
         }*/
 
-        public void Create(Dictionary<string, string> data)
+        public override void Create(Dictionary<string, string> data)
         {
             Validate(data);
 
@@ -37,7 +37,7 @@ namespace RestService
             dbCon.Command(data, stat);
         }
 
-        public SqlDataReader Read(int id)
+        public override SqlDataReader Read(int id)
         {
             PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where id = '" + id + "'", 
             new List<string> { });
@@ -45,7 +45,7 @@ namespace RestService
             return null;
         }
 
-        public void Update(int id, Dictionary<string, string> data)
+        public override void Update(int id, Dictionary<string, string> data)
         {
             Validate(data);
 
@@ -54,16 +54,16 @@ namespace RestService
             dbCon.Command(data, stat);
         }
 
-        public void Delete(int id)
+        public override void Delete(int id)
         {
             PreparedStatement stat = dbCon.Prepare("DELETE FROM user_account where id = '"+id+"'",new List<string>());
 
             dbCon.Command(new Dictionary<string, string>(), stat);
         }
 
-        public void Search(Dictionary<string, string> data);
+        public override void Search(Dictionary<string, string> data);
 
-        public void Validate(Dictionary<string, string> data)
+        public override void Validate(Dictionary<string, string> data)
         {
             if (!data.ContainsKey("email"))
                 throw new Exception("User is missing 'email' data");

@@ -7,7 +7,7 @@ using System.Data;
 
 namespace RestService
 {
-    class PreparedStatement
+    public class PreparedStatement
     {
         public SqlCommand myCommand;
         private int mySecret;
