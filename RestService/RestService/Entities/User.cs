@@ -4,10 +4,10 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 
-namespace RestService
+namespace RestService.Entities
 {
     [DataContract]
-    public class User
+    public class User : IEntities
     {
         [DataMember]
         public int id { get; set; }

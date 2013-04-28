@@ -7,9 +7,5 @@ using System.Web;
 namespace RestService.Entities
 {
     [DataContract]
-    public abstract class AbstractEntity
-    {
-        [DataMember]
-        public int id { get; set; }
-    }
+    public abstract class IEntities {}
 }

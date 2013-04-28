@@ -7,10 +7,10 @@ using System.Data;
 
 namespace RestService
 {
-    class PreparedStatement
+    public class PreparedStatement
     {
-        SqlCommand myCommand;
-        int mySecret;
+        public SqlCommand myCommand;
+        private int mySecret;
 
         public PreparedStatement(SqlCommand cmd, int secret)
         {
@@ -23,7 +23,6 @@ namespace RestService
         public bool CheckSecret(int i)
         {
             return mySecret == i;
-            else return false;
         }
     }
 }

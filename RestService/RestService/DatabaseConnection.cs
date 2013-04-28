@@ -10,8 +10,8 @@ namespace RestService
 {
     public class DatabaseConnection
     {
-        Random rnd = new Random();
-        private int secret = rnd.Next(1,int.MaxValue);
+        private Random rnd;
+        private int secret;
         private SqlConnection connection;
         private string connectionString;
         private Dictionary<string, string> databases;
@@ -25,6 +25,8 @@ namespace RestService
 
         private void Initialize()
         {
+             rnd = new Random();
+             secret = rnd.Next(int.MaxValue);
             databases = new Dictionary<string,string>();
             databases.Add("ITU", "ItuDatabase");
             databases.Add("SMU", "SmuDatabase");   
@@ -47,9 +49,14 @@ namespace RestService
             
         }
 
-        public PreparedStatement Prepare(string query)
+        public PreparedStatement Prepare(string query, List<String> parameters)
         { 
             SqlCommand cmd = new SqlCommand(query, connection);
+            foreach (string p in parameters)
+            {
+                SqlParameter parameter = cmd.Parameters.Add(new SqlParameter("@" + p, SqlDbType.Text));
+                parameter.Value = "";
+            }
             cmd.Prepare();
             return new PreparedStatement(cmd, secret);
         }
@@ -67,12 +74,21 @@ namespace RestService
         /// <param name="database">Database to execute the query on</param>
         public void Command(Dictionary<string, string> data, PreparedStatement statement)
         {
+            ValidateStatement(statement);
+            SqlCommand cmd = statement.GetCmd();
+            foreach(SqlParameter p in cmd.Parameters)
+            {
+                if(data.ContainsKey(p.ParameterName)){
+                    p.Value = data[p.ParameterName];
+                }else{
+                    //TODO: throw new Datasadflasjfdælk
+                }
+            }
             Connect();
             if (connection.State != System.Data.ConnectionState.Open) Connect();
             if (connection.State != System.Data.ConnectionState.Open) ErrorMessage("Cannot open connection to server");
             else
             {
-                command.
                 //SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.ExecuteNonQuery();
                 CloseConnection();
@@ -104,12 +120,16 @@ namespace RestService
             return null;
         }
 
+        private void ValidateStatement(PreparedStatement statement)  
+        {
+            if (!statement.CheckSecret(secret))throw new Exception("The Prepared statement is not created by us (or atlest does no know the 'secret' number)");
+        }
+
         private void ErrorMessage(string s)
         {
             Console.Write(s);
         }
-    }
-}
+
 /*
 //******************************************************** User *******************************************************
 
@@ -930,6 +950,6 @@ namespace RestService
 
             return ratingId;
         }
+ */
     }
 }
-*/
