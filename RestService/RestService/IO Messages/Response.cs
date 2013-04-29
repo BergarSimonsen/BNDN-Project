@@ -17,16 +17,16 @@ namespace RestService.IO_Messages
         public Dictionary<string, string> metaData;
 
         [DataMember]
-        public string errorMessage;
+        public string message;
 
         [DataMember]
         public int errorCode;
 
-        public Response(T[] data, Dictionary<string,string> metaData, string errorMessage, int errorCode)
+        public Response(T[] data, Dictionary<string,string> metaData, string message, int errorCode)
         {
             this.data = data;
             this.metaData = metaData;
-            this.errorMessage = errorMessage;
+            this.message = message;
             this.errorCode = errorCode;
         }
     }

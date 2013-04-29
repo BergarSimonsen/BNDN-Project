@@ -110,7 +110,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media")]
-        Response<int> postMedia(Media media);
+        Response<Media> postMedia(Media media);
         // Working
 
         [OperationContract]
@@ -119,7 +119,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media/{id}")]
-        Response<string> putMedia(Media media, string id);
+        Response<Media> putMedia(Media media, string id);
         // No error, but won't update
 
         [OperationContract]
@@ -128,7 +128,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/media/{id}")]
-        Response<string> deleteMedia(string id);
+        Response<Media> deleteMedia(string id);
         // Working
 
         [OperationContract]
@@ -162,7 +162,7 @@ namespace RestService
             RequestFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaCategory")]
-        Response<int> postMediaCategory(MediaCategory mediaCategory);
+        Response<MediaCategory> postMediaCategory(MediaCategory mediaCategory);
         // Working
 
         [OperationContract]
@@ -171,7 +171,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaCategory/{id}")]
-        Response<string> putMediaCategory(string id, MediaCategory mediaCategory);
+        Response<MediaCategory> putMediaCategory(string id, MediaCategory mediaCategory);
         // Almost working. Doesn't update description, only name
 
         [OperationContract]
@@ -180,7 +180,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaCategory/{id}")]
-        Response<string> deleteMediaCategory(string id);
+        Response<MediaCategory> deleteMediaCategory(string id);
         // Working
 
         
@@ -210,7 +210,7 @@ namespace RestService
             RequestFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tags")]
-        Response<int> postTag(Tag tag);
+        Response<Tag> postTag(Tag tag);
         // Working
 
         [OperationContract]
@@ -219,14 +219,14 @@ namespace RestService
             RequestFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tags/{id}")]
-        Response<string> putTag(string id, Tag tag);
+        Response<Tag> putTag(string id, Tag tag);
         // Bad request
 
         [OperationContract]
         [WebInvoke(
             Method = "DELETE",
             UriTemplate = "/tags/{id}")]
-        Response<string> deleteTag(string id);
+        Response<Tag> deleteTag(string id);
         // Bad request
 
         [OperationContract]
@@ -253,7 +253,7 @@ namespace RestService
             RequestFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tagGroups")]
-        Response<int> postTagGroup(TagGroup tagGroup);
+        Response<TagGroup> postTagGroup(TagGroup tagGroup);
         // Working
 
         [OperationContract]
@@ -262,14 +262,14 @@ namespace RestService
             RequestFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/tagGroups/{id}")]
-        Response<string> putTagGroup(string id, TagGroup tagGroup);
+        Response<TagGroup> putTagGroup(string id, TagGroup tagGroup);
         // WORKING
 
         [OperationContract]
         [WebInvoke(
             Method = "DELETE",
             UriTemplate = "/tagGroups/{id}")]
-        Response<string> deleteTagGroup(string id);
+        Response<TagGroup> deleteTagGroup(string id);
         // WORKING
 
         [OperationContract]
@@ -277,8 +277,8 @@ namespace RestService
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/tagsByMedia/{media}")]
-        Response<Tag> getTagByMedia(string media);
+            UriTemplate = "/tagsByMedia/{mediaId}")]
+        Response<Tag> getTagByMedia(string mediaId);
         // Works but doesn't return anything. Are there any entries?
         // Hmm... ??
 
@@ -287,8 +287,8 @@ namespace RestService
             Method = "POST",
             RequestFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/tagsByMedia/{media}/{tag}")]
-        Response<string> mediaHasTag(string media, string tag);
+            UriTemplate = "/tagsByMedia/{mediaId}/{tagId}")]
+        Response<Media> mediaHasTag(string mediaId, string tagId);
         // Think it's working :p
 
 
@@ -299,29 +299,29 @@ namespace RestService
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/rating?media={media}&user={user}")]
-        Response<Rating> getRating(string media, string user);
+            UriTemplate = "/rating?media={media}&user={user}&limit={limit}&page={page}")]
+        Response<Rating> getRating(string media, string user, string limit, string page);
 
         [OperationContract]
         [WebInvoke(
             Method = "POST",
             RequestFormat = WebMessageFormat.Json,
             UriTemplate = "/rating")]
-        Response<int> postRating(Rating rating);
+        Response<Rating> postRating(Rating rating);
         // Bad Request
 
         [OperationContract]
         [WebInvoke(
             Method = "PUT",
             UriTemplate = "/rating/{id}")]
-        Response<string> putRating(string id, Rating rating);
+        Response<Rating> putRating(string id, Rating rating);
         // Not tested
 
         [OperationContract]
         [WebInvoke(
             Method = "DELETE",
             UriTemplate = "/rating/{id}")]
-        Response<string> deleteRating(string id);
+        Response<Rating> deleteRating(string id);
         // Not tested
     }
 }
