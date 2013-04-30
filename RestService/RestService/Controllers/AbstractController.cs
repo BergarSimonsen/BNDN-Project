@@ -8,7 +8,7 @@ using RestService.Entities;
 
 namespace RestService.Controllers
 {
-    public abstract class AbstractController<T>
+    public abstract class AbstractController<T> where T : IEntities
     {
         public abstract Response<T> Call(Request request);
 

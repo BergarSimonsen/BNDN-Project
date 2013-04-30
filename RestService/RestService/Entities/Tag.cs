@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace RestService
+namespace RestService.Entities
 {
     [DataContract]
-    public class Tag
+    public class Tag : IEntities
     {
         [DataMember]
         public int id;

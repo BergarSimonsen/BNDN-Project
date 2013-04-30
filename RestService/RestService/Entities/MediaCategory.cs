@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Web;
 
-namespace RestService
+namespace RestService.Entities
 {
     [DataContract]
-    public class TagGroup
+    public class MediaCategory : IEntities
     {
         [DataMember]
         public int id;
@@ -15,10 +15,14 @@ namespace RestService
         [DataMember]
         public string name;
 
-        public TagGroup(int id, string name)
+        [DataMember]
+        public string description;
+
+        public MediaCategory(int id, string name, string description)
         {
             this.id = id;
             this.name = name;
+            this.description = description;
         }
     }
 }

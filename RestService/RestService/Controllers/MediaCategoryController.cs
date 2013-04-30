@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using RestService.IO_Messages;
+using RestService.Entities;
 
 namespace RestService.Controllers
 {

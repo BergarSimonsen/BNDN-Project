@@ -5,10 +5,10 @@ using System.Web;
 using System.Runtime.Serialization;
 
 
-namespace RestService
+namespace RestService.Entities
 {
     [DataContract]
-    public class Media
+    public class Media : IEntities 
     {
         [DataMember]
         public int id;

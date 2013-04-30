@@ -150,7 +150,7 @@ namespace RestService
             return controller.Call(request);
         }
 
-        public Response<string> getToken(string email, string password)
+        public string getToken(string email, string password)
         {
             IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
 
@@ -167,7 +167,7 @@ namespace RestService
             return null;
         }
 
-        public Response<string> renewToken()
+        public string renewToken()
         {
             IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
 
@@ -330,7 +330,7 @@ namespace RestService
             return controller.Call(request);
         }
 
-        public Response<string> insertMediaFile(Stream file, string id)
+        public string insertMediaFile(Stream file, string id)
         {
             throw new NotImplementedException();
         }

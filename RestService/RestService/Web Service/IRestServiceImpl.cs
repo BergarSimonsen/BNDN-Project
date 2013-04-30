@@ -57,7 +57,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/token/{email}/{password}")]
-        Response<string> getToken(string email, string password);
+        string getToken(string email, string password);
 
         [OperationContract]
         [WebInvoke(
@@ -65,7 +65,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/token/renew")]
-        Response<string> renewToken();
+        string renewToken();
 
         [OperationContract]
         [WebInvoke(
@@ -136,7 +136,7 @@ namespace RestService
             Method = "POST",
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaFiles/{id}")]
-        Response<string> insertMediaFile(Stream file, string id);
+        string insertMediaFile(Stream file, string id);
 
         [OperationContract]
         [WebInvoke(

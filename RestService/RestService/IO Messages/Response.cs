@@ -8,7 +8,7 @@ using RestService.Entities;
 namespace RestService.IO_Messages
 {
     [DataContract]
-    public class Response<T>
+    public class Response<T> where T : IEntities
     {
         [DataMember]
         public T[] data;
