@@ -5,3 +5,4 @@ C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestService\bi
 C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestService\bin\Debug\ConsoleApplication.pdb
 C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestService\obj\x86\Debug\ConsoleApplication.exe
 C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestService\obj\x86\Debug\ConsoleApplication.pdb
+C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestService\obj\x86\Debug\RestService.csprojResolveAssemblyReference.cache

@@ -8,23 +8,26 @@ using RestService.Entities;
 namespace RestService.IO_Messages
 {
     [DataContract]
-    public class Response
+    public class Response<T> where T : IEntities
     {
         [DataMember]
-        public List<AbstractEntity> data;
+        public T[] data;
 
         [DataMember]
         public Dictionary<string, string> metaData;
 
         [DataMember]
-        public string errorMessage;
+        public string message;
 
         [DataMember]
         public int errorCode;
 
-        public Response(List<AbstractEntity> data, Dictionary<string,string> metaData, string errorMessage, int errorCode)
+        public Response(T[] data, Dictionary<string,string> metaData, string message, int errorCode)
         {
-
+            this.data = data;
+            this.metaData = metaData;
+            this.message = message;
+            this.errorCode = errorCode;
         }
     }
 }
