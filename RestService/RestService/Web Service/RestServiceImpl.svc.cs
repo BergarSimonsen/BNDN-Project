@@ -734,5 +734,156 @@ namespace RestService
 
             return controller.Call(request);
         }
+
+
+        public Response<User> postUserData(string id, string userData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<User> putUserData(string id, string userData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<User> deleteUserData(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserGroup> getUserGroup(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserGroup> postUserGroup(UserGroup userGroup)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserGroup> putUserGroup(UserGroup userGroup, string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserGroup> deleteUserGroup(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<User> getUsersInGroup(string groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserGroup> getGroupsOfUser(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserGroup> postUserInUsergroup(string userId, string groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserGroup> removeUserFromGroup(string userId, string groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<Entities.Action> getAction(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<Entities.Action> postAction(Entities.Action action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<Entities.Action> putAction(Entities.Action action, string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<Entities.Action> deleteAction(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<Entities.Action> getUserCanDoAction(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<Entities.Action> postUserCanDoAction(string userId, string actionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<Entities.Action> deleteUserCanDoAction(string userId, string actionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<Entities.Action> getGroupCanDoAction(string groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<Entities.Action> postGroupCanDoAction(string groupId, string actionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<Entities.Action> deleteGroupCanDoAction(string groupId, string actionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserAccountTag> getUserTag(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserAccountTag> getUserTag()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserAccountTag> postUserTag(UserAccountTag userTag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserAccountTag> deleteUserTag(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<Media> getMediaByTag(string userid, string tagId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserAccountTag> getTagsByUser(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserAccountTag> postUserAccountTag(string userId, string mediaId, string tagId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserAccountTag> deleteMediaByTag(string mediaId, string tagId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<UserAccountTag> deleteUserAccountTag(string tagId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
