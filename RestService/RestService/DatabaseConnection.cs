@@ -21,6 +21,7 @@ namespace RestService
         {
             Initialize();
             connectionString = "Server=rentit.itu.dk;DATABASE=" + databases[database] + ";UID=Rentit26db;PASSWORD=ZAQ12wsx;";
+            Connect();
         }
 
         private void Initialize()
@@ -37,9 +38,13 @@ namespace RestService
             connection = new SqlConnection(connectionString);
             try
             {
-                if (connection.State != System.Data.ConnectionState.Open) connection.Open();
-                Console.WriteLine("works");
-                return connection;
+                connection.Open();
+                if (connection.State == System.Data.ConnectionState.Open)
+                {
+                    Console.WriteLine("works");
+                    return connection;
+                }
+                else throw new Exception("DICK BUTT");
             }
             catch(SqlException e)
             {
@@ -101,7 +106,7 @@ namespace RestService
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute query on</param>
         /// <returns>SQLDataReader object with return values</returns>
-        public SqlDataReader Query(string query)
+        public SqlDataReader Query(Dictionary<string,string> data, PreparedStatement stmt)
         {
             Connect();
             if (connection.State != System.Data.ConnectionState.Open) Connect();
@@ -110,13 +115,15 @@ namespace RestService
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand(query, connection);
+                    SqlCommand cmd = stmt.GetCmd();
+                    cmd.Connection = connection;
                     SqlDataReader reader = cmd.ExecuteReader();
                     //CloseConnection();
                     return reader;
                 }
                 catch (SqlException e) { ErrorMessage(e.StackTrace); }
             }
+            Console.WriteLine("DICK BUTT v.2");
             return null;
         }
 

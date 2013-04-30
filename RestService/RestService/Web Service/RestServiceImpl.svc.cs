@@ -76,7 +76,6 @@ namespace RestService
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
             data.Add("authorization", authString);
-
             data.Add("id", id);
 
             Request request = makeRequest(requestContext, data);
@@ -126,7 +125,7 @@ namespace RestService
                 data.Add("userData" + i, user.userData[i].ToString());
             }
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, data);
 
             UserController controller = new UserController();
 
@@ -201,7 +200,7 @@ namespace RestService
                 data.Add("newUserData" + i, newUser.userData[i].ToString());
             }
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, data);
 
             UserController controller = new UserController();
 
