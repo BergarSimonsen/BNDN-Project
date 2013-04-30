@@ -101,7 +101,7 @@ namespace RestService
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute query on</param>
         /// <returns>SQLDataReader object with return values</returns>
-        public SqlDataReader Query(string query)
+        public SqlDataReader Query(Dictionary<string, string> data, PreparedStatement statement)
         {
             Connect();
             if (connection.State != System.Data.ConnectionState.Open) Connect();
@@ -110,7 +110,7 @@ namespace RestService
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand(query, connection);
+                    SqlCommand cmd = statement.GetCmd();
                     SqlDataReader reader = cmd.ExecuteReader();
                     //CloseConnection();
                     return reader;

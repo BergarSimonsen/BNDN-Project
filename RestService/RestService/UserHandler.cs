@@ -38,7 +38,7 @@ namespace RestService
             PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where id = '" + id + "'", 
             new List<string> { });
 
-            return null;
+            return dbCon.Query(new Dictionary<string,string>(), stat);
         }
 
         public override void Update(int id, Dictionary<string, string> data)
@@ -57,14 +57,41 @@ namespace RestService
             dbCon.Command(new Dictionary<string, string>(), stat);
         }
 
-        public override void Search(Dictionary<string, string> data) { }
+        public override SqlDataReader Search(Dictionary<string, string> data) 
+        {
+            Validate(data);
 
+            string insertTo = "";
+            string valueString = "";
+            List<string> list = new List<string>();
+
+            foreach (KeyValuePair<string,string> s in data)
+            {
+                list.Add(s.Key);
+                insertTo += " " + s.Key + ",";
+                valueString += " @" + s.Key + ",";
+            }
+
+            insertTo.Remove(valueString.Length - 1);
+            valueString.Remove(valueString.Length - 1);
+
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account (" + insertTo + ") VALUES (" + valueString + ")", list);
+
+            return dbCon.Query(data, stat);
+        }
+
+        
         public override void Validate(Dictionary<string, string> data)
         {
             if (!data.ContainsKey("email"))
                 throw new Exception("User is missing 'email' data");
             if (!data.ContainsKey("password"))
                 throw new Exception("User is missing 'password' data");
+            if (!data.ContainsKey("created"))
+                throw new Exception("User is missing 'created' data");
+            if (!data.ContainsKey("modified"))
+                throw new Exception("User is missing 'modified' data");
         }
+         
     }
 }
