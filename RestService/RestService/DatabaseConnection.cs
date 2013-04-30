@@ -176,8 +176,13 @@ namespace RestService
             // created and modified are the same at insertion.
             DateTime created = DateTime.Now;
             // Insert into user_account
+<<<<<<< HEAD
+            string query = "insert into user_account(email, password_hash, created, modified) values('"+email+"','"+password+"','"+created.Date+"','"+created.Date+"')";
+            ExecuteQuery(query, "SMU");
+=======
             string query = "insert into user_account(email, password_hash, created, modified) values('"+email+"','"+password+"','"+created+"','"+created+"')";
             Command();
+>>>>>>> 8a86fd079ef91afdabed9ab6c828e37de89f392c
             // Get user back from database in order to get the id
             User curUser = getUser(email);
             int curId = curUser.id;

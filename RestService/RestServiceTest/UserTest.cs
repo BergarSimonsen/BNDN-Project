@@ -2,6 +2,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using RestService;
+using RestService.Controllers;
+using RestService.Entities;
+using RestService.IO_Messages;
+using RestService.Security;
+using RestService.Web_Service;
 
 namespace RestServiceTest
 {
