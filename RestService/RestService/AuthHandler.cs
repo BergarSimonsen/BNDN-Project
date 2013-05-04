@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -34,6 +33,7 @@ namespace RestService
                 return -1;
             }
         }
+
         public static UserTokenData GetUserFromMap(string token)
         {
             UserTokenData value;
@@ -94,9 +94,7 @@ namespace RestService
                 if (instance == null) { instance = new CryptoHandler(); }
                 return instance;
             }
-            
-            private Dictionary<string, string> UserTokenMap = new Dictionary<string,string>();
-            private Dictionary<string, RSACryptoServiceProvider> userHashMap = new Dictionary<string,RSACryptoServiceProvider>();
+
             private UnicodeEncoding ByteConverter = new UnicodeEncoding();
 
             public RSACryptoServiceProvider GetKey()

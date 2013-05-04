@@ -55,7 +55,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/token/{email}/{password}")]
-        Token getToken(string email, string password);
+        string getToken(string email, string password);
 
         [OperationContract]
         [WebInvoke(
@@ -63,7 +63,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/token/renew")]
-        Token renewToken();
+        string renewToken();
 
         [OperationContract]
         [WebInvoke(
