@@ -82,6 +82,183 @@ namespace RestService
             UriTemplate = "/user/{id}")]
         Response<User> deleteUser(string id);
 
+
+        //User data
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userData/{id}")]
+        Response<User> postUserData(string id, string userData);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "PUT",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userData/{id}")]
+        Response<User> putUserData(string id, string userData);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userData/{id}")]
+        Response<User> deleteUserData(string id);
+
+        //========================================= USER GROUPS ================================//
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userGroup/{id}")]
+        Response<UserGroup> getUserGroup(string id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userGroup")]
+        Response<UserGroup> postUserGroup(UserGroup userGroup);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "PUT",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userGroup/{id}")]
+        Response<UserGroup> putUserGroup(UserGroup userGroup, string id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userGroup/{id}")]
+        Response<UserGroup> deleteUserGroup(string id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/usersInGroup/{groupId}")]
+        Response<User> getUsersInGroup(string groupId);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "groupOfUser/{userId}")]
+        Response<UserGroup> getGroupsOfUser(string userId);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "userInGroup/")]
+        Response<UserGroup> postUserInUsergroup(string userId, string groupId);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "removeUserFromGroup/{userid}/{groupid}")]
+        Response<UserGroup> removeUserFromGroup(string userId, string groupId);
+
+        //========================================= ACTION ================================//
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/action/{id}")]
+        Response<RestService.Entities.Action> getAction(string id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/action")]
+        Response<RestService.Entities.Action> postAction(RestService.Entities.Action action);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "PUT",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/action/{id}")]
+        Response<RestService.Entities.Action> putAction(RestService.Entities.Action action, string id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/action/{id}")]
+        Response<RestService.Entities.Action> deleteAction(string id);
+
+        // user_account_can_do_action
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userActions/{userId}")]
+        Response<RestService.Entities.Action> getUserCanDoAction(string userId);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userCanDoAction/{userId}/{actionId}")]
+        Response<RestService.Entities.Action> postUserCanDoAction(string userId, string actionId);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/removeUserAction/{userId}/{actionId}")]
+        Response<RestService.Entities.Action> deleteUserCanDoAction(string userId, string actionId);
+
+        // User_group_can_do_action
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/groupActions/{groupId}")]
+        Response<RestService.Entities.Action> getGroupCanDoAction(string groupId);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/groupCanDoAction/{groupId}/{actionId}")]
+        Response<RestService.Entities.Action> postGroupCanDoAction(string groupId, string actionId);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/removeGroupAction/{groupId}/{actionId}")]
+        Response<RestService.Entities.Action> deleteGroupCanDoAction(string groupId, string actionId);
+
+
         //========================================= MEDIA AND MEDIA CATEGORY ================================//
         [OperationContract]
         [WebInvoke(
@@ -290,6 +467,79 @@ namespace RestService
             UriTemplate = "/tagsByMedia/{mediaId}/{tagId}")]
         Response<Media> mediaHasTag(string mediaId, string tagId);
         // Think it's working :p
+
+        // User tag
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userTags/{id}")]
+        Response<UserAccountTag> getUserTag(string id);
+
+        [OperationContract] 
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userTags")]
+        Response<UserAccountTag> getUserTag();
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userTags")]
+        Response<UserAccountTag> postUserTag(UserAccountTag userTag);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userTags/{id}")]
+        Response<UserAccountTag> deleteUserTag(string id);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/mediaByTag/{userId}/{tagId}")]
+        Response<Media> getMediaByTag(string userid, string tagId);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/tagsByUser/{userId}")]
+        Response<UserAccountTag> getTagsByUser(string userId);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "userAccountTag/{userId}/{mediaId}/{tagId}")]
+        Response<UserAccountTag> postUserAccountTag(string userId, string mediaId, string tagId);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "mediaByTag/{mediaId}/{tagId}")]
+        Response<UserAccountTag> deleteMediaByTag(string mediaId, string tagId);
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "userAccountTag/{tagId}")]
+        Response<UserAccountTag> deleteUserAccountTag(string tagId);
 
 
         //========================================= RATING ===================================================//

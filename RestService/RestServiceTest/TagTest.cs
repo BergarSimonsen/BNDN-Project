@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestService;
+using RestService.Entities;
 
 namespace RestServiceTest
 {
