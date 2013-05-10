@@ -61,21 +61,20 @@ namespace RestService
         {
             Validate(data);
 
-            string insertTo = "";
-            string valueString = "";
+            string searchParams = "";
+            
             List<string> list = new List<string>();
 
             foreach (KeyValuePair<string,string> s in data)
             {
-                list.Add(s.Key);
-                insertTo += " " + s.Key + ",";
-                valueString += " @" + s.Key + ",";
+                string semiResult = s.Key+" = '"+s.Value+"' and ";
+                searchParams += semiResult;
             }
 
-            insertTo.Remove(valueString.Length - 1);
-            valueString.Remove(valueString.Length - 1);
+            // removes the last "and" since there are no more params to search for
+            searchParams.Remove(searchParams.Length - 4);
 
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account (" + insertTo + ") VALUES (" + valueString + ")", list);
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where " + searchParams, list);
 
             return dbCon.Query(data, stat);
         }
