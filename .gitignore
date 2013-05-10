@@ -2,7 +2,13 @@
 *.csproj.user
 *.suo
 *.sln
-RestService/RestService/obj/Debug/
-RestService/RestService/obj/Release/
-RestService/RestService/bin/
-RestService/RestService/Properties/
+RestService/app.config
+RestService/RestService/obj/*
+RestService/RestService/obj/**
+RestService/RestService/obj/Debug/**/*
+RestService/RestService/obj/Release/**/*
+RestService/RestService/bin/*
+RestService/RestService/bin/**/*
+RestService/RestService/Properties/**/*
+**.DS_Store*
+**~
