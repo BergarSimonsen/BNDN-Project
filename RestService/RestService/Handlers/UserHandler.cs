@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
 using RestService.Security;
+using RestService.Entities;
 
 namespace RestService
 {
@@ -33,12 +34,12 @@ namespace RestService
             dbCon.Command(data, stat);
         }
 
-        public override SqlDataReader Read(int id)
+        public override List<IEntities> Read(int id)
         {
             PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where id = '" + id + "'", 
             new List<string> { });
 
-            return dbCon.Query(new Dictionary<string,string>(), stat);
+            return CreateUser(dbCon.Query(new Dictionary<string,string>(), stat));
         }
 
         public override void Update(int id, Dictionary<string, string> data)
@@ -57,7 +58,7 @@ namespace RestService
             dbCon.Command(new Dictionary<string, string>(), stat);
         }
 
-        public override SqlDataReader Search(Dictionary<string, string> data) 
+        public override List<IEntities> Search(Dictionary<string, string> data) 
         {
             Validate(data);
 
@@ -76,7 +77,7 @@ namespace RestService
 
             PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where " + searchParams, list);
 
-            return dbCon.Query(data, stat);
+            return CreateUser(dbCon.Query(data, stat));
         }
 
         
@@ -90,6 +91,23 @@ namespace RestService
                 throw new Exception("User is missing 'created' data");
             if (!data.ContainsKey("modified"))
                 throw new Exception("User is missing 'modified' data");
+        }
+
+        private List<IEntities> CreateUser(SqlDataReader reader)
+        { 
+            List<IEntities> returnUsers = new List<IEntities>();
+
+            while (reader.Read())
+            { 
+                int id = reader.GetInt32(reader.GetOrdinal("id"));
+                string email = reader.GetString(reader.GetOrdinal("email"));
+                string password = reader.GetString(reader.GetOrdinal("password_hash"));
+
+                //TODO userdata has to be fetched witht he rast of the data
+                returnUsers.Add(new User(id, email, password, null));
+            }
+
+            return returnUsers;
         }
          
     }

@@ -29,12 +29,12 @@ namespace RestService
             dbCon.Command(data, stat);
         }
 
-        public override SqlDataReader Read(int id)
+        public override List<IEntities> Read(int id)
         {
             PreparedStatement stat = dbCon.Prepare("SELECT * FROM media where id = '" + id + "'",
             new List<string> { });
 
-            return dbCon.Query(new Dictionary<string, string>(), stat);
+            return CreateMedia(dbCon.Query(new Dictionary<string, string>(), stat));
         }
 
         public override void Update(int id, Dictionary<string, string> data)
@@ -54,7 +54,7 @@ namespace RestService
             dbCon.Command(new Dictionary<string, string>(), stat);
         }
 
-        public override SqlDataReader Search(Dictionary<string, string> data)
+        public override List<IEntities> Search(Dictionary<string, string> data)
         {
             Validate(data);
 
@@ -73,7 +73,7 @@ namespace RestService
 
             PreparedStatement stat = dbCon.Prepare("SELECT * FROM media where " + searchParams, list);
 
-            return dbCon.Query(data, stat);
+            return CreateMedia(dbCon.Query(data, stat));
         }
 
 
@@ -97,12 +97,26 @@ namespace RestService
                 throw new Exception("Media is missing 'user' data");
         }
 
-        private Media createMedia(SqlDataReader reader)
+        private List<IEntities> CreateMedia(SqlDataReader reader)
         {
 
+            List<IEntities> returnMedia = new List<IEntities>(); ;
 
+            while (reader.Read())
+            { 
+                int id = reader.GetInt32(reader.GetOrdinal("id"));
+                int mediaCategory = reader.GetInt32(reader.GetOrdinal("media_category_id"));
+                int user = reader.GetInt32(reader.GetOrdinal("user_account_id"));
+                string fileLocation = reader.GetString(reader.GetOrdinal("file_location"));
+                string title = reader.GetString(reader.GetOrdinal("title"));
+                string description = reader.GetString(reader.GetOrdinal("description"));
+                int mediaLength = reader.GetInt32(reader.GetOrdinal("length"));
+                string format = reader.GetString(reader.GetOrdinal("format"));
 
-            return null;
+                returnMedia.Add(new Media(id, mediaCategory, user, fileLocation, title, description, mediaLength, format));
+            }
+
+            return returnMedia;
         }
     }
 }
