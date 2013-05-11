@@ -12,3 +12,7 @@ C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestService\bin\Debug\
 C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestService\bin\Debug\ConsoleApplication.exe
 C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestService\bin\Debug\ConsoleApplication.pdb
 C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestService\obj\x86\Debug\RestService.csprojResolveAssemblyReference.cache
+C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\obj\x86\Debug\ConsoleApplication.pdb
+C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\bin\Debug\ConsoleApplication.exe.config
+C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\obj\x86\Debug\RestService.csprojResolveAssemblyReference.cache
