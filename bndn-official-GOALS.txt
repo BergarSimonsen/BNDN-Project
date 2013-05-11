@@ -1,0 +1,13 @@
+After this learning activity the student should be able to: 
+
+(1) select and apply various online tools for distance communication, such as video conferencing, chat, wiki and email. 
+
+(2) account for long distance distributed teamwork including cultural differences time and location independence. 
+
+(3) take active part in a globally software development team, including project definition, planning, coordination and be responsible for dedicated parts of the project. 
+
+(4) construct a working client/server solution. This includes task description, user interface, data model, design, programming and testing. 
+
+(5) apply and reflect on theories presented in the course to the experiences obtained during the project and document it in the final project report. 
+
+(6) conduct a constructive feedback process on other fellow students work.
