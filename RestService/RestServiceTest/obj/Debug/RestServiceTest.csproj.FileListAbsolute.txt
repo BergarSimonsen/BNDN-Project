@@ -1,7 +1,9 @@
-C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\RestServiceTest.dll
-C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\RestServiceTest.pdb
-C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.csprojResolveAssemblyReference.cache
-C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.dll
-C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.pdb
-C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\ConsoleApplication.exe
-C:\Users\bergarsimonsen\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\ConsoleApplication.pdb
+C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\TestResults\RestService.TE.Tests.mdf
+C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\TestResults\RestService.TE.Tests_log.ldf
+C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\RestServiceTest.dll
+C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\RestServiceTest.pdb
+C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\ConsoleApplication.exe
+C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\ConsoleApplication.pdb
+C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.csprojResolveAssemblyReference.cache
+C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.dll
+C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.pdb
