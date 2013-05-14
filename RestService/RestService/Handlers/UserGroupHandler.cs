@@ -7,29 +7,17 @@ using System.Data.SqlClient;
 using RestService.Security;
 using RestService.Entities;
 
-namespace RestService
+namespace RestService.Handlers
 {
-    public class UserHandler : AbstractHandler<User>
+    class UserGroupHandler : AbstractHandler<UserGroup>
     {
         public UserHandler(DatabaseConnection incDbCon, Permissions perm) : base(incDbCon, perm) { }
-
-        /*public User createUser(int id, string email, string password, int[] userData)
-        {
-            
-            PreparedStatement s = dbCon.Prepare("INSERT INTO user (name, email, password) VALUES (@name, @email, @password)");
-            dbCon.Command(new Dictionary<string,string>{
-                {"email", email},
-                {"password", password}
-            }, s);
-
-            return new User(id,email,password, userData);
-        }*/
 
         public override void Create(Dictionary<string, string> data)
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO user_account (email, password_hash, created, modified) " +
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO user_group (email, password_hash, created, modified) " +
             "VALUES (@email, @password, @created, @modified)", new List<string> { "email", "password", "created", "modified" });
             dbCon.Command(data, stat);
         }
@@ -114,6 +102,5 @@ namespace RestService
         {
             return incList.ToArray();
         }
-         
     }
 }

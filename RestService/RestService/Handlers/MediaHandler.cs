@@ -9,7 +9,7 @@ using RestService.Entities;
 
 namespace RestService
 {
-    class MediaHandler : AbstractHandler
+    class MediaHandler : AbstractHandler<Media>
     {
 
         public MediaHandler(DatabaseConnection incDbCon, Permissions perm) : base(incDbCon, perm){ }
@@ -29,12 +29,12 @@ namespace RestService
             dbCon.Command(data, stat);
         }
 
-        public override List<IEntities> Read(int id)
+        public override Media[] Read(int id)
         {
             PreparedStatement stat = dbCon.Prepare("SELECT * FROM media where id = '" + id + "'",
             new List<string> { });
 
-            return CreateMedia(dbCon.Query(new Dictionary<string, string>(), stat));
+            return ListToArray(CreateMedia(dbCon.Query(new Dictionary<string, string>(), stat)));
         }
 
         public override void Update(int id, Dictionary<string, string> data)
@@ -54,7 +54,7 @@ namespace RestService
             dbCon.Command(new Dictionary<string, string>(), stat);
         }
 
-        public override List<IEntities> Search(Dictionary<string, string> data)
+        public override Media[] Search(Dictionary<string, string> data)
         {
             Validate(data);
 
@@ -73,7 +73,7 @@ namespace RestService
 
             PreparedStatement stat = dbCon.Prepare("SELECT * FROM media where " + searchParams, list);
 
-            return CreateMedia(dbCon.Query(data, stat));
+            return ListToArray(CreateMedia(dbCon.Query(data, stat)));
         }
 
 
@@ -97,10 +97,10 @@ namespace RestService
                 throw new Exception("Media is missing 'user' data");
         }
 
-        private List<IEntities> CreateMedia(SqlDataReader reader)
+        private List<Media> CreateMedia(SqlDataReader reader)
         {
 
-            List<IEntities> returnMedia = new List<IEntities>(); ;
+            List<Media> returnMedia = new List<Media>(); ;
 
             while (reader.Read())
             { 
@@ -117,6 +117,11 @@ namespace RestService
             }
 
             return returnMedia;
+        }
+
+        private Media[] ListToArray(List<Media> incList)
+        {
+            return incList.ToArray();
         }
     }
 }
