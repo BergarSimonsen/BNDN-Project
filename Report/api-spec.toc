@@ -1,7 +1,7 @@
 \contentsline {section}{\numberline {1}api spec}{1}{section.1}
 \contentsline {subsection}{\numberline {1.1}M6, Movie Distribution Web Service API Specs}{1}{subsection.1.1}
-\contentsline {subsection}{\numberline {1.2}Users (users, tokens \& user data types)}{3}{subsection.1.2}
-\contentsline {subsection}{\numberline {1.3}Media (Media \& Media Category)}{7}{subsection.1.3}
-\contentsline {subsection}{\numberline {1.4}Tags}{11}{subsection.1.4}
-\contentsline {subsection}{\numberline {1.5}Orders}{14}{subsection.1.5}
-\contentsline {subsection}{\numberline {1.6}rating}{14}{subsection.1.6}
+\contentsline {subsection}{\numberline {1.2}Users (users, tokens, user data \& user groups)}{3}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}Actions (user actions \& user group actions)}{8}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}Media (Media \& Media Category)}{11}{subsection.1.4}
+\contentsline {subsection}{\numberline {1.5}Tags}{14}{subsection.1.5}
+\contentsline {subsection}{\numberline {1.6}Rating}{19}{subsection.1.6}

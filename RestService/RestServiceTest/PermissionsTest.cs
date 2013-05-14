@@ -60,14 +60,9 @@ namespace RestServiceTest
             Dictionary<string, string> test = new Dictionary<string, string>();
             test.Add("id", "14");
             test.Add("password_hash", "myPass");
-            SqlDataReader reader = userHandler.Search(test);
+            User[] users = userHandler.Search(test);
 
-            string result = "";
-
-            while (reader.Read())
-            {
-                result = reader.GetString(reader.GetOrdinal("email"));
-            }
+            string result = users[0].email;
 
             Assert.AreEqual("Someguy@hotmail.com", result);
         }
@@ -75,13 +70,9 @@ namespace RestServiceTest
         [TestMethod]
         public void TestRead()
         {
-            SqlDataReader reader = userHandler.Read(14);
-            string result =" ";
-            while (reader.Read())
-            {
-                result = reader.GetString(reader.GetOrdinal("password_hash"));
-            }
-
+            User[] users = userHandler.Read(14);
+            string result = users[0].password;
+            
             Assert.AreEqual("myPass", result);
         }
         */
