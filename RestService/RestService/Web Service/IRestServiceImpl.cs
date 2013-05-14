@@ -57,7 +57,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/token/{email}/{password}")]
-        string getToken(string email, string password);
+        Response<Token> getToken(string email, string password);
 
         [OperationContract]
         [WebInvoke(
@@ -65,7 +65,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/token/renew")]
-        string renewToken();
+        Response<Token> renewToken();
 
         [OperationContract]
         [WebInvoke(
@@ -82,15 +82,23 @@ namespace RestService
             UriTemplate = "/user/{id}")]
         Response<User> deleteUser(string id);
 
-
         //User data
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            RequestFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+            UriTemplate = "/userData/{userId}")]
+        Response<User_Data> getUserData(string userId);
+
         [OperationContract]
         [WebInvoke(
             Method = "POST",
             RequestFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/userData/{id}")]
-        Response<User> postUserData(string id, string userData);
+            UriTemplate = "/userData")]
+        Response<User_Data> postUserData(User_Data userData);
 
         [OperationContract]
         [WebInvoke(
@@ -98,7 +106,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/userData/{id}")]
-        Response<User> putUserData(string id, string userData);
+        Response<User_Data> putUserData(string id, User_Data userData);
 
         [OperationContract]
         [WebInvoke(
@@ -106,7 +114,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/userData/{id}")]
-        Response<User> deleteUserData(string id);
+        Response<User_Data> deleteUserData(string id);
 
         //========================================= USER GROUPS ================================//
 
@@ -155,7 +163,7 @@ namespace RestService
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "groupOfUser/{userId}")]
+            UriTemplate = "/groupOfUser/{userId}")]
         Response<UserGroup> getGroupsOfUser(string userId);
 
         [OperationContract]
@@ -163,7 +171,7 @@ namespace RestService
             Method = "POST",
             RequestFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "userInGroup/")]
+            UriTemplate = "/userInGroup/{userId}/{groupId}")]
         Response<UserGroup> postUserInUsergroup(string userId, string groupId);
 
         [OperationContract]
@@ -171,7 +179,7 @@ namespace RestService
             Method = "DELETE",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "removeUserFromGroup/{userid}/{groupid}")]
+            UriTemplate = "/userInGroup/{userid}/{groupid}")]
         Response<UserGroup> removeUserFromGroup(string userId, string groupId);
 
         //========================================= ACTION ================================//
@@ -186,27 +194,11 @@ namespace RestService
 
         [OperationContract]
         [WebInvoke(
-            Method = "POST",
-            RequestFormat = WebMessageFormat.Json,
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/action")]
-        Response<RestService.Entities.Action> postAction(RestService.Entities.Action action);
-
-        [OperationContract]
-        [WebInvoke(
-            Method = "PUT",
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/action/{id}")]
-        Response<RestService.Entities.Action> putAction(RestService.Entities.Action action, string id);
-
-        [OperationContract]
-        [WebInvoke(
-            Method = "DELETE",
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/action/{id}")]
-        Response<RestService.Entities.Action> deleteAction(string id);
+        Response<RestService.Entities.Action> getActions();
 
         // user_account_can_do_action
         [OperationContract]
@@ -222,15 +214,15 @@ namespace RestService
             Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/userCanDoAction/{userId}/{actionId}")]
-        Response<RestService.Entities.Action> postUserCanDoAction(string userId, string actionId);
+            UriTemplate = "/userActions/{userId}/{actionId}/{contentId}/{allow}")]
+        Response<RestService.Entities.Action> postUserCanDoAction(string userId, string actionId, string contentId, string allow);
 
         [OperationContract]
         [WebInvoke(
             Method = "DELETE",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/removeUserAction/{userId}/{actionId}")]
+            UriTemplate = "/userActions/{userId}/{actionId}")]
         Response<RestService.Entities.Action> deleteUserCanDoAction(string userId, string actionId);
 
         // User_group_can_do_action
@@ -247,15 +239,15 @@ namespace RestService
             Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/groupCanDoAction/{groupId}/{actionId}")]
-        Response<RestService.Entities.Action> postGroupCanDoAction(string groupId, string actionId);
+            UriTemplate = "/groupActions/{groupId}/{actionId}/{contentId}/{allow}")]
+        Response<RestService.Entities.Action> postGroupCanDoAction(string groupId, string actionId, string contentId, string allow);
 
         [OperationContract]
         [WebInvoke(
             Method = "DELETE",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/removeGroupAction/{groupId}/{actionId}")]
+            UriTemplate = "/groupActions/{groupId}/{actionId}")]
         Response<RestService.Entities.Action> deleteGroupCanDoAction(string groupId, string actionId);
 
 
@@ -483,7 +475,7 @@ namespace RestService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/userTags")]
-        Response<UserAccountTag> getUserTag();
+        Response<UserAccountTag> getUserTags();
 
         [OperationContract]
         [WebInvoke(
@@ -506,16 +498,16 @@ namespace RestService
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/mediaByTag/{userId}/{tagId}")]
-        Response<Media> getMediaByTag(string userid, string tagId);
+            UriTemplate = "/mediaByUserTag/{userId}/{userTagId}")]
+        Response<Media> getMediaUserByTag(string userid, string userTagId);
 
         [OperationContract]
         [WebInvoke(
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/tagsByUser/{userId}")]
-        Response<UserAccountTag> getTagsByUser(string userId);
+            UriTemplate = "/userTagsByUser/{userId}")]
+        Response<UserAccountTag> getUserTagsByUser(string userId);
 
         [OperationContract]
         [WebInvoke(
@@ -530,8 +522,8 @@ namespace RestService
             Method = "DELETE",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "mediaByTag/{mediaId}/{tagId}")]
-        Response<UserAccountTag> deleteMediaByTag(string mediaId, string tagId);
+            UriTemplate = "mediaByUserTag/{mediaId}/{tagId}")]
+        Response<UserAccountTag> deleteMediaByUserTag(string mediaId, string tagId);
 
         [OperationContract]
         [WebInvoke(

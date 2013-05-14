@@ -24,7 +24,7 @@ namespace RestService.Security
             {
                 int contentId = int.Parse(reader.GetString(reader.GetOrdinal("content_id")));
                 string actionName = reader.GetString(reader.GetOrdinal("name"));
-                //bool allowed = reader.GetBoolean(reader.GetOrdinal("allow"));
+                bool allowed = reader.GetBoolean(reader.GetOrdinal("allow"));
 
                 actions.Add(new Entities.Action(contentId,actionName,null, true));
             }
@@ -35,7 +35,7 @@ namespace RestService.Security
             {
                 int contentId = reader.GetInt32(reader.GetOrdinal("content_id"));
                 string actionName = reader.GetString(reader.GetOrdinal("name"));
-                //bool allowed = reader.GetBoolean(reader.GetOrdinal("allowed"));
+                bool allowed = reader.GetBoolean(reader.GetOrdinal("allow"));
 
                 actions.Add(new Entities.Action(contentId, actionName, null, true));
             }

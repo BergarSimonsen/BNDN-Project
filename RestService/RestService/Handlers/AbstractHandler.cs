@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using RestService.Security;
+using RestService.Entities;
 
 namespace RestService
 {
@@ -20,13 +21,13 @@ namespace RestService
 
         public abstract void Create(Dictionary<string, string> data);
 
-        public abstract SqlDataReader Read(int id);
+        public abstract List<IEntities> Read(int id);
 
         public abstract void Update(int id, Dictionary<string, string> data);
 
         public abstract void Delete(int id);
 
-        public abstract SqlDataReader Search(Dictionary<string, string> data);
+        public abstract List<IEntities> Search(Dictionary<string, string> data);
 
         public abstract void Validate(Dictionary<string, string> data);
     }

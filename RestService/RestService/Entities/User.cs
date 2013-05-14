@@ -19,9 +19,9 @@ namespace RestService.Entities
         public string password { get; set; }
 
         [DataMember]
-        public int[] userData { get; set; }
+        public string[] userData { get; set; }
 
-        public User(int id, string email, string password, int[] userData)
+        public User(int id, string email, string password, string[] userData)
         {
             this.id = id;
             this.password = password;
