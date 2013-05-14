@@ -9,7 +9,7 @@ using RestService.Entities;
 
 namespace RestService
 {
-    class MediaHandler : AbstractHandler
+    class MediaHandler : AbstractHandler<Media>
     {
 
         public MediaHandler(DatabaseConnection incDbCon, Permissions perm) : base(incDbCon, perm){ }

@@ -9,7 +9,7 @@ using RestService.Entities;
 
 namespace RestService
 {
-    public class UserHandler : AbstractHandler
+    public class UserHandler : AbstractHandler<User>
     {
         public UserHandler(DatabaseConnection incDbCon, Permissions perm) : base(incDbCon, perm) { }
 
@@ -34,12 +34,12 @@ namespace RestService
             dbCon.Command(data, stat);
         }
 
-        public override List<IEntities> Read(int id)
+        public override User[] Read(int id)
         {
             PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where id = '" + id + "'", 
             new List<string> { });
 
-            return CreateUser(dbCon.Query(new Dictionary<string,string>(), stat));
+            return ListToArray(CreateUser(dbCon.Query(new Dictionary<string,string>(), stat)));
         }
 
         public override void Update(int id, Dictionary<string, string> data)
@@ -58,7 +58,7 @@ namespace RestService
             dbCon.Command(new Dictionary<string, string>(), stat);
         }
 
-        public override List<IEntities> Search(Dictionary<string, string> data) 
+        public override User[] Search(Dictionary<string, string> data) 
         {
             Validate(data);
 
@@ -77,7 +77,7 @@ namespace RestService
 
             PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where " + searchParams, list);
 
-            return CreateUser(dbCon.Query(data, stat));
+            return ListToArray(CreateUser(dbCon.Query(data, stat)));
         }
 
         
@@ -93,9 +93,9 @@ namespace RestService
                 throw new Exception("User is missing 'modified' data");
         }
 
-        private List<IEntities> CreateUser(SqlDataReader reader)
+        private List<User> CreateUser(SqlDataReader reader)
         { 
-            List<IEntities> returnUsers = new List<IEntities>();
+            List<User> returnUsers = new List<User>();
 
             while (reader.Read())
             { 
@@ -108,6 +108,11 @@ namespace RestService
             }
 
             return returnUsers;
+        }
+
+        private User[] ListToArray(List<User> incList)
+        {
+            return incList.ToArray();
         }
          
     }
