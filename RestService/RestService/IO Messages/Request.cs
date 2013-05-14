@@ -25,17 +25,23 @@ namespace RestService.IO_Messages
         public Dictionary<string, string> data;
 
         /// <summary>
+        /// The authorization string
+        /// </summary>
+        public string authorization;
+
+        /// <summary>
         /// The user who made the call
         /// </summary>
         public User user {get; set;}
 
         //Contructor
-        public Request(LinkedList<string> uri, RestMethods method, Dictionary<string, string> data, User user)
+        public Request(LinkedList<string> uri, RestMethods method, Dictionary<string, string> data, User user, string authorization)
         {
             this.uri = uri;
             this.method = method;
             this.data = data;
             this.user = user;
+            this.authorization = authorization;
         }
     }
 }

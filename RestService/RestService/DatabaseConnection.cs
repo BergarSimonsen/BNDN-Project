@@ -54,14 +54,9 @@ namespace RestService
             
         }
 
-        public PreparedStatement Prepare(string query, List<String> parameters)
-        { 
+        public PreparedStatement Prepare(string query)
+        {
             SqlCommand cmd = new SqlCommand(query, connection);
-            foreach (string p in parameters)
-            {
-                SqlParameter parameter = cmd.Parameters.Add(new SqlParameter("@" + p, SqlDbType.Text));
-                parameter.Value = "";
-            }
             cmd.Prepare();
             return new PreparedStatement(cmd, secret);
         }

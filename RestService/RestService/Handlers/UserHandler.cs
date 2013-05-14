@@ -29,15 +29,19 @@ namespace RestService
         {
             Validate(data);
 
+            DateTime created = DateTime.Now;
+
+            data.Add("created", created.Year + "-" + created.Month + "-" + created.Day + " " + created.Hour + ":" + created.Minute + ":" + created.Second);
+            data.Add("modified", created.Year + "-" + created.Month + "-" + created.Day + " " + created.Hour + ":" + created.Minute + ":" + created.Second);
+
             PreparedStatement stat = dbCon.Prepare("INSERT INTO user_account (email, password_hash, created, modified) " +
-            "VALUES (@email, @password, @created, @modified)", new List<string> { "email", "password", "created", "modified" });
+            "VALUES ('" + data["email"] + "', '" + data["password"] + "', '" + data["created"] + "', '" + data["modified"] + "')");
             dbCon.Command(data, stat);
         }
 
         public override User[] Read(int id)
         {
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where id = '" + id + "'", 
-            new List<string> { });
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where id = '" + id + "'");
 
             return ListToArray(CreateUser(dbCon.Query(new Dictionary<string,string>(), stat)));
         }
@@ -46,36 +50,41 @@ namespace RestService
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("UPDATE user_account (email, password_hash, created, modified)" +
-            "VALUES (@email, @password, @created, @modified)", new List<string> { "email", "password", "created", "modified"});
+            DateTime now = DateTime.Now;
+
+            data.Add("modified", now.Year + "-" + now.Month + "-" + now.Day + " " + now.Hour + ":" + now.Minute + ":" + now.Second);
+
+            PreparedStatement stat = dbCon.Prepare("UPDATE user_account SET email = '"+data["email"]+"', password_hash = '"+data["password"]+"', modified = '"+data["modified"]+"') " +
+            "WHERE id = '"+id+"'");
             dbCon.Command(data, stat);
         }
 
         public override void Delete(int id)
         {
-            PreparedStatement stat = dbCon.Prepare("DELETE FROM user_account where id = '"+id+"'",new List<string>());
+            PreparedStatement stat = dbCon.Prepare("DELETE FROM user_account where id = '"+id+"'");
 
             dbCon.Command(new Dictionary<string, string>(), stat);
         }
 
         public override User[] Search(Dictionary<string, string> data) 
         {
-            Validate(data);
-
             string searchParams = "";
-            
-            List<string> list = new List<string>();
 
-            foreach (KeyValuePair<string,string> s in data)
+            if (data.Count != 0)
             {
-                string semiResult = s.Key+" = '"+s.Value+"' and ";
-                searchParams += semiResult;
+                searchParams += " where ";
+
+                foreach (KeyValuePair<string, string> s in data)
+                {
+                    string semiResult = s.Key + " = '" + s.Value + "' and ";
+                    searchParams += semiResult;
+                }
+
+                // removes the last "and" since there are no more params to search for
+                searchParams = searchParams.Remove(searchParams.Length - 4);
             }
 
-            // removes the last "and" since there are no more params to search for
-            searchParams.Remove(searchParams.Length - 4);
-
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where " + searchParams, list);
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account"+ searchParams);
 
             return ListToArray(CreateUser(dbCon.Query(data, stat)));
         }
@@ -87,10 +96,6 @@ namespace RestService
                 throw new Exception("User is missing 'email' data");
             if (!data.ContainsKey("password"))
                 throw new Exception("User is missing 'password' data");
-            if (!data.ContainsKey("created"))
-                throw new Exception("User is missing 'created' data");
-            if (!data.ContainsKey("modified"))
-                throw new Exception("User is missing 'modified' data");
         }
 
         private List<User> CreateUser(SqlDataReader reader)
