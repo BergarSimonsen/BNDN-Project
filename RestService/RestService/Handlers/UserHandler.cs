@@ -93,9 +93,9 @@ namespace RestService
                 throw new Exception("User is missing 'modified' data");
         }
 
-        private List<IEntities> CreateUser(SqlDataReader reader)
+        private List<User> CreateUser(SqlDataReader reader)
         { 
-            List<IEntities> returnUsers = new List<IEntities>();
+            List<User> returnUsers = new List<User>();
 
             while (reader.Read())
             { 
