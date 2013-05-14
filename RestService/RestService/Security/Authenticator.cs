@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using RestService.IO_Messages;
@@ -10,9 +9,6 @@ namespace RestService.Security
 {
     public class Authenticator
     {
-        private static SHA256CryptoServiceProvider shaHashProvider = new SHA256CryptoServiceProvider();
-        private static UnicodeEncoding byteConverter = new UnicodeEncoding();
-
         private static bool VerifyHash(Request request)
         {
             /**
@@ -52,13 +48,10 @@ namespace RestService.Security
                 { verificationString += secretKey; }
             }
 
-            verificationHash = byteConverter.GetString(
-                shaHashProvider.ComputeHash(byteConverter.GetBytes(verificationString))
-                );
+            verificationHash = SHAEncrypter.SHAEncrypt(verificationString);
 
             if (verificationHash.Equals(requestHash))   { return true; }
-            return false;
-             
+            return false;             
         }
     }
 }
