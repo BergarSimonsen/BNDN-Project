@@ -7,3 +7,10 @@ C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\De
 C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.csprojResolveAssemblyReference.cache
 C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.dll
 C:\Users\Morten\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.pdb
+C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.csprojResolveAssemblyReference.cache
+C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.dll
+C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\obj\Debug\RestServiceTest.pdb
+C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\RestServiceTest.dll
+C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\RestServiceTest.pdb
+C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\RestService.dll
+C:\Users\christian\Documents\GitHub\BNDN-Project\RestService\RestServiceTest\bin\Debug\RestService.pdb
