@@ -28,7 +28,7 @@ namespace RestService
         /// <param name="request">The incoming request context</param>
         /// <param name="data">The data dictionary</param>
         /// <returns></returns>
-        private static Request makeRequest(IncomingWebRequestContext request, Dictionary<string,string> data)
+        private static Request makeRequest(IncomingWebRequestContext request, Dictionary<string, string> data, string authorization)
         {
             //gets the whole uri
             string pathUri = request.UriTemplateMatch.RequestUri.PathAndQuery;
@@ -44,7 +44,7 @@ namespace RestService
             //gets the request method
             RestMethods method = (RestMethods) Enum.Parse(typeof(RestMethods), request.Method);
 
-            return new Request(uri, method, data, null);
+            return new Request(uri, method, data, null, authorization);
         }
 
         /// <summary>
@@ -75,10 +75,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, data);
+            Request request = makeRequest(requestContext, data, authString);
 
             UserController controller = new UserController();
 
@@ -93,7 +92,6 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_group_id", group_id);
             data.Add("email", emailFilter);
             data.Add("limit", limit);
@@ -101,7 +99,7 @@ namespace RestService
             data.Add("order by", order_by);
             data.Add("order", order);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserController controller = new UserController();
 
@@ -116,16 +114,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("email", user.email);
             data.Add("password", user.password);
 
-            for (int i = 0; i < user.userData.Length; i++)
-            {
-                data.Add("userData" + i, user.userData[i].ToString());
-            }
-
-            Request request = makeRequest(requestContext, data);
+            Request request = makeRequest(requestContext, data, authString);
 
             UserController controller = new UserController();
 
@@ -140,9 +132,7 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
-
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserController controller = new UserController();
 
@@ -157,11 +147,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("email", email);
             data.Add("password", password);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TokenController controller = new TokenController();
 
@@ -176,9 +165,7 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
-
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TokenController controller = new TokenController();
 
@@ -193,18 +180,12 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
             data.Add("oldPassword", oldPassword);
-            data.Add("newEmail", newUser.email);
-            data.Add("newPassword", newUser.password);
+            data.Add("email", newUser.email);
+            data.Add("password", newUser.password);
 
-            for (int i = 0; i < newUser.userData.Length; i++)
-            {
-                data.Add("newUserData" + i, newUser.userData[i].ToString());
-            }
-
-            Request request = makeRequest(requestContext, data);
+            Request request = makeRequest(requestContext, data, authString);
 
             UserController controller = new UserController();
 
@@ -219,10 +200,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserController controller = new UserController();
 
@@ -237,10 +217,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaController controller = new MediaController();
 
@@ -255,14 +234,13 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("tag", tag);
             data.Add("mediaCategory", mediaCategoryFilter);
             data.Add("title", nameFilter);
             data.Add("page", page);
             data.Add("limit", limit);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaController controller = new MediaController();
 
@@ -277,7 +255,6 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("description", media.description);
             data.Add("fileLocation", media.fileLocation);
             data.Add("format", media.format);
@@ -286,7 +263,7 @@ namespace RestService
             data.Add("title", media.title);
             data.Add("user", media.user.ToString());
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaController controller = new MediaController();
 
@@ -301,14 +278,13 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("description", media.description);
             data.Add("fileLocation", media.fileLocation);
             data.Add("mediaCategory", media.mediaCategory.ToString());
             data.Add("mediaLength", media.mediaLength.ToString());
             data.Add("title", media.title);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaController controller = new MediaController();
 
@@ -323,10 +299,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaController controller = new MediaController();
 
@@ -346,9 +321,7 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
-
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaCategoryController controller = new MediaCategoryController();
 
@@ -363,10 +336,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaCategoryController controller = new MediaCategoryController();
 
@@ -381,11 +353,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("description", mediaCategory.description);
             data.Add("name", mediaCategory.name);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaCategoryController controller = new MediaCategoryController();
 
@@ -400,12 +371,11 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("description", mediaCategory.description);
             data.Add("name", mediaCategory.name);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaCategoryController controller = new MediaCategoryController();
 
@@ -420,10 +390,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaCategoryController controller = new MediaCategoryController();
 
@@ -438,12 +407,11 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("tagGroup", tagGroupFilter);
             data.Add("limit", limit);
             data.Add("page", page);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data),authString);
 
             TagController controller = new TagController();
 
@@ -458,10 +426,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TagController controller = new TagController();
 
@@ -476,12 +443,11 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("name", tag.name);
             data.Add("simpleName", tag.simple_name);
             data.Add("tagGroup", tag.tag_group.ToString());
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TagController controller = new TagController();
 
@@ -496,13 +462,12 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("name", tag.name);
             data.Add("simpleName", tag.simple_name);
             data.Add("tagGroup", tag.tag_group.ToString());
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TagController controller = new TagController();
 
@@ -517,10 +482,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TagController controller = new TagController();
 
@@ -535,10 +499,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TagGroupController controller = new TagGroupController();
 
@@ -553,11 +516,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("limit", limit);
             data.Add("page", page);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TagGroupController controller = new TagGroupController();
 
@@ -572,10 +534,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("name", tagGroup.name);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TagGroupController controller = new TagGroupController();
 
@@ -590,11 +551,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
             data.Add("name", tagGroup.name);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TagGroupController controller = new TagGroupController();
 
@@ -609,10 +569,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TagGroupController controller = new TagGroupController();
 
@@ -627,10 +586,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", mediaId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             TagController controller = new TagController();
 
@@ -645,11 +603,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("mediaId", mediaId);
             data.Add("tagId", tagId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaController controller = new MediaController();
 
@@ -664,13 +621,12 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("mediaId", mediaId);
             data.Add("userId", userId);
             data.Add("limit", limit);
             data.Add("page", page);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             RatingController controller = new RatingController();
 
@@ -685,14 +641,13 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("mediaId", rating.mediaId.ToString());
             data.Add("userId", rating.userId.ToString());
             data.Add("comment", rating.comment);
             data.Add("commentTitle", rating.commentTitle);
             data.Add("rating", rating.rating.ToString());
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             RatingController controller = new RatingController();
 
@@ -707,13 +662,12 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
             data.Add("comment", rating.comment);
             data.Add("commentTitle", rating.commentTitle);
             data.Add("rating", rating.rating.ToString());
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             RatingController controller = new RatingController();
 
@@ -728,10 +682,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             RatingController controller = new RatingController();
 
@@ -746,10 +699,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", userId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserDataController controller = new UserDataController();
 
@@ -764,12 +716,11 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", userData.userId.ToString());
             data.Add("name", userData.userDataType);
             data.Add("value", userData.value);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserDataController controller = new UserDataController();
 
@@ -784,12 +735,11 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
             data.Add("name", userData.userDataType);
             data.Add("value", userData.value);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserDataController controller = new UserDataController();
 
@@ -804,10 +754,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserDataController controller = new UserDataController();
 
@@ -822,10 +771,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserGroupController controller = new UserGroupController();
 
@@ -840,11 +788,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("name", userGroup.name);
             data.Add("description", userGroup.description);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data),authString);
 
             UserGroupController controller = new UserGroupController();
 
@@ -859,12 +806,11 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
             data.Add("name", userGroup.name);
             data.Add("description", userGroup.description);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserGroupController controller = new UserGroupController();
 
@@ -879,10 +825,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserGroupController controller = new UserGroupController();
 
@@ -897,10 +842,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_group_id", groupId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserController controller = new UserController();
 
@@ -915,10 +859,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", userId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserGroupController controller = new UserGroupController();
 
@@ -933,11 +876,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", userId);
             data.Add("user_group_id", userId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserGroupController controller = new UserGroupController();
 
@@ -952,11 +894,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", userId);
             data.Add("user_group_id", userId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserGroupController controller = new UserGroupController();
 
@@ -971,10 +912,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             ActionController controller = new ActionController();
 
@@ -989,9 +929,7 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
-
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             ActionController controller = new ActionController();
 
@@ -1006,10 +944,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", userId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             ActionController controller = new ActionController();
 
@@ -1024,13 +961,12 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", userId);
             data.Add("action_id", actionId);
             data.Add("content_id", contentId);
             data.Add("allow", allow);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             ActionController controller = new ActionController();
 
@@ -1045,11 +981,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", userId);
             data.Add("action_id", actionId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             ActionController controller = new ActionController();
 
@@ -1064,10 +999,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_group_id", groupId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             ActionController controller = new ActionController();
 
@@ -1082,13 +1016,12 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_group_id", groupId);
             data.Add("action_id", actionId);
             data.Add("content_id", contentId);
             data.Add("allow", allow);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             ActionController controller = new ActionController();
 
@@ -1103,11 +1036,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", groupId);
             data.Add("action_id", actionId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             ActionController controller = new ActionController();
 
@@ -1122,10 +1054,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserAccountTagController controller = new UserAccountTagController();
 
@@ -1140,9 +1071,7 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
-
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserAccountTagController controller = new UserAccountTagController();
 
@@ -1157,10 +1086,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("name", userTag.name);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserAccountTagController controller = new UserAccountTagController();
 
@@ -1175,10 +1103,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("id", id);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserAccountTagController controller = new UserAccountTagController();
 
@@ -1193,11 +1120,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", userid);
             data.Add("user_account_tag_id", userTagId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             MediaController controller = new MediaController();
 
@@ -1212,10 +1138,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", userId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserAccountTagController controller = new UserAccountTagController();
 
@@ -1230,12 +1155,11 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_id", userId);
             data.Add("user_account_tag_id", tagId);
             data.Add("media_id", mediaId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserAccountTagController controller = new UserAccountTagController();
 
@@ -1250,11 +1174,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_tag_id", tagId);
             data.Add("media_id", mediaId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserAccountTagController controller = new UserAccountTagController();
 
@@ -1269,10 +1192,9 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("authorization", authString);
             data.Add("user_account_tag_id", tagId);
 
-            Request request = makeRequest(requestContext, trimData(data));
+            Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserAccountTagController controller = new UserAccountTagController();
 

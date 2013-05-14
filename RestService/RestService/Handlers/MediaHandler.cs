@@ -24,15 +24,13 @@ namespace RestService
             Validate(data);
 
             PreparedStatement stat = dbCon.Prepare("INSERT INTO media (type, file_location, title, description, minutes, format, media_category_id, user_account_id)" +
-            " VALUES(@type, @file_location, @title , @description, @minutes, @format, @media_category_id, @user_account_id)"
-            , new List<string> {"@type", "@file_location", "@title", "@description", "@minutes", "@format", "@media_category_id", "@user_account_id"});
+            " VALUES(@type, @file_location, @title , @description, @minutes, @format, @media_category_id, @user_account_id)");
             dbCon.Command(data, stat);
         }
 
         public override Media[] Read(int id)
         {
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM media where id = '" + id + "'",
-            new List<string> { });
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM media where id = '" + id + "'");
 
             return ListToArray(CreateMedia(dbCon.Query(new Dictionary<string, string>(), stat)));
         }
@@ -42,14 +40,13 @@ namespace RestService
             Validate(data);
 
             PreparedStatement stat = dbCon.Prepare("UPDATE media (type, file_location, title, description, minutes, format, media_category_id, user_account_id)" +
-            " VALUES(@type, @file_location, @title , @description, @minutes, @format, @media_category_id, @user_account_id)"
-            , new List<string> { "@type", "@file_location", "@title", "@description", "@minutes", "@format", "@media_category_id", "@user_account_id" });
+            " VALUES(@type, @file_location, @title , @description, @minutes, @format, @media_category_id, @user_account_id)");
             dbCon.Command(data, stat);
         }
 
         public override void Delete(int id)
         {
-            PreparedStatement stat = dbCon.Prepare("DELETE FROM media where id = '" + id + "'", new List<string>());
+            PreparedStatement stat = dbCon.Prepare("DELETE FROM media where id = '" + id + "'");
 
             dbCon.Command(new Dictionary<string, string>(), stat);
         }
@@ -71,7 +68,7 @@ namespace RestService
             // removes the last "and" since there are no more params to search for
             searchParams.Remove(searchParams.Length - 4);
 
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM media where " + searchParams, list);
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM media where " + searchParams);
 
             return ListToArray(CreateMedia(dbCon.Query(data, stat)));
         }

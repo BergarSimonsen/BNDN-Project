@@ -24,7 +24,8 @@ namespace RestService.Controllers
 
                 DatabaseConnection db = new DatabaseConnection("SMU");
 
-                Permissions permissions = getPermissions(request.user, db);
+                //Permissions permissions = getPermissions(request.user, db);
+                Permissions permissions = null;
 
                 UserHandler handler = new UserHandler(db, permissions);
 
@@ -60,12 +61,12 @@ namespace RestService.Controllers
                         break;
                 }
             }
-            catch (Exception ex)
-            {
-
-            }
             finally
             {
+                if (metaData.Count == 0)
+                {
+                    metaData = null;
+                }
                 response = createResponse(users, errorCode, message, metaData);
             }
 

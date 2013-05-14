@@ -45,7 +45,7 @@ namespace RestServiceTest
         }
 
 /**************************************************************** Handler ***************************************************************/
-
+        /*
         [TestMethod]
         public void TestPreparedStatement()
         {
@@ -75,5 +75,6 @@ namespace RestServiceTest
             
             Assert.AreEqual("myPass", result);
         }
+        */
     }
 }
