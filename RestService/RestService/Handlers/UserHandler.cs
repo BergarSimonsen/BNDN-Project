@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
 using RestService.Security;
+using RestService.Entities;
 
 namespace RestService
 {
@@ -33,12 +34,12 @@ namespace RestService
             dbCon.Command(data, stat);
         }
 
-        public override SqlDataReader Read(int id)
+        public override List<IEntities> Read(int id)
         {
             PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where id = '" + id + "'", 
             new List<string> { });
 
-            return null;
+            return CreateUser(dbCon.Query(new Dictionary<string,string>(), stat));
         }
 
         public override void Update(int id, Dictionary<string, string> data)
@@ -57,14 +58,57 @@ namespace RestService
             dbCon.Command(new Dictionary<string, string>(), stat);
         }
 
-        public override void Search(Dictionary<string, string> data) { }
+        public override List<IEntities> Search(Dictionary<string, string> data) 
+        {
+            Validate(data);
 
+            string searchParams = "";
+            
+            List<string> list = new List<string>();
+
+            foreach (KeyValuePair<string,string> s in data)
+            {
+                string semiResult = s.Key+" = '"+s.Value+"' and ";
+                searchParams += semiResult;
+            }
+
+            // removes the last "and" since there are no more params to search for
+            searchParams.Remove(searchParams.Length - 4);
+
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where " + searchParams, list);
+
+            return CreateUser(dbCon.Query(data, stat));
+        }
+
+        
         public override void Validate(Dictionary<string, string> data)
         {
             if (!data.ContainsKey("email"))
                 throw new Exception("User is missing 'email' data");
             if (!data.ContainsKey("password"))
                 throw new Exception("User is missing 'password' data");
+            if (!data.ContainsKey("created"))
+                throw new Exception("User is missing 'created' data");
+            if (!data.ContainsKey("modified"))
+                throw new Exception("User is missing 'modified' data");
         }
+
+        private List<IEntities> CreateUser(SqlDataReader reader)
+        { 
+            List<IEntities> returnUsers = new List<IEntities>();
+
+            while (reader.Read())
+            { 
+                int id = reader.GetInt32(reader.GetOrdinal("id"));
+                string email = reader.GetString(reader.GetOrdinal("email"));
+                string password = reader.GetString(reader.GetOrdinal("password_hash"));
+
+                //TODO userdata has to be fetched witht he rast of the data
+                returnUsers.Add(new User(id, email, password, null));
+            }
+
+            return returnUsers;
+        }
+         
     }
 }

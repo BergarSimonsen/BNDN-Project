@@ -26,7 +26,7 @@ namespace RestService
 
         public abstract void Delete(int id);
 
-        public abstract void Search(Dictionary<string, string> data);
+        public abstract SqlDataReader Search(Dictionary<string, string> data);
 
         public abstract void Validate(Dictionary<string, string> data);
     }
