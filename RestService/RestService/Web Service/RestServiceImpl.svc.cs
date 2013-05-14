@@ -149,7 +149,7 @@ namespace RestService
             return controller.Call(request);
         }
 
-        public string getToken(string email, string password)
+        public Response<Token> getToken(string email, string password)
         {
             IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
 
@@ -163,10 +163,12 @@ namespace RestService
 
             Request request = makeRequest(requestContext, trimData(data));
 
-            return null;
+            TokenController controller = new TokenController();
+
+            return controller.Call(request);
         }
 
-        public string renewToken()
+        public Response<Token> renewToken()
         {
             IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
 
@@ -178,7 +180,9 @@ namespace RestService
 
             Request request = makeRequest(requestContext, trimData(data));
 
-            return null;
+            TokenController controller = new TokenController();
+
+            return controller.Call(request);
         }
 
         public Response<User> updateUser(string id, string oldPassword, User newUser)
@@ -734,155 +738,545 @@ namespace RestService
             return controller.Call(request);
         }
 
-
-        public Response<User> postUserData(string id, string userData)
+        public Response<User_Data> getUserData(string userId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", userId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserDataController controller = new UserDataController();
+
+            return controller.Call(request);
         }
 
-        public Response<User> putUserData(string id, string userData)
+        public Response<User_Data> postUserData(User_Data userData)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", userData.userId.ToString());
+            data.Add("name", userData.userDataType);
+            data.Add("value", userData.value);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserDataController controller = new UserDataController();
+
+            return controller.Call(request);
         }
 
-        public Response<User> deleteUserData(string id)
+        public Response<User_Data> putUserData(string id, User_Data userData)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("id", id);
+            data.Add("name", userData.userDataType);
+            data.Add("value", userData.value);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserDataController controller = new UserDataController();
+
+            return controller.Call(request);
+        }
+
+        public Response<User_Data> deleteUserData(string id)
+        {
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("id", id);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserDataController controller = new UserDataController();
+
+            return controller.Call(request);
         }
 
         public Response<UserGroup> getUserGroup(string id)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("id", id);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserGroupController controller = new UserGroupController();
+
+            return controller.Call(request);
         }
 
         public Response<UserGroup> postUserGroup(UserGroup userGroup)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("name", userGroup.name);
+            data.Add("description", userGroup.description);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserGroupController controller = new UserGroupController();
+
+            return controller.Call(request);
         }
 
         public Response<UserGroup> putUserGroup(UserGroup userGroup, string id)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("id", id);
+            data.Add("name", userGroup.name);
+            data.Add("description", userGroup.description);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserGroupController controller = new UserGroupController();
+
+            return controller.Call(request);
         }
 
         public Response<UserGroup> deleteUserGroup(string id)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("id", id);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserGroupController controller = new UserGroupController();
+
+            return controller.Call(request);
         }
 
         public Response<User> getUsersInGroup(string groupId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_group_id", groupId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserController controller = new UserController();
+
+            return controller.Call(request);
         }
 
         public Response<UserGroup> getGroupsOfUser(string userId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", userId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserGroupController controller = new UserGroupController();
+
+            return controller.Call(request);
         }
 
         public Response<UserGroup> postUserInUsergroup(string userId, string groupId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", userId);
+            data.Add("user_group_id", userId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserGroupController controller = new UserGroupController();
+
+            return controller.Call(request);
         }
 
         public Response<UserGroup> removeUserFromGroup(string userId, string groupId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", userId);
+            data.Add("user_group_id", userId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserGroupController controller = new UserGroupController();
+
+            return controller.Call(request);
         }
 
         public Response<Entities.Action> getAction(string id)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("id", id);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            ActionController controller = new ActionController();
+
+            return controller.Call(request);
         }
 
-        public Response<Entities.Action> postAction(Entities.Action action)
+        public Response<RestService.Entities.Action> getActions()
         {
-            throw new NotImplementedException();
-        }
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
 
-        public Response<Entities.Action> putAction(Entities.Action action, string id)
-        {
-            throw new NotImplementedException();
-        }
+            Dictionary<string, string> data = new Dictionary<string, string>();
 
-        public Response<Entities.Action> deleteAction(string id)
-        {
-            throw new NotImplementedException();
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            ActionController controller = new ActionController();
+
+            return controller.Call(request);
         }
 
         public Response<Entities.Action> getUserCanDoAction(string userId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", userId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            ActionController controller = new ActionController();
+
+            return controller.Call(request);
         }
 
-        public Response<Entities.Action> postUserCanDoAction(string userId, string actionId)
+        public Response<Entities.Action> postUserCanDoAction(string userId, string actionId, string contentId, string allow)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", userId);
+            data.Add("action_id", actionId);
+            data.Add("content_id", contentId);
+            data.Add("allow", allow);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            ActionController controller = new ActionController();
+
+            return controller.Call(request);
         }
 
         public Response<Entities.Action> deleteUserCanDoAction(string userId, string actionId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", userId);
+            data.Add("action_id", actionId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            ActionController controller = new ActionController();
+
+            return controller.Call(request);
         }
 
         public Response<Entities.Action> getGroupCanDoAction(string groupId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_group_id", groupId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            ActionController controller = new ActionController();
+
+            return controller.Call(request);
         }
 
-        public Response<Entities.Action> postGroupCanDoAction(string groupId, string actionId)
+        public Response<Entities.Action> postGroupCanDoAction(string groupId, string actionId, string contentId, string allow)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_group_id", groupId);
+            data.Add("action_id", actionId);
+            data.Add("content_id", contentId);
+            data.Add("allow", allow);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            ActionController controller = new ActionController();
+
+            return controller.Call(request);
         }
 
         public Response<Entities.Action> deleteGroupCanDoAction(string groupId, string actionId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", groupId);
+            data.Add("action_id", actionId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            ActionController controller = new ActionController();
+
+            return controller.Call(request);
         }
 
         public Response<UserAccountTag> getUserTag(string id)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("id", id);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserAccountTagController controller = new UserAccountTagController();
+
+            return controller.Call(request);
         }
 
-        public Response<UserAccountTag> getUserTag()
+        public Response<UserAccountTag> getUserTags()
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserAccountTagController controller = new UserAccountTagController();
+
+            return controller.Call(request);
         }
 
         public Response<UserAccountTag> postUserTag(UserAccountTag userTag)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("name", userTag.name);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserAccountTagController controller = new UserAccountTagController();
+
+            return controller.Call(request);
         }
 
         public Response<UserAccountTag> deleteUserTag(string id)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("id", id);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserAccountTagController controller = new UserAccountTagController();
+
+            return controller.Call(request);
         }
 
-        public Response<Media> getMediaByTag(string userid, string tagId)
+        public Response<Media> getMediaUserByTag(string userid, string userTagId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", userid);
+            data.Add("user_account_tag_id", userTagId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            MediaController controller = new MediaController();
+
+            return controller.Call(request);
         }
 
-        public Response<UserAccountTag> getTagsByUser(string userId)
+        public Response<UserAccountTag> getUserTagsByUser(string userId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", userId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserAccountTagController controller = new UserAccountTagController();
+
+            return controller.Call(request);
         }
 
         public Response<UserAccountTag> postUserAccountTag(string userId, string mediaId, string tagId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_id", userId);
+            data.Add("user_account_tag_id", tagId);
+            data.Add("media_id", mediaId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserAccountTagController controller = new UserAccountTagController();
+
+            return controller.Call(request);
         }
 
-        public Response<UserAccountTag> deleteMediaByTag(string mediaId, string tagId)
+        public Response<UserAccountTag> deleteMediaByUserTag(string mediaId, string tagId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_tag_id", tagId);
+            data.Add("media_id", mediaId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserAccountTagController controller = new UserAccountTagController();
+
+            return controller.Call(request);
         }
 
         public Response<UserAccountTag> deleteUserAccountTag(string tagId)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("authorization", authString);
+            data.Add("user_account_tag_id", tagId);
+
+            Request request = makeRequest(requestContext, trimData(data));
+
+            UserAccountTagController controller = new UserAccountTagController();
+
+            return controller.Call(request);
         }
     }
 }

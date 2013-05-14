@@ -7,26 +7,26 @@ using System.Web;
 namespace RestService.Entities
 {
     [DataContract]
-    public class User : IEntities
+    public class User_Data : IEntities
     {
         [DataMember]
         public int id { get; set; }
 
         [DataMember]
-        public string email { get; set; }
+        public int userId { get; set; }
 
         [DataMember]
-        public string password { get; set; }
+        public string userDataType { get; set; }
 
         [DataMember]
-        public string[] userData { get; set; }
+        public string value { get; set; }
 
-        public User(int id, string email, string password, string[] userData)
+        public User_Data(int id, int userId, string dataType, string value)
         {
             this.id = id;
-            this.password = password;
-            this.email = email;
-            this.userData = userData;
+            this.userId = userId;
+            this.userDataType = dataType;
+            this.value = value;
         }
     }
 }
