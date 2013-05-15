@@ -20,7 +20,7 @@ namespace RestService
         public DatabaseConnection(string database)
         {
             Initialize();
-            connectionString = "Server=rentit.itu.dk;DATABASE=" + databases[database] + ";UID=Rentit26db;PASSWORD=ZAQ12wsx;";
+            connectionString = "Server=rentit.itu.dk;DATABASE=" + databases[database].ToString() + ";UID=Rentit26db;PASSWORD=ZAQ12wsx;";
             Connect();
         }
 
@@ -54,14 +54,9 @@ namespace RestService
             
         }
 
-        public PreparedStatement Prepare(string query, List<String> parameters)
-        { 
+        public PreparedStatement Prepare(string query)
+        {
             SqlCommand cmd = new SqlCommand(query, connection);
-            foreach (string p in parameters)
-            {
-                SqlParameter parameter = cmd.Parameters.Add(new SqlParameter("@" + p, SqlDbType.Text));
-                parameter.Value = "";
-            }
             cmd.Prepare();
             return new PreparedStatement(cmd, secret);
         }
@@ -106,6 +101,7 @@ namespace RestService
         /// <param name="query">Query to execute</param>
         /// <param name="database">Database to execute query on</param>
         /// <returns>SQLDataReader object with return values</returns>
+
         public SqlDataReader Query(Dictionary<string,string> data, PreparedStatement stmt)
         {
             Connect();
@@ -115,6 +111,7 @@ namespace RestService
             {
                 try
                 {
+
                     SqlCommand cmd = stmt.GetCmd();
                     cmd.Connection = connection;
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -127,7 +124,7 @@ namespace RestService
             return null;
         }
 
-        private void ValidateStatement(PreparedStatement statement)  
+        public void ValidateStatement(PreparedStatement statement)  
         {
             if (!statement.CheckSecret(secret))throw new Exception("The Prepared statement is not created by us (or atlest does no know the 'secret' number)");
         }

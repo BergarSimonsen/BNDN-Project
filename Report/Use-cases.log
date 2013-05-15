@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.1.28)  18 APR 2013 16:31
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.1.28)  14 MAY 2013 15:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -451,42 +451,112 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Underfull \hbox (badness 10000) in paragraph at lines 32--32
+Underfull \hbox (badness 10000) in paragraph at lines 36--36
 
  []
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 32.
+LaTeX Font Info:    Try loading font information for U+msa on input line 36.
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 32.
+LaTeX Font Info:    Try loading font information for U+msb on input line 36.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-Overfull \hbox (21.79999pt too wide) in paragraph at lines 32--33
-[][] 
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 36--37
+[] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 62--62
+
+ []
+
+
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 62--63
+[] 
  []
 
 [1
 
 {/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-(./Use-cases.aux) ) 
+Underfull \hbox (badness 10000) in paragraph at lines 90--90
+
+ []
+
+
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 90--91
+[] 
+ []
+
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 113--113
+
+ []
+
+
+Overfull \hbox (26.87535pt too wide) in paragraph at lines 113--114
+[] 
+ []
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 135--135
+
+ []
+
+
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 135--136
+[] 
+ []
+
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 161--161
+
+ []
+
+
+Overfull \hbox (21.9587pt too wide) in paragraph at lines 161--162
+[] 
+ []
+
+[5]
+Underfull \hbox (badness 10000) in paragraph at lines 185--185
+
+ []
+
+
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 185--186
+[] 
+ []
+
+[6]
+Underfull \hbox (badness 10000) in paragraph at lines 208--208
+
+ []
+
+
+Overfull \hbox (62.48663pt too wide) in paragraph at lines 208--209
+[] 
+ []
+
+[7] [8] (./Use-cases.aux) ) 
 Here is how much of TeX's memory you used:
- 3069 strings out of 493488
- 39005 string characters out of 3141326
- 101046 words of memory out of 3000000
- 6335 multiletter control sequences out of 15000+200000
- 5647 words of font info for 23 fonts, out of 3000000 for 9000
+ 3076 strings out of 493488
+ 39084 string characters out of 3141326
+ 105046 words of memory out of 3000000
+ 6340 multiletter control sequences out of 15000+200000
+ 6857 words of font info for 27 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 37i,6n,35p,235b,209s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmbx10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr10.pfb>
-Output written on Use-cases.pdf (1 page, 31314 bytes).
+ 37i,6n,35p,235b,207s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2012/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr10.pfb>
+Output written on Use-cases.pdf (8 pages, 59641 bytes).
 PDF statistics:
- 16 PDF objects out of 1000 (max. 8388607)
- 10 compressed objects within 1 object stream
+ 43 PDF objects out of 1000 (max. 8388607)
+ 29 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
