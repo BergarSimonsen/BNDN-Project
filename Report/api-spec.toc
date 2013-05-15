@@ -14,3 +14,6 @@
 \contentsline {subsection}{\numberline {2.6}UC6: Distributor uploads movie}{28}{subsection.2.6}
 \contentsline {subsection}{\numberline {2.7}UC7: System admin blocks user}{29}{subsection.2.7}
 \contentsline {subsection}{\numberline {2.8}UC8: System admin removes media}{30}{subsection.2.8}
+\contentsline {section}{\numberline {3}Class Diagram}{31}{section.3}
+\contentsline {section}{\numberline {4}Project Plan}{32}{section.4}
+\contentsline {section}{\numberline {5}Data Model}{33}{section.5}
