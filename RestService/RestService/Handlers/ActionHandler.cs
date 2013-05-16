@@ -17,16 +17,15 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO action (name, description) VALUES (@name, @description)"
-            , new List<string> {"name", "description"});
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO action (name, description) "+
+            "VALUES ('"+data["name"]+"', '"+data["description"]+"')");
             
             dbCon.Command(data, stat);
         }
 
         public override RestService.Entities.Action[] Read(int id)
         {
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM action where id = '" + id + "'", 
-            new List<string> { });
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM action where id = '" + id + "'");
 
             return ListToArray(CreateAction(dbCon.Query(new Dictionary<string, string>(), stat)));
         }
@@ -36,33 +35,36 @@ namespace RestService.Handlers
             Validate(data);
 
             PreparedStatement stat = dbCon.Prepare("UPDATE action (name, description)" +
-            "VALUES (@name, @description)", new List<string> { "name", "description"});
+            "VALUES ('"+data["name"]+"', '"+data["description"]+"')");
             dbCon.Command(data, stat);
         }
 
         public override void Delete(int id)
         {
-            PreparedStatement stat = dbCon.Prepare("DELETE FROM action where id = '"+id+"'",new List<string>());
+            PreparedStatement stat = dbCon.Prepare("DELETE FROM action where id = '"+id+"'");
 
             dbCon.Command(new Dictionary<string, string>(), stat);
         }
 
-        public override RestService.Entities.Action[] Search(Dictionary<string, string> data) 
+        public override RestService.Entities.Action[] Search(Dictionary<string, string> data)
         {
             string searchParams = "";
-            
-            List<string> list = new List<string>();
 
-            foreach (KeyValuePair<string,string> s in data)
+            if (data.Count != 0)
             {
-                string semiResult = s.Key+" = '"+s.Value+"' and ";
-                searchParams += semiResult;
+                searchParams += " where ";
+
+                foreach (KeyValuePair<string, string> s in data)
+                {
+                    string semiResult = s.Key + " = '" + s.Value + "' and ";
+                    searchParams += semiResult;
+                }
+
+                // removes the last "and" since there are no more params to search for
+                searchParams = searchParams.Remove(searchParams.Length - 4);
             }
 
-            // removes the last "and" since there are no more params to search for
-            searchParams.Remove(searchParams.Length - 4);
-
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM action where " + searchParams, list);
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account" + searchParams);
 
             return ListToArray(CreateAction(dbCon.Query(data, stat)));
         }

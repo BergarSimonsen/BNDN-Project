@@ -13,18 +13,6 @@ namespace RestService
     {
         public UserHandler(DatabaseConnection incDbCon, Permissions perm) : base(incDbCon, perm) { }
 
-        /*public User createUser(int id, string email, string password, int[] userData)
-        {
-            
-            PreparedStatement s = dbCon.Prepare("INSERT INTO user (name, email, password) VALUES (@name, @email, @password)");
-            dbCon.Command(new Dictionary<string,string>{
-                {"email", email},
-                {"password", password}
-            }, s);
-
-            return new User(id,email,password, userData);
-        }*/
-
         public override void Create(Dictionary<string, string> data)
         {
             Validate(data);
