@@ -61,12 +61,18 @@ namespace RestService.Controllers
                         break;
                 }
             }
+            catch(Exception ex)
+            {
+                errorCode = 001;
+                message = ex.Message;
+            }
             finally
             {
                 if (metaData.Count == 0)
                 {
                     metaData = null;
                 }
+
                 response = createResponse(users, errorCode, message, metaData);
             }
 
