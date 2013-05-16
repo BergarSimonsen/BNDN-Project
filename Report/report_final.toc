@@ -1,0 +1,15 @@
+\contentsline {section}{\numberline {1}Abstract WRITE LATER}{2}
+\contentsline {section}{\numberline {2}Contents WRITE WHEN FORMATTING}{2}
+\contentsline {section}{\numberline {3}Introduction}{3}
+\contentsline {subsection}{\numberline {3.1}Problem}{3}
+\contentsline {subsection}{\numberline {3.2}Problem statement}{4}
+\contentsline {subsection}{\numberline {3.3}Scientific method}{4}
+\contentsline {subsection}{\numberline {3.4}Source code}{4}
+\contentsline {section}{\numberline {4}Design and development}{4}
+\contentsline {subsection}{\numberline {4.1}Domain description}{5}
+\contentsline {subsection}{\numberline {4.2}Web service requirements and analysis}{5}
+\contentsline {subsection}{\numberline {4.3}Limitations and scope}{6}
+\contentsline {subsection}{\numberline {4.4}Final System requirements}{7}
+\contentsline {subsection}{\numberline {4.5}Web service design}{8}
+\contentsline {subsubsection}{\numberline {4.5.1}Designing a generic web service}{8}
+\contentsline {subsubsection}{\numberline {4.5.2}Using REST as the web service interface}{8}

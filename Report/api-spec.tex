@@ -19,9 +19,7 @@
 \tolerance=1000
 \providecommand{\alert}[1]{\textbf{#1}}
 
-\title{api-spec}
-\author{Bergar Simonsen}
-\date{\today}
+\title{Appendix}
 \setlength{\parindent}{0cm}
 \hypersetup{
   pdfkeywords={},
@@ -35,7 +33,10 @@
 \setcounter{tocdepth}{3}
 \tableofcontents
 \vspace*{1cm}
-\section{api spec}
+
+\newpage
+
+\section{Web service API-specifications}
 \subsection{M6, Movie Distribution Web Service API Specs}
 
 The web service uses RESTful concepts to provide a standardized and stateless programming interface, for interacting with the system. \\
@@ -50,11 +51,18 @@ All responses consists of the following data:
 \hline
  Message                     &  Description                                               \\
 \hline
- error\_number   &  0 on success, otherwise a number indicating the relevant error.  \\
+ error\_code   &  0 on success, otherwise a number indicating the relevant error.  \\
                              &  NOT TO BE CONFUSED WITH HTTP-Response-code! This   \\
                              &  is assuming the HTTP-Response-code is 200.                \\
 \hline
  error\_message  &  A message in English, describing the eventual error.      \\
+\hline
+Data & Array of data. Usually contains some data object \\
+	& (such as users, media etc ..).
+\\
+\hline
+MetaData & Metadata about the data. \\
+	& Examples are \texttt{limit}, \texttt{page offset} etc .. \\
 \hline
 \end{tabular}
 \end{center}
@@ -83,6 +91,8 @@ Are GET or POST arguments, depending on the request-type. The parameters documen
 \textbf{Response} \\
 Is an associative JSON object, with fields corresponding to the left side column of the table. The right side of the column describes the data in the field of the returned response.
 All responses are wrapped in \texttt{Response<TYPE>} objects. For example when calling the \texttt{GET user} method, it returns \texttt{Response<User>}.
+
+\newpage
 
 \subsection{Users (users, tokens, user data \& user groups)}
 
@@ -149,19 +159,21 @@ The users are at the heart of the system. All actions are performed by users, an
 
 \begin{tabbing}
 \textbf{Get all users (with parameters)} \\
-\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /user?group\_id=\{group\_id\}\&emailFilter=\{emailFilter\}\&limit=\{limit\}
-\\ \> \&page=\{page\}\&order\_by=\{order\_by\}\&order=\{order\} \\
+\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /user?group\_id=\{group\_id\}\&emailFilter=\{emailFilter\}
+\\ \> \&limit=\{limit\}\&page=\{page\}\&order\_by=\{order\_by\} \\ \>
+\&order=\{order\} \\
 \textcolor{black!60}{\textbf{Description:}}  \> Who are the users that match the given parameters \\
 \textcolor{black!60}{\textbf{Method:}} \> GET \\
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{group\_id} Id of a user group. \\ \> Only show users who are members of this/these group(s) \\
 \> \textbf{emailFilter} Filter by email \\
-\> \textbf{limit} How many users to return? \\
-\> \textbf{page} Should there be an offset? Default = 1 means no offset. \\
+\> \textbf{limit} How many users to return? (default = 10) \\
+\> \textbf{page} Should there be an offset? \\
+\> Default = 1 means no offset. \\
 \> \textbf{order\_by} Order by what column? Default = e-mail. \\
 \> \textbf{order} Order which way? Default = ASC. \\
 \textcolor{black!60}{\textbf{Authorization:}} \> Token \\
 \textcolor{black!60}{\textbf{Response:}} \> \textbf{Response<User>} \\
-\> Response object containing an array of user objects along with page \\ \> number and count.
+\> Response object containing an array of user objects along \\ \> with page number and count.
 \end{tabbing}
 
 \begin{center}\line(1,0){250}\end{center}
@@ -249,6 +261,8 @@ The users are at the heart of the system. All actions are performed by users, an
 \textcolor{black!60}{\textbf{Description:}}  \> Make a new user data. \\
 \textcolor{black!60}{\textbf{Method:}} \> POST \\
 \textcolor{black!60}{\textbf{Parameters:}} \> None. \\
+\textcolor{black!60}{\textbf{Content-Type:}} \> application/json. \\
+\> \textbf{User\_Data} User data object. \\
 \textcolor{black!60}{\textbf{Response:}} \> \textbf{Response<User\_Data>} \\
 \> Response object containing the new user data.
 \end{tabbing}
@@ -297,6 +311,8 @@ The users are at the heart of the system. All actions are performed by users, an
 \textcolor{black!60}{\textbf{Description:}}  \> Creates a new user group. \\
 \textcolor{black!60}{\textbf{Method:}} \> POST \\
 \textcolor{black!60}{\textbf{Parameters:}} \> None. \\
+\textcolor{black!60}{\textbf{Content-type:}} \> \textbf{application/json} \\
+\> \textbf{UserGroup} UserGroup object \\
 \textcolor{black!60}{\textbf{Response:}} \> \textbf{Response<UserGroup>} \\
 \> Response object containing the new user group.
 \end{tabbing}
@@ -363,21 +379,9 @@ The users are at the heart of the system. All actions are performed by users, an
 \> Response object containing an empty user group.
 \end{tabbing}
 
-\begin{center}\line(1,0){250}\end{center}
+\newpage
 
 \subsection{Actions (user actions \& user group actions)}
-
-% remember to delete
-\begin{tabbing}
-\textbf{TITLE} \\
-\textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= URL \\
-\textcolor{black!60}{\textbf{Description:}}  \> DESC \\
-\textcolor{black!60}{\textbf{Method:}} \> METHOD \\
-\textcolor{black!60}{\textbf{Parameters:}} \> PARAMS. \\
-\textcolor{black!60}{\textbf{Response:}} \> RESPONSE
-\end{tabbing}
-
-\begin{center}\line(1,0){250}\end{center}
 
 \begin{tabbing}
 \textbf{Get an action} \\
@@ -473,7 +477,7 @@ The users are at the heart of the system. All actions are performed by users, an
 \textcolor{black!60}{\textbf{Response:}} \> Response object containing an empty action object.
 \end{tabbing}
 
-\begin{center}\line(1,0){250}\end{center}
+\newpage
 
 \subsection{Media (Media \& Media Category)}
 
@@ -535,9 +539,9 @@ MediaCategory
 \> might be member of. \\
 \> \textbf{nameFilter} Filter media by name \\
 \> \textbf{page} Page offset. Default is 1 (no offset). \\
-\> \textbf{limit} How many results to return. \\
-\textcolor{black!60}{\textbf{Response:}} \> Response object containing an array of media objects along with \\
-\> meta information such as page offset and limit.
+\> \textbf{limit} How many results to return. (default = 10) \\
+\textcolor{black!60}{\textbf{Response:}} \> Response object containing an array of media objects along \\
+\> with meta information such as page offset and limit.
 \end{tabbing}
 
 \begin{center}\line(1,0){250}\end{center}
@@ -558,7 +562,7 @@ MediaCategory
 \begin{tabbing}
 \textbf{Upload a media file associated with a media} \\
 \textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /mediaFiles/\{ID\} \\
-\textcolor{black!60}{\textbf{Description:}}  \> Upload a media file. You give the ID connected to the posted \\ \> meta data and the file you want to upload. \\
+\textcolor{black!60}{\textbf{Description:}}  \> Upload a media file. You give the ID connected to \\ \> the posted meta data and the file you want to upload. \\
 \textcolor{black!60}{\textbf{Method:}} \> POST \\
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{ID} The id of the media that belongs to the file. \\
 \textcolor{black!60}{\textbf{Content-Type}} \> \textbf{File Stream} The file to upload \\
@@ -574,7 +578,8 @@ MediaCategory
 \textcolor{black!60}{\textbf{Method:}} \> PUT \\
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{ID} Id of the media to update. \\
 \textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
-\> \textbf{Media} Media object containing the updated media information. \\
+\> \textbf{Media} Media object containing the updated 
+\\ \> media information. \\
 \textcolor{black!60}{\textbf{Response:}} \> Response object containing the updated media object.
 \end{tabbing}
 
@@ -583,7 +588,8 @@ MediaCategory
 \begin{tabbing}
 \textbf{Delete media} \\
 \textcolor{black!60}{\textbf{Url structure:}} \hspace{0.2in} \= /media/\{ID\} \\
-\textcolor{black!60}{\textbf{Description:}}  \> Delete a media. This will also delete the file connected to the media. \\
+\textcolor{black!60}{\textbf{Description:}}  \> Delete a media. This will also delete the file 
+\\ \> connected to the media. \\
 \textcolor{black!60}{\textbf{Method:}} \> DELETE \\
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{ID} Id of the media to delete. \\
 \textcolor{black!60}{\textbf{Response:}} \> Response object containing an empty media object.
@@ -620,7 +626,8 @@ MediaCategory
 \textcolor{black!60}{\textbf{Method:}} \> POST \\
 \textcolor{black!60}{\textbf{Parameters:}} \> None \\
 \textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
-\> \textbf{MediaCategory} MediaCategory object containing all related information. \\
+\> \textbf{MediaCategory} MediaCategory object containing 
+\\ \> all related information. \\
 \textcolor{black!60}{\textbf{Response:}} \> Response object containing the new media category object.
 \end{tabbing}
 
@@ -633,8 +640,10 @@ MediaCategory
 \textcolor{black!60}{\textbf{Method:}} \> PUT \\
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{ID} Id of the media category to update. \\
 \textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
-\> \textbf{MediaCategory} Media category object containing information of the updated media category.. \\
-\textcolor{black!60}{\textbf{Response:}} \> Response object containing the newly updated media category object.
+\> \textbf{MediaCategory} Media category object containing 
+\\ \> information of the updated media category.. \\
+\textcolor{black!60}{\textbf{Response:}} \> Response object containing the newly updated media 
+\\ \> category object.
 \end{tabbing}
 
 \begin{center}\line(1,0){250}\end{center}
@@ -648,6 +657,7 @@ MediaCategory
 \textcolor{black!60}{\textbf{Response:}} \> Response object containing a empty media category object.
 \end{tabbing}
 
+\newpage
 
 \subsection{Tags}
 
@@ -728,7 +738,7 @@ MediaCategory
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{ID} Id of the tag to update. \\
 \textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
 \> \textbf{Tag} Tag object containing the updated tag.\\
-\textcolor{black!60}{\textbf{Response:}} \> Response object containing the newly updated tag object.
+\textcolor{black!60}{\textbf{Response:}} \> Response object containing the newly updated \\ \> tag object.
 \end{tabbing}
 
 \begin{center}\line(1,0){250}\end{center}
@@ -774,7 +784,8 @@ MediaCategory
 \textcolor{black!60}{\textbf{Method:}} \> POST \\
 \textcolor{black!60}{\textbf{Parameters:}} \> None \\
 \textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
-\> \textbf{TagGroup} TagGroup object containing all relevant information.\\
+\> \textbf{TagGroup} TagGroup object containing all 
+\\ \> relevant information.\\
 \textcolor{black!60}{\textbf{Response:}} \> Response object containing the new tag group object.
 \end{tabbing}
 
@@ -787,8 +798,10 @@ MediaCategory
 \textcolor{black!60}{\textbf{Method:}} \> PUT \\
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{ID} Id of the tag group to edit. \\
 \textcolor{black!60}{\textbf{Content-Type}} \> \textbf{application/json} \\
-\> \textbf{TagGroup} TagGroup object with the new information. \\
-\textcolor{black!60}{\textbf{Response:}} \> Response object containing the newly updated tagGroup object.
+\> \textbf{TagGroup} TagGroup object with the 
+\\ \> new information. \\
+\textcolor{black!60}{\textbf{Response:}} \> Response object containing the newly updated 
+\\ \> tagGroup object.
 \end{tabbing}
 
 \begin{center}\line(1,0){250}\end{center}
@@ -822,7 +835,8 @@ MediaCategory
 \textcolor{black!60}{\textbf{Method:}} \> POST \\
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{mediaId} The id of the media to connect to. \\
 \> \textbf{tagId} Id of the tag to connect. \\
-\textcolor{black!60}{\textbf{Response:}} \> Response object containing the media connected to the tag.
+\textcolor{black!60}{\textbf{Response:}} \> Response object containing the media connected 
+\\ \> to the tag.
 \end{tabbing}
 
 \begin{center}\line(1,0){250}\end{center}
@@ -833,7 +847,8 @@ MediaCategory
 \textcolor{black!60}{\textbf{Description:}}  \> Gets all tags connected to a user. \\
 \textcolor{black!60}{\textbf{Method:}} \> GET \\
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{id} Id of the user. \\
-\textcolor{black!60}{\textbf{Response:}} \> Response object containing a list of UserAccountTag objects.
+\textcolor{black!60}{\textbf{Response:}} \> Response object containing a list of 
+\\ \> UserAccountTag objects.
 \end{tabbing}
 
 \begin{center}\line(1,0){250}\end{center}
@@ -844,7 +859,8 @@ MediaCategory
 \textcolor{black!60}{\textbf{Description:}}  \> Gets all user tags available in the system. \\
 \textcolor{black!60}{\textbf{Method:}} \> GET \\
 \textcolor{black!60}{\textbf{Parameters:}} \> None. \\
-\textcolor{black!60}{\textbf{Response:}} \> Response object containing a list of UserAccountTag objects.
+\textcolor{black!60}{\textbf{Response:}} \> Response object containing a list of 
+\\ \> UserAccountTag objects.
 \end{tabbing}
 
 \begin{center}\line(1,0){250}\end{center}
@@ -856,8 +872,10 @@ MediaCategory
 \textcolor{black!60}{\textbf{Method:}} \> POST \\
 \textcolor{black!60}{\textbf{Parameters:}} \> None. \\
 \textcolor{black!60}{\textbf{Content-type:}} \> \textbf{application/json} \\
-\> \textbf{UserAccountTag} UserAccountTag object containing all relevant information. \\
-\textcolor{black!60}{\textbf{Response:}} \> Response object containing the new UserAccountTag object.
+\> \textbf{UserAccountTag} UserAccountTag object 
+\\ \> containing all relevant information. \\
+\textcolor{black!60}{\textbf{Response:}} \> Response object containing the new 
+\\ \> UserAccountTag object.
 \end{tabbing}
 
 \begin{center}\line(1,0){250}\end{center}
@@ -868,7 +886,8 @@ MediaCategory
 \textcolor{black!60}{\textbf{Description:}}  \> Deletes a specific user tag. \\
 \textcolor{black!60}{\textbf{Method:}} \> DELETE \\
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{ID} Id of the user tag to delete.. \\
-\textcolor{black!60}{\textbf{Response:}} \> Response object containing a empty UserAccountTag object.
+\textcolor{black!60}{\textbf{Response:}} \> Response object containing a empty 
+\\ \> UserAccountTag object.
 \end{tabbing}
 
 \begin{center}\line(1,0){250}\end{center}
@@ -891,7 +910,8 @@ MediaCategory
 \textcolor{black!60}{\textbf{Description:}}  \> Returns all userTags that belong to a specific user. \\
 \textcolor{black!60}{\textbf{Method:}} \> GET \\
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{userId} Id of the user. \\
-\textcolor{black!60}{\textbf{Response:}} \> Response object containing a list of all UserAccountTag objects.
+\textcolor{black!60}{\textbf{Response:}} \> Response object containing a list of all 
+\\ \> UserAccountTag objects.
 \end{tabbing}
 
 \begin{center}\line(1,0){250}\end{center}
@@ -918,6 +938,8 @@ MediaCategory
 \> \textbf{tagId} Id of the user tag to remove from. \\
 \textcolor{black!60}{\textbf{Response:}} \> Response object containing a empty user tag object.
 \end{tabbing}
+
+\newpage
 
 \subsection{Rating}
 
@@ -970,5 +992,234 @@ MediaCategory
 \textcolor{black!60}{\textbf{Parameters:}} \> \textbf{id} Id of the rating to delete \\
 \textcolor{black!60}{\textbf{Response:}} \> Response object containing an empty rating object.
 \end{tabbing}
+
+\section{Use cases}
+\subsection{UC1: Create profile}
+\fbox{\begin{minipage}{\columnwidth}
+\begin{tabbing}
+\textcolor{black!60}{\textbf{Use case: }} \hspace{0.5in} \= UC1: User creates profile. \\
+\textcolor{black!60}{\textbf{Scope: }} \hspace{0.2in} \> Web service application \\
+\textcolor{black!60}{\textbf{Level: }}  \> User goal \\
+\textcolor{black!60}{\textbf{Primary actor: }} \> Regular user \\
+\textcolor{black!60}{\textbf{Stakeholder}} \\ 
+\textcolor{black!60}{\textbf{and interests: }} \> Regular user, who wants to create a new profile. \\
+\textcolor{black!60}{\textbf{Preconditions: }} \> None \\
+\textcolor{black!60}{\textbf{Postconditions: }} \> User has created a profile. 
+\end{tabbing}
+\textcolor{black!60}{\textbf{Basic flow: }} 
+\begin{enumerate}
+	\item A user decides to try out the system and wants to create a new personal profile.
+	\item User starts the client, and presses the "sign-up" button.
+	\item The user is then presented with a form which he can fill out his personal information (such as name, email etc ..)
+	\item After the user has inserted his personal information, he is presented with a message stating that the profile creation was successful.
+\end{enumerate}
+\textcolor{black!60}{\textbf{Extensions: }} 
+\begin{enumerate}
+	\item[4*] If there is an error in the sign up process, the user gets an error message stating what the error is.
+\end{enumerate}
+\textcolor{black!60}{\textbf{Special requirements: }} none \\
+\end{minipage}}
+
+\subsection{UC2: Log into the system}
+\fbox{\begin{minipage}{\columnwidth}
+\begin{tabbing}
+\textcolor{black!60}{\textbf{Use case: }} \hspace{0.5in} \= UC2: User logs into the system. \\
+\textcolor{black!60}{\textbf{Scope: }} \hspace{0.2in} \> Web service application \\
+\textcolor{black!60}{\textbf{Level: }}  \> User goal \\
+\textcolor{black!60}{\textbf{Primary actor: }} \> Regular user \\
+\textcolor{black!60}{\textbf{Stakeholder}} \\ 
+\textcolor{black!60}{\textbf{and interests: }} \> Registered user. \\
+\textcolor{black!60}{\textbf{Preconditions: }} \> User must have created a personal profile. \\
+\textcolor{black!60}{\textbf{Postconditions: }} \> User is logged into the system.
+\end{tabbing}
+\textcolor{black!60}{\textbf{Basic flow: }} 
+\begin{enumerate}
+	\item The user starts the client and is presented with a log in screen.
+	\item User is prompted to insert the email and password of his profile.
+	\item The system checks if the credentials are correct, and redirects the user to the home screen of the application.
+\end{enumerate}
+\textcolor{black!60}{\textbf{Extensions: }} 
+\begin{enumerate}
+	\item In case the user has forgotten his log in credentials, he is presented with a form where he can get his credentials sent to his email address.
+	\item[3*] In case the given credentials are incorrect, the system gives an error and asks the user to try again.
+\end{enumerate}
+\textcolor{black!60}{\textbf{Special requirements: }} none \\
+\end{minipage}}
+
+\subsection{UC3: User watches movie}
+\fbox{\begin{minipage}{\columnwidth}
+\begin{tabbing}
+\textcolor{black!60}{\textbf{Use case: }} \hspace{0.5in} \= UC3: User watches a movie. \\
+\textcolor{black!60}{\textbf{Scope: }} \hspace{0.2in} \> Web service application \\
+\textcolor{black!60}{\textbf{Level: }}  \> User goal \\
+\textcolor{black!60}{\textbf{Primary actor: }} \> Regular user \\
+\textcolor{black!60}{\textbf{Stakeholder}} \\ 
+\textcolor{black!60}{\textbf{and interests: }} \> Registered user. \\
+\textcolor{black!60}{\textbf{Preconditions: }} \> User must be logged into the system. \\
+\textcolor{black!60}{\textbf{Postconditions: }} \> None.
+\end{tabbing}
+\textcolor{black!60}{\textbf{Basic flow: }} 
+\begin{enumerate}
+	\item After the user has logged into the system, he wants to watch a movie.
+	\item The user searches through the list of movies available, and select one he likes and that is free to watch.
+	\item The user is presented with a new screen which he can stream (watch) the movie online.
+\end{enumerate}
+\textcolor{black!60}{\textbf{Extensions: }} 
+\begin{enumerate}
+	\item[2.*]	 The user selects a movie he likes and presses the link.
+	\item[3.*] The movie that the user selected is not a free movie, and must therefore either pay a one time fee or get a subscription.
+	\item[4.*] The user selects to get a subscription and is presented with a form where he can enter his payment information.
+	\item[5.*] After the user has inserted his payment, he is presented with a new screen which allows him to watch the movie.
+\end{enumerate}
+\textcolor{black!60}{\textbf{Special requirements: }} none \\
+\end{minipage}}
+
+\subsection{UC4: User posts rating}
+\fbox{\begin{minipage}{\columnwidth}
+\begin{tabbing}
+\textcolor{black!60}{\textbf{Use case: }} \hspace{0.5in} \= UC4: User posts a comment and rating for a movie. \\
+\textcolor{black!60}{\textbf{Scope: }} \hspace{0.2in} \> Web service application \\
+\textcolor{black!60}{\textbf{Level: }}  \> User goal \\
+\textcolor{black!60}{\textbf{Primary actor: }} \> Regular user \\
+\textcolor{black!60}{\textbf{Stakeholder}} \\ 
+\textcolor{black!60}{\textbf{and interests: }} \> Registered user. \\
+\textcolor{black!60}{\textbf{Preconditions: }} \> User must be logged into the system. \\
+\textcolor{black!60}{\textbf{Postconditions: }} \> User's rating and comment is posted to the site for all to see.
+\end{tabbing}
+\textcolor{black!60}{\textbf{Basic flow: }} 
+\begin{enumerate}
+	\item When the user is done watching a movie, he feels like writing a comment about the movie and give it a rating.
+	\item On the movie screen there is a form where the user can write a comment.
+	\item The user writes a title for the comment, and writes a few lines giving his opinion on the movie.
+	\item The user decides to give the movie 5 out of 5 available stars because he really liked the movie.
+	\item The user saves the comment and the comment is added to the list of all comments that are related to this specific movie.
+\end{enumerate}
+\textcolor{black!60}{\textbf{Special requirements: }} The user must not be blocked by an admin. (see UC7) \\
+\end{minipage}}
+
+\subsection{UC5: User play list}
+\fbox{\begin{minipage}{\columnwidth}
+\begin{tabbing}
+\textcolor{black!60}{\textbf{Use case: }} \hspace{0.5in} \= UC5: User creates a personal play list. \\
+\textcolor{black!60}{\textbf{Scope: }} \hspace{0.2in} \> Web service application \\
+\textcolor{black!60}{\textbf{Level: }}  \> User goal \\
+\textcolor{black!60}{\textbf{Primary actor: }} \> Regular user \\
+\textcolor{black!60}{\textbf{Stakeholder}} \\ 
+\textcolor{black!60}{\textbf{and interests: }} \> Registered user. \\
+\textcolor{black!60}{\textbf{Preconditions: }} \> User must be logged into the system. \\
+\textcolor{black!60}{\textbf{Postconditions: }} \> Personal play list is created and stored on the system.
+\end{tabbing}
+\textcolor{black!60}{\textbf{Basic flow: }} 
+\begin{enumerate}
+	\item A user wants to create a personal play list of movies he likes and intends to watch at a later date.
+	\item On the personal profile page, the user creates a new play list.
+	\item The user creates a tag for the play list called "movies i want to see" and saves the play list with the tag as the title.
+	\item The user then browses through the list of movies, adding the ones he wants to watch later.
+\end{enumerate}
+\textcolor{black!60}{\textbf{Special requirements: }} None. \\
+\end{minipage}}
+
+\subsection{UC6: Distributor uploads movie}
+\fbox{\begin{minipage}{\columnwidth}
+\begin{tabbing}
+\textcolor{black!60}{\textbf{Use case: }} \hspace{0.5in} \= UC6: Distributor uploads a new movie to the system \\
+\textcolor{black!60}{\textbf{Scope: }} \hspace{0.2in} \> Web service application \\
+\textcolor{black!60}{\textbf{Level: }}  \> User goal \\
+\textcolor{black!60}{\textbf{Primary actor: }} \> Distributor \\
+\textcolor{black!60}{\textbf{Stakeholder}} \\ 
+\textcolor{black!60}{\textbf{and interests: }} \> Registered users, distributors. \\
+\textcolor{black!60}{\textbf{Preconditions: }} \> Distributor must be registered and logged in. \\
+\textcolor{black!60}{\textbf{Postconditions: }} \> New movie is uploaded to the system for everyone to watch.
+\end{tabbing}
+\textcolor{black!60}{\textbf{Basic flow: }} 
+\begin{enumerate}
+	\item A distributor has just finished making a movie, and he wants to upload the movie to the system.
+	\item The distributor navigates to the "upload media" page of the system.
+	\item He is presented with a form in which he must fill out all meta data related to the movie.
+	\item After writing the information, he adds a few tags, from a list of tags, to the media, making it easier to find on the system.
+	\item The distributor decides that this movie will not be free to watch and adds it to the "premium movie" group.
+	\item After all the information is in place, he is presented with an upload form in which he can upload the media.
+	\item After the upload is completed, the movie is stored on the system and ready for all premium members to see.
+
+\end{enumerate}
+\textcolor{black!60}{\textbf{Special requirements: }} Distributor must have access to upload movies to the system. \\
+\end{minipage}}
+
+\subsection{UC7: System admin blocks user}
+\fbox{\begin{minipage}{\columnwidth}
+\begin{tabbing}
+\textcolor{black!60}{\textbf{Use case: }} \hspace{0.5in} \= UC7: System admin blocks user from posting ratings \\
+\textcolor{black!60}{\textbf{Scope: }} \hspace{0.2in} \> Web service application \\
+\textcolor{black!60}{\textbf{Level: }}  \> User goal \\
+\textcolor{black!60}{\textbf{Primary actor: }} \> System admin \\
+\textcolor{black!60}{\textbf{Stakeholder}} \\ 
+\textcolor{black!60}{\textbf{and interests: }} \> Registered users, system admin. \\
+\textcolor{black!60}{\textbf{Preconditions: }} \> User has abused comment/rating system. \\
+\textcolor{black!60}{\textbf{Postconditions: }} \> User is blocked from posting comment/ratings.
+\end{tabbing}
+\textcolor{black!60}{\textbf{Basic flow: }} 
+\begin{enumerate}
+	\item System admin has gotten complaints that a user is spamming the comment section of multiple movies.
+	\item System admin looks into the matter, reading all comments made by the specific user.
+	\item System admin removes abusing comments from the comment section.
+	\item System admin blocks the user from posting any more comments.
+	\item System admin sends a private message to the user explaining that he has been blocked, why he has been blocked, and for how long.
+	\item System admin also sends the user a warning that he might get blocked from the system if the abuse continues.
+\end{enumerate}
+\textcolor{black!60}{\textbf{Special requirements: }} None. \\
+\end{minipage}}
+
+\subsection{UC8: System admin removes media}
+\fbox{\begin{minipage}{\columnwidth}
+\begin{tabbing}
+\textcolor{black!60}{\textbf{Use case: }} \hspace{0.5in} \= UC8: System admin removes media \\
+\textcolor{black!60}{\textbf{Scope: }} \hspace{0.2in} \> Web service application \\
+\textcolor{black!60}{\textbf{Level: }}  \> User goal \\
+\textcolor{black!60}{\textbf{Primary actor: }} \> System admin \\
+\textcolor{black!60}{\textbf{Stakeholder}} \\ 
+\textcolor{black!60}{\textbf{and interests: }} \> Distributors, system admin. \\
+\textcolor{black!60}{\textbf{Preconditions: }} \> Distributor has uploaded media that violates the terms of agreement. \\
+\textcolor{black!60}{\textbf{Postconditions: }} \> Media is removed and distributor loses his distributing license.
+\end{tabbing}
+\textcolor{black!60}{\textbf{Basic flow: }} 
+\begin{enumerate}
+	\item System admin finds that a distributor has uploaded a movie that violates the terms of agreement.
+	\item System admin looks into the matter by checking out the video meta data and video file.
+	\item System admin removes the movie from the system.
+	\item System admin revokes the license from the distributor, degrading him to a regular user.
+	\item System admin sends a private message to the distributor explaining that he has lost his license and why.
+\end{enumerate}
+\textcolor{black!60}{\textbf{Special requirements: }} None. \\
+\end{minipage}}
+
+\newpage
+
+\section{Class Diagram}
+
+\begin{figure}[h!]
+  \caption{Complete class diagram of the system.}
+  \centering
+    \includegraphics[width=1\textwidth, angle=270]{diagrams/class_diagram.jpg}
+\end{figure}
+
+\newpage
+
+\section{Project Plan}
+
+\begin{figure}[h!]
+  \caption{Project plan for the ITU group}
+  \centering
+    \includegraphics[width=1\textwidth, angle=270]{images/project_plan.png}
+\end{figure}
+
+\newpage
+
+\section{Data Model}
+
+\begin{figure}[h!]
+  \caption{Complete data model for the system}
+  \centering
+    \includegraphics[width=1\textwidth, angle=270]{images/data_model.png}
+\end{figure}
 
 \end{document}

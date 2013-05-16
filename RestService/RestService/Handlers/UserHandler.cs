@@ -76,7 +76,6 @@ namespace RestService
 
             return ListToArray(CreateUser(dbCon.Query(data, stat)));
         }
-
         
         public override void Validate(Dictionary<string, string> data)
         {
