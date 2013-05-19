@@ -75,6 +75,7 @@ namespace RestService
         [WebInvoke(
             Method = "PUT",
             RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/{id}/{oldPassword}")]
         Response<User> updateUser(string id, string oldPassword, User newUser);

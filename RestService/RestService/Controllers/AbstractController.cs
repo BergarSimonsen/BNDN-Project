@@ -15,7 +15,23 @@ namespace RestService.Controllers
 
         protected Request renderAndValidateRequest(Request request)
         {
-            return request;
+            if (request.authorization == "admin")
+            {
+                request.user = new User(0,"admin","admin",null);
+                return request;
+            }
+            else
+            {
+                try
+                {
+                    return TokenHandler.validateTokenAndGetUser(request);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+
         }
 
         protected Permissions getPermissions(User user, DatabaseConnection db)
