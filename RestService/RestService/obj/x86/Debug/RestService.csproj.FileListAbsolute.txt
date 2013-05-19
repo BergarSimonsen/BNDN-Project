@@ -19,3 +19,4 @@ C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\bin\Debug\Te
 C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\bin\Debug\TestResults\RestService.TE.Tests_log.ldf
 C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\bin\Debug\ConsoleApplication.exe
 C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\bin\Debug\ConsoleApplication.pdb
+C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\obj\x86\Debug\RestService.csprojResolveAssemblyReference.cache
