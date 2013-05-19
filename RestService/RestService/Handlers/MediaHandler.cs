@@ -42,10 +42,9 @@ namespace RestService
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("UPDATE media (type, file_location, title, description, minutes, media_category_id, user_account_id)" +
+            PreparedStatement stat = dbCon.Prepare("UPDATE media (type, title, description, minutes, media_category_id, user_account_id)" +
             " VALUES('"
             + data["type"] + "', '"
-            + data["file_location"] + "', '"
             + data["title"] + "', '"
             + data["description"] + "', '"
             + data["minutes"] + "', '"
@@ -80,7 +79,7 @@ namespace RestService
                 searchParams = searchParams.Remove(searchParams.Length - 4);
             }
 
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account" + searchParams);
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM media" + searchParams);
 
             Media[] tempArray = ListToArray(CreateMedia(dbCon.Query(data, stat)));
 
@@ -126,7 +125,7 @@ namespace RestService
                 string fileLocation = reader.GetString(reader.GetOrdinal("file_location"));
                 string title = reader.GetString(reader.GetOrdinal("title"));
                 string description = reader.GetString(reader.GetOrdinal("description"));
-                int mediaLength = reader.GetInt32(reader.GetOrdinal("length"));
+                int mediaLength = reader.GetInt32(reader.GetOrdinal("minutes"));
                 string format = reader.GetString(reader.GetOrdinal("format"));
 
                 returnMedia.Add(new Media(id, mediaCategory, user, fileLocation, title, description, mediaLength, format));

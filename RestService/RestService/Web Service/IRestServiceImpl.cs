@@ -340,7 +340,7 @@ namespace RestService
 			ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaFiles/{id}")]
-        string insertMediaFile(Stream file, string id);
+        Response<Media> insertMediaFile(Stream file, string id);
 		// DOCUMENTED
 
         [OperationContract]

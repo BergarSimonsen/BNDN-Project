@@ -235,7 +235,7 @@ namespace RestService
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
             data.Add("tag", tag);
-            data.Add("mediaCategory", mediaCategoryFilter);
+            data.Add("media_category_id", mediaCategoryFilter);
             data.Add("title", nameFilter);
             data.Add("page", page);
             data.Add("limit", limit);
@@ -255,13 +255,13 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
+            data.Add("type", "");
             data.Add("description", media.description);
-            data.Add("fileLocation", media.fileLocation);
             data.Add("format", media.format);
-            data.Add("mediaCategory", media.mediaCategory.ToString());
-            data.Add("mediaLength", media.mediaLength.ToString());
+            data.Add("media_category_id", media.mediaCategory.ToString());
+            data.Add("minutes", media.mediaLength.ToString());
             data.Add("title", media.title);
-            data.Add("user", media.user.ToString());
+            data.Add("user_account_id", media.user.ToString());
 
             Request request = makeRequest(requestContext, trimData(data), authString);
 
@@ -278,11 +278,14 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
+            data.Add("id", id);
+            data.Add("type", "");
             data.Add("description", media.description);
-            data.Add("fileLocation", media.fileLocation);
-            data.Add("mediaCategory", media.mediaCategory.ToString());
-            data.Add("mediaLength", media.mediaLength.ToString());
+            data.Add("format", media.format);
+            data.Add("media_category_id", media.mediaCategory.ToString());
+            data.Add("minutes", media.mediaLength.ToString());
             data.Add("title", media.title);
+            data.Add("user_account_id", media.user.ToString()); ;
 
             Request request = makeRequest(requestContext, trimData(data), authString);
 
@@ -308,7 +311,43 @@ namespace RestService
             return controller.Call(request);
         }
 
-        public string insertMediaFile(Stream file, string id)
+        public Response<Media> mediaHasTag(string mediaId, string tagId)
+        {
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("mediaId", mediaId);
+            data.Add("tagId", tagId);
+
+            Request request = makeRequest(requestContext, trimData(data), authString);
+
+            MediaController controller = new MediaController();
+
+            return controller.Call(request);
+        }
+
+        public Response<Media> getMediaUserByTag(string userid, string userTagId)
+        {
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            data.Add("user_account_id", userid);
+            data.Add("user_account_tag_id", userTagId);
+
+            Request request = makeRequest(requestContext, trimData(data), authString);
+
+            MediaController controller = new MediaController();
+
+            return controller.Call(request);
+        }
+
+        public Response<Media> insertMediaFile(Stream file, string id)
         {
             throw new NotImplementedException();
         }
@@ -591,24 +630,6 @@ namespace RestService
             Request request = makeRequest(requestContext, trimData(data), authString);
 
             TagController controller = new TagController();
-
-            return controller.Call(request);
-        }
-
-        public Response<Media> mediaHasTag(string mediaId, string tagId)
-        {
-            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
-
-            Dictionary<string, string> data = new Dictionary<string, string>();
-
-            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
-
-            data.Add("mediaId", mediaId);
-            data.Add("tagId", tagId);
-
-            Request request = makeRequest(requestContext, trimData(data), authString);
-
-            MediaController controller = new MediaController();
 
             return controller.Call(request);
         }
@@ -1108,24 +1129,6 @@ namespace RestService
             Request request = makeRequest(requestContext, trimData(data), authString);
 
             UserAccountTagController controller = new UserAccountTagController();
-
-            return controller.Call(request);
-        }
-
-        public Response<Media> getMediaUserByTag(string userid, string userTagId)
-        {
-            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
-
-            Dictionary<string, string> data = new Dictionary<string, string>();
-
-            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
-
-            data.Add("user_account_id", userid);
-            data.Add("user_account_tag_id", userTagId);
-
-            Request request = makeRequest(requestContext, trimData(data), authString);
-
-            MediaController controller = new MediaController();
 
             return controller.Call(request);
         }

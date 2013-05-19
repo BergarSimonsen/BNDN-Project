@@ -20,7 +20,7 @@ namespace RestService.Controllers
 
             try
             {
-                Request newRequest = renderAndValidateRequest(request);
+                request = renderAndValidateRequest(request);
 
                 DatabaseConnection db = new DatabaseConnection("SMU");
 
