@@ -42,7 +42,7 @@ namespace RestService
 
             data.Add("modified", now.Year + "-" + now.Month + "-" + now.Day + " " + now.Hour + ":" + now.Minute + ":" + now.Second);
 
-            PreparedStatement stat = dbCon.Prepare("UPDATE user_account SET email = '"+data["email"]+"', password_hash = '"+data["password"]+"', modified = '"+data["modified"]+"') " +
+            PreparedStatement stat = dbCon.Prepare("UPDATE user_account SET email = '"+data["email"]+"', password_hash = '"+data["password"]+"', modified = '"+data["modified"]+"'"+
             "WHERE id = '"+id+"'");
             dbCon.Command(data, stat);
         }

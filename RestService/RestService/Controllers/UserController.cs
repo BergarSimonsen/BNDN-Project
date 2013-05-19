@@ -63,8 +63,16 @@ namespace RestService.Controllers
             }
             catch(Exception ex)
             {
-                errorCode = 001;
-                message = ex.Message;
+                if (ex.Data.Contains("errorCode"))
+                {
+                    response.errorCode = (int)ex.Data["errorCode"];
+                    response.message = ex.Message;
+                }
+                else
+                {
+                    errorCode = 001;
+                    message = ex.Message;
+                }
             }
             finally
             {

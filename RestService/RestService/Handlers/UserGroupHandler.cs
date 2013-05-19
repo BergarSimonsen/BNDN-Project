@@ -63,7 +63,7 @@ namespace RestService.Handlers
                 searchParams = searchParams.Remove(searchParams.Length - 4);
             }
 
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account" + searchParams);
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_group" + searchParams);
 
             return ListToArray(CreateUserGroup(dbCon.Query(data, stat)));
         }
