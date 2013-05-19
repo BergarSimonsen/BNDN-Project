@@ -17,9 +17,12 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO rating (name, description) "+
-            "VALUES ('" + data["user_account_id"] + "', '" + data["media_id"] + "', '" + data["rating"] 
-            + "', '" + data["comment"] + "', '" + data["comment_title"] + "')");
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO rating (name, description) VALUES ('" + 
+            data["user_account_id"] + "', '" + 
+            data["media_id"] + "', '" + 
+            data["rating"] + "', '" + 
+            data["comment"] + "', '" + 
+            data["comment_title"] + "')");
             
             dbCon.Command(data, stat);
         }
@@ -35,9 +38,12 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("UPDATE rating (name, description)" +
-            "VALUES ('" + data["user_account_id"] + "', '" + data["media_id"] + "', '" + data["rating"] 
-            + "', '" + data["comment"] + "', '" + data["comment_title"] + "')");
+            PreparedStatement stat = dbCon.Prepare("UPDATE rating (name, description) VALUES ('" +
+            data["user_account_id"] + "', '" +
+            data["media_id"] + "', '" +
+            data["rating"] + "', '" +
+            data["comment"] + "', '" +
+            data["comment_title"] + "') where id=" + id);
 
             dbCon.Command(data, stat);
         }

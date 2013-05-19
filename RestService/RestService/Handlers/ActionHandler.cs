@@ -17,8 +17,9 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO action (name, description) "+
-            "VALUES ('"+data["name"]+"', '"+data["description"]+"')");
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO action (name, description) VALUES ('"+
+            data["name"]+"', '"+
+            data["description"]+"')");
             
             dbCon.Command(data, stat);
         }
@@ -34,8 +35,10 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("UPDATE action (name, description)" +
-            "VALUES ('"+data["name"]+"', '"+data["description"]+"')");
+            PreparedStatement stat = dbCon.Prepare("UPDATE action (name, description) VALUES ('" +
+            data["name"] + "', '" +
+            data["description"] + "') where id=" + id);
+
             dbCon.Command(data, stat);
         }
 

@@ -17,7 +17,10 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO tag (name, tag_group_id, simple_name) VALUES ('" + data["name"] + "','" + data["tag_group_id"] + "', '" + data["simple_name"] + "')");
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO tag (name, tag_group_id, simple_name) VALUES ('" + 
+            data["name"] + "','" + 
+            data["tag_group_id"] + "', '" + 
+            data["simple_name"] + "')");
             
             dbCon.Command(data, stat);
         }
@@ -33,8 +36,11 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("UPDATE tag (name, simple_name)" +
-            "VALUES ('" + data["name"] + "','" + data["tag_group_id"] + "', '" + data["simple_name"] + "')");
+            PreparedStatement stat = dbCon.Prepare("UPDATE tag (name, simple_name) VALUES ('" + 
+            data["name"] + "','" + 
+            data["tag_group_id"] + "', '" +
+            data["simple_name"] + "') where id=" + id);
+
             dbCon.Command(data, stat);
         }
 

@@ -17,7 +17,9 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO user_group (name, description) VALUES ('" + data["name"] + "', '" + data["description"] + "')");
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO user_group (name, description) VALUES ('" + 
+            data["name"] + "', '" + 
+            data["description"] + "')");
             
             dbCon.Command(data, stat);
         }
@@ -33,8 +35,10 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("UPDATE user_group (name, description)" +
-            "VALUES ('" + data["name"] + "', '" + data["description"] + "')");
+            PreparedStatement stat = dbCon.Prepare("UPDATE user_group (name, description) VALUES ('" +
+            data["name"] + "', '" +
+            data["description"] + "') where id=" + id);
+
             dbCon.Command(data, stat);
         }
 
@@ -63,7 +67,7 @@ namespace RestService.Handlers
                 searchParams = searchParams.Remove(searchParams.Length - 4);
             }
 
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account" + searchParams);
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_group" + searchParams);
 
             return ListToArray(CreateUserGroup(dbCon.Query(data, stat)));
         }

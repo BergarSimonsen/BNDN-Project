@@ -17,7 +17,9 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO media_category (name, description) VALUES ('" + data["name"] + "', '" + data["description"] + "')");
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO media_category (name, description) VALUES ('" + 
+            data["name"] + "', '" + 
+            data["description"] + "')");
             
             dbCon.Command(data, stat);
         }
@@ -33,12 +35,11 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            DateTime now = DateTime.Now;
+            PreparedStatement stat = dbCon.Prepare("UPDATE media_category (name, description)" +
+            " VALUES('"
+            + data["name"] + "', '"
+            + data["description"] + "') where id=" + id);
 
-            data.Add("modified", now.Year + "-" + now.Month + "-" + now.Day + " " + now.Hour + ":" + now.Minute + ":" + now.Second);
-
-            PreparedStatement stat = dbCon.Prepare("UPDATE media_category SET email = '"+data["email"]+"', password_hash = '"+data["password"]+"', modified = '"+data["modified"]+"') " +
-            "WHERE id = '"+id+"'");
             dbCon.Command(data, stat);
         }
 
