@@ -1,3 +1,0 @@
-C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\bin\Debug\ConsoleApplication.exe.config
-C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\obj\x86\Debug\ConsoleApplication.exe
-C:\Users\Aben\Documents\GitHub\BNDN-Project\RestService\RestService\obj\x86\Debug\ConsoleApplication.pdb

@@ -6,6 +6,7 @@ using System.Web;
 using System.Data.SqlClient;
 using RestService.Security;
 using RestService.Entities;
+using RestService.Handlers;
 
 namespace RestService
 {

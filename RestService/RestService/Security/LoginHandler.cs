@@ -13,7 +13,7 @@ namespace RestService.Security
     {
         public static Token Login(string email, string password)
         {
-            string userPassword = GetUser(email);
+            string userPassword = GetUserPassword(email);
             
             if (!password.Equals(userPassword))
             { throw new Exception("User not found or password mismatch"); }
@@ -21,11 +21,11 @@ namespace RestService.Security
             return new Token(SHAEncrypter.SHAEncrypt(email + password));
         }
 
-        private static string GetUser(string email)
+        private static string GetUserPassword(string email)
         {
             DatabaseConnection dbConnect = new DatabaseConnection("SMU");
 
-            string query = @"SELECT password FROM user_account WHERE email='" + email + "'";
+            string query = "SELECT password FROM user_account WHERE email=/'" + email + "/'";
             PreparedStatement prepStat = dbConnect.Prepare(query);
 
             SqlDataReader data = dbConnect.Query(null, prepStat);
