@@ -38,10 +38,6 @@ namespace RestService.Controllers
                             {
                                 ratings = handler.Read(int.Parse(request.data["id"]));
                             }
-                            else
-                            {   
-                                // Mangler.. Not sure?!
-                            }
                         }
                         else if (request.uri.Count < 2)
                         {

@@ -464,7 +464,7 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("tagGroup", tagGroupFilter);
+            data.Add("tag_group_id", tagGroupFilter);
             data.Add("limit", limit);
             data.Add("page", page);
 
@@ -501,8 +501,8 @@ namespace RestService
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
             data.Add("name", tag.name);
-            data.Add("simpleName", tag.simple_name);
-            data.Add("tagGroup", tag.tag_group.ToString());
+            data.Add("simple_name", tag.simple_name);
+            data.Add("tag_group_id", tag.tag_group.ToString());
 
             Request request = makeRequest(requestContext, trimData(data), authString);
 
@@ -520,8 +520,8 @@ namespace RestService
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
             data.Add("name", tag.name);
-            data.Add("simpleName", tag.simple_name);
-            data.Add("tagGroup", tag.tag_group.ToString());
+            data.Add("simple_name", tag.simple_name);
+            data.Add("tag_group_id", tag.tag_group.ToString());
             data.Add("id", id);
 
             Request request = makeRequest(requestContext, trimData(data), authString);
@@ -660,8 +660,8 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("mediaId", mediaId);
-            data.Add("userId", userId);
+            data.Add("media_id", mediaId);
+            data.Add("user_account_id", userId);
             data.Add("limit", limit);
             data.Add("page", page);
 
@@ -680,10 +680,10 @@ namespace RestService
 
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
-            data.Add("mediaId", rating.mediaId.ToString());
-            data.Add("userId", rating.userId.ToString());
+            data.Add("media_id", rating.mediaId.ToString());
+            data.Add("user_account_id", rating.userId.ToString());
             data.Add("comment", rating.comment);
-            data.Add("commentTitle", rating.commentTitle);
+            data.Add("comment_title", rating.commentTitle);
             data.Add("rating", rating.rating.ToString());
 
             Request request = makeRequest(requestContext, trimData(data), authString);
@@ -703,7 +703,7 @@ namespace RestService
 
             data.Add("id", id);
             data.Add("comment", rating.comment);
-            data.Add("commentTitle", rating.commentTitle);
+            data.Add("comment_title", rating.commentTitle);
             data.Add("rating", rating.rating.ToString());
 
             Request request = makeRequest(requestContext, trimData(data), authString);
