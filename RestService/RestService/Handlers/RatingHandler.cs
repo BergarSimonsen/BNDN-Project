@@ -17,7 +17,7 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO rating (name, description) VALUES ('" + 
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO rating (user_account_id, media_id, rating, comment, comment_title) VALUES ('" + 
             data["user_account_id"] + "', '" + 
             data["media_id"] + "', '" + 
             data["rating"] + "', '" + 
@@ -38,7 +38,7 @@ namespace RestService.Handlers
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("UPDATE rating (name, description) VALUES ('" +
+            PreparedStatement stat = dbCon.Prepare("UPDATE rating (user_account_id, media_id, rating, comment, comment_title) VALUES ('" +
             data["user_account_id"] + "', '" +
             data["media_id"] + "', '" +
             data["rating"] + "', '" +
