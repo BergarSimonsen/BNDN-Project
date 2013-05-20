@@ -75,6 +75,7 @@ namespace RestService
         [WebInvoke(
             Method = "PUT",
             RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/user/{id}/{oldPassword}")]
         Response<User> updateUser(string id, string oldPassword, User newUser);
@@ -339,7 +340,7 @@ namespace RestService
 			ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
             UriTemplate = "/mediaFiles/{id}")]
-        string insertMediaFile(Stream file, string id);
+        Response<Media> insertMediaFile(Stream file, string id);
 		// DOCUMENTED
 
         [OperationContract]

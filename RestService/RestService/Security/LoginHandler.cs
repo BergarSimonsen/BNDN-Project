@@ -26,7 +26,7 @@ namespace RestService.Security
             DatabaseConnection dbConnect = new DatabaseConnection("SMU");
 
             string query = @"SELECT password FROM user_account WHERE email='" + email + "'";
-            PreparedStatement prepStat = dbConnect.Prepare(query, new List<string>());
+            PreparedStatement prepStat = dbConnect.Prepare(query);
 
             SqlDataReader data = dbConnect.Query(null, prepStat);
             string userPassword = data.GetString(0);

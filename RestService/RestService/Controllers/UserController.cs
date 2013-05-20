@@ -20,7 +20,7 @@ namespace RestService.Controllers
 
             try
             {
-                Request newRequest = renderAndValidateRequest(request);
+                request = renderAndValidateRequest(request);
 
                 DatabaseConnection db = new DatabaseConnection("SMU");
 
@@ -61,12 +61,26 @@ namespace RestService.Controllers
                         break;
                 }
             }
+            catch(Exception ex)
+            {
+                if (ex.Data.Contains("errorCode"))
+                {
+                    response.errorCode = (int)ex.Data["errorCode"];
+                    response.message = ex.Message;
+                }
+                else
+                {
+                    errorCode = 001;
+                    message = ex.Message;
+                }
+            }
             finally
             {
                 if (metaData.Count == 0)
                 {
                     metaData = null;
                 }
+
                 response = createResponse(users, errorCode, message, metaData);
             }
 

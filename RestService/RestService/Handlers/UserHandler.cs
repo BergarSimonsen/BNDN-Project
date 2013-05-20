@@ -22,8 +22,12 @@ namespace RestService
             data.Add("created", created.Year + "-" + created.Month + "-" + created.Day + " " + created.Hour + ":" + created.Minute + ":" + created.Second);
             data.Add("modified", created.Year + "-" + created.Month + "-" + created.Day + " " + created.Hour + ":" + created.Minute + ":" + created.Second);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO user_account (email, password_hash, created, modified) " +
-            "VALUES ('" + data["email"] + "', '" + data["password"] + "', '" + data["created"] + "', '" + data["modified"] + "')");
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO user_account (email, password_hash, created, modified) VALUES ('" + 
+            data["email"] + "', '" + 
+            data["password"] + "', '" + 
+            data["created"] + "', '" + 
+            data["modified"] + "')");
+
             dbCon.Command(data, stat);
         }
 
@@ -36,14 +40,17 @@ namespace RestService
 
         public override void Update(int id, Dictionary<string, string> data)
         {
+            DateTime created = DateTime.Now;
+            data.Add("modified", created.Year + "-" + created.Month + "-" + created.Day + " " + created.Hour + ":" + created.Minute + ":" + created.Second);
+            
             Validate(data);
 
-            DateTime now = DateTime.Now;
+            PreparedStatement stat = dbCon.Prepare("UPDATE user_account (email, password_hash, created, modified) VALUES ('" +
+            data["email"] + "', '" +
+            data["password"] + "', '" +
+            data["created"] + "', '" +
+            data["modified"] + "') where id=" + id);
 
-            data.Add("modified", now.Year + "-" + now.Month + "-" + now.Day + " " + now.Hour + ":" + now.Minute + ":" + now.Second);
-
-            PreparedStatement stat = dbCon.Prepare("UPDATE user_account SET email = '"+data["email"]+"', password_hash = '"+data["password"]+"', modified = '"+data["modified"]+"') " +
-            "WHERE id = '"+id+"'");
             dbCon.Command(data, stat);
         }
 

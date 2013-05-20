@@ -9,47 +9,48 @@ using RestService.Entities;
 
 namespace RestService.Handlers
 {
-    class UserGroupHandler : AbstractHandler<UserGroup>
+    class MediaCategoryHandler : AbstractHandler<MediaCategory>
     {
-        public UserGroupHandler(DatabaseConnection incDbCon, Permissions perm) : base(incDbCon, perm) { }
+        public MediaCategoryHandler(DatabaseConnection incDbCon, Permissions perm) : base(incDbCon, perm) { }
 
         public override void Create(Dictionary<string, string> data)
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO user_group (name, description) VALUES ('" + 
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO media_category (name, description) VALUES ('" + 
             data["name"] + "', '" + 
             data["description"] + "')");
             
             dbCon.Command(data, stat);
         }
 
-        public override UserGroup[] Read(int id)
+        public override MediaCategory[] Read(int id)
         {
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_group where id = '" + id + "'");
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM media_category where id = '" + id + "'");
 
-            return ListToArray(CreateUserGroup(dbCon.Query(new Dictionary<string, string>(), stat)));
+            return ListToArray(CreateMediaCategory(dbCon.Query(new Dictionary<string,string>(), stat)));
         }
 
         public override void Update(int id, Dictionary<string, string> data)
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("UPDATE user_group (name, description) VALUES ('" +
-            data["name"] + "', '" +
-            data["description"] + "') where id=" + id);
+            PreparedStatement stat = dbCon.Prepare("UPDATE media_category (name, description)" +
+            " VALUES('"
+            + data["name"] + "', '"
+            + data["description"] + "') where id=" + id);
 
             dbCon.Command(data, stat);
         }
 
         public override void Delete(int id)
         {
-            PreparedStatement stat = dbCon.Prepare("DELETE FROM user_group where id = '"+id+"'");
+            PreparedStatement stat = dbCon.Prepare("DELETE FROM media_category where id = '"+id+"'");
 
             dbCon.Command(new Dictionary<string, string>(), stat);
         }
 
-        public override UserGroup[] Search(Dictionary<string, string> data)
+        public override MediaCategory[] Search(Dictionary<string, string> data) 
         {
             string searchParams = "";
 
@@ -67,23 +68,22 @@ namespace RestService.Handlers
                 searchParams = searchParams.Remove(searchParams.Length - 4);
             }
 
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_group" + searchParams);
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM media_category"+ searchParams);
 
-            return ListToArray(CreateUserGroup(dbCon.Query(data, stat)));
+            return ListToArray(CreateMediaCategory(dbCon.Query(data, stat)));
         }
-
         
         public override void Validate(Dictionary<string, string> data)
         {
             if (!data.ContainsKey("name"))
-                throw new Exception("UserGroup is missing 'name' data");
+                throw new Exception("MediaCategory is missing 'name' data");
             if (!data.ContainsKey("description"))
-                throw new Exception("UserGroup is missing 'description' data");
+                throw new Exception("MediaCategory is missing 'description' data");
         }
 
-        private List<UserGroup> CreateUserGroup(SqlDataReader reader)
-        {
-            List<UserGroup> returnUserGroups = new List<UserGroup>();
+        private List<MediaCategory> CreateMediaCategory(SqlDataReader reader)
+        { 
+            List<MediaCategory> returnMediaCategories = new List<MediaCategory>();
 
             while (reader.Read())
             { 
@@ -91,15 +91,17 @@ namespace RestService.Handlers
                 string name = reader.GetString(reader.GetOrdinal("name"));
                 string description= reader.GetString(reader.GetOrdinal("description"));
 
-                returnUserGroups.Add(new UserGroup(id, name, description));
+                //TODO userdata has to be fetched witht he rast of the data
+                returnMediaCategories.Add(new MediaCategory(id, name, description));
             }
 
-            return returnUserGroups;
+            return returnMediaCategories;
         }
 
-        private UserGroup[] ListToArray(List<UserGroup> incList)
+        private MediaCategory[] ListToArray(List<MediaCategory> incList)
         {
             return incList.ToArray();
         }
+         
     }
 }
