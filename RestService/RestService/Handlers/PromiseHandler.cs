@@ -9,7 +9,7 @@ using RestService.Entities;
 
 namespace RestService.Handlers
 {
-    class PromiseHandler :AbstractHandler<Promise>
+    class PromiseHandler : AbstractHandler<Promise>
     {
         public PromiseHandler(DatabaseConnection incDbCon, Permissions perm) : base(incDbCon, perm) { }
 
