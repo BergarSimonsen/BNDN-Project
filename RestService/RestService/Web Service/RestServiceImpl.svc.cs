@@ -237,8 +237,16 @@ namespace RestService
             data.Add("tag", tag);
             data.Add("media_category_id", mediaCategoryFilter);
             data.Add("title", nameFilter);
-            data.Add("page", page);
+            if (limit == null)
+            {
+                limit = "10";
+            }
             data.Add("limit", limit);
+            if (page == null)
+            {
+                page = "1";
+            }
+            data.Add("page", page);
 
             Request request = makeRequest(requestContext, trimData(data), authString);
 
