@@ -18,8 +18,8 @@ namespace RestService
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO media (type, title, description, minutes, format, media_category_id, user_account_id)" +
-            " VALUES('" 
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO media (file_location, type, title, description, minutes, format, media_category_id, user_account_id)" +
+            " VALUES('not updated', '"
             + data["type"] + "', '" 
             + data["title"] + "', '" 
             + data["description"] + "', '" 
@@ -65,13 +65,13 @@ namespace RestService
         {
             string searchParams = "";
 
-            if (data.Count != 0)
+            if (data.Count > 2)
             {
                 searchParams += " where ";
 
                 foreach (KeyValuePair<string, string> s in data)
                 {
-                    if (s.Key != "limit" && s.Key != "page")
+                    if (s.Key != "type" && s.Key != "limit" && s.Key != "page")
                     {
                         string semiResult = s.Key + " = '" + s.Value + "' and ";
                         searchParams += semiResult;

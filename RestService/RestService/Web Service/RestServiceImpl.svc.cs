@@ -14,6 +14,7 @@ using RestService.Controllers;
 using RestService.IO_Messages;
 using RestService.Web_Service;
 using RestService.Entities;
+using RestService.HelperObjects;
 
 
 namespace RestService
@@ -226,7 +227,7 @@ namespace RestService
             return controller.Call(request);
         }
 
-        public Response<Media> getMedias(string tag, string mediaCategoryFilter, string nameFilter, string page, string limit)
+        public Response<Media> getMedias(string user, string tag, string mediaCategoryFilter, string nameFilter, string page, string limit)
         {
             IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
 
@@ -235,11 +236,12 @@ namespace RestService
             string authString = requestContext.Headers[HttpRequestHeader.Authorization];
 
             data.Add("tag", tag);
+            data.Add("user_account_id", user);
             data.Add("media_category_id", mediaCategoryFilter);
             data.Add("title", nameFilter);
             if (limit == null)
             {
-                limit = "10";
+                limit = "20";
             }
             data.Add("limit", limit);
             if (page == null)
@@ -357,7 +359,15 @@ namespace RestService
 
         public Response<Media> insertMediaFile(Stream file, string id)
         {
-            throw new NotImplementedException();
+            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
+
+            string authString = requestContext.Headers[HttpRequestHeader.Authorization];
+
+            Request request = makeRequest(requestContext, null, authString);
+
+            MediaFilesController controller = new MediaFilesController();
+
+            return controller.InsertMediaFile(request, int.Parse(id), file);
         }
 
         public Response<MediaCategory> getMediaCategories()

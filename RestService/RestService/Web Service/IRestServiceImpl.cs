@@ -296,8 +296,8 @@ namespace RestService
             Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
-            UriTemplate = "/media?tag={tag}&mediaCategoryFilter={mediaCategoryFilter}&nameFilter={nameFilter}&page={page}&limit={limit}")]
-        Response<Media> getMedias(string tag, string mediaCategoryFilter, string nameFilter, string page, string limit);
+            UriTemplate = "/media?user={user}&tag={tag}&mediaCategoryFilter={mediaCategoryFilter}&nameFilter={nameFilter}&page={page}&limit={limit}")]
+        Response<Media> getMedias(string user, string tag, string mediaCategoryFilter, string nameFilter, string page, string limit);
         // Almost working.
         // Paging doesn't work 100%.
         // Didn't test tag

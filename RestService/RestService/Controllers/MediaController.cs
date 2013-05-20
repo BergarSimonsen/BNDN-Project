@@ -5,6 +5,7 @@ using System.Web;
 using RestService.IO_Messages;
 using RestService.Entities;
 using RestService.Security;
+using RestService.HelperObjects;
 
 namespace RestService.Controllers
 {
@@ -50,6 +51,9 @@ namespace RestService.Controllers
                         break;
                     case Web_Service.RestMethods.POST:
                         handler.Create(request.data);
+                        request.data["limit"] = "1";
+                        request.data["page"] = "1";
+                        media = handler.Search(request.data);
                         break;
                     case Web_Service.RestMethods.PUT:
                         handler.Update(int.Parse(request.data["id"]), request.data);
