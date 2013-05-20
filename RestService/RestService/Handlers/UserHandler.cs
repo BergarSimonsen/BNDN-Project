@@ -33,7 +33,10 @@ namespace RestService
 
         public override User[] Read(int id)
         {
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account where id = '" + id + "'");
+            PreparedStatement stat = dbCon.Prepare("select * from user_account "
+            + "inner join user_account_data on user_account.id=user_account_data.user_account_id"
+            + "inner join user_account_data_type on user_account_data.user_account_data_type_id=user_account_data_type.id "
+            + "where user_account.id=" + id);
 
             return ListToArray(CreateUser(dbCon.Query(new Dictionary<string,string>(), stat)));
         }
@@ -79,7 +82,10 @@ namespace RestService
                 searchParams = searchParams.Remove(searchParams.Length - 4);
             }
 
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account"+ searchParams);
+            PreparedStatement stat = dbCon.Prepare("select * from user_account "
+            + "inner join user_account_data on user_account.id=user_account_data.user_account_id"
+            + "inner join user_account_data_type on user_account_data.user_account_data_type_id=user_account_data_type.id "
+            + searchParams);
 
             return ListToArray(CreateUser(dbCon.Query(data, stat)));
         }
@@ -98,12 +104,17 @@ namespace RestService
 
             while (reader.Read())
             { 
-                int id = reader.GetInt32(reader.GetOrdinal("id"));
+                int userId = reader.GetInt32(reader.GetOrdinal("userId"));
                 string email = reader.GetString(reader.GetOrdinal("email"));
                 string password = reader.GetString(reader.GetOrdinal("password_hash"));
 
+                //int dataID = reader.GetInt32(reader.GetOrdinal("userDataId"));
+                string value = reader.GetString(reader.GetOrdinal("value"));
+                //string dataType = reader.GetString(reader.GetOrdinal("dataType"));
+
                 //TODO userdata has to be fetched witht he rast of the data
-                returnUsers.Add(new User(id, email, password, null));
+                //returnUsers.Add(new User(userId, email, password, new User_Data[ new User_Data(dataID, userId, dataType, value)]));
+                returnUsers.Add(new User(userId, email, password, new string[]{value}));
             }
 
             return returnUsers;
