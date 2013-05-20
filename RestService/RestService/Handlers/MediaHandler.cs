@@ -6,6 +6,7 @@ using System.Web;
 using System.Data.SqlClient;
 using RestService.Security;
 using RestService.Entities;
+using RestService.Handlers;
 
 namespace RestService
 {
@@ -18,8 +19,8 @@ namespace RestService
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("INSERT INTO media (type, title, description, minutes, format, media_category_id, user_account_id)" +
-            " VALUES('" 
+            PreparedStatement stat = dbCon.Prepare("INSERT INTO media (file_location, type, title, description, minutes, format, media_category_id, user_account_id)" +
+            " VALUES('not updated', '"
             + data["type"] + "', '" 
             + data["title"] + "', '" 
             + data["description"] + "', '" 
@@ -42,10 +43,9 @@ namespace RestService
         {
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("UPDATE media (type, file_location, title, description, minutes, media_category_id, user_account_id)" +
+            PreparedStatement stat = dbCon.Prepare("UPDATE media (type, title, description, minutes, media_category_id, user_account_id)" +
             " VALUES('"
             + data["type"] + "', '"
-            + data["file_location"] + "', '"
             + data["title"] + "', '"
             + data["description"] + "', '"
             + data["minutes"] + "', '"
@@ -66,21 +66,24 @@ namespace RestService
         {
             string searchParams = "";
 
-            if (data.Count != 0)
+            if (data.Count > 2)
             {
                 searchParams += " where ";
 
                 foreach (KeyValuePair<string, string> s in data)
                 {
-                    string semiResult = s.Key + " = '" + s.Value + "' and ";
-                    searchParams += semiResult;
+                    if (s.Key != "type" && s.Key != "limit" && s.Key != "page")
+                    {
+                        string semiResult = s.Key + " = '" + s.Value + "' and ";
+                        searchParams += semiResult;
+                    }
                 }
 
                 // removes the last "and" since there are no more params to search for
                 searchParams = searchParams.Remove(searchParams.Length - 4);
             }
 
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM user_account" + searchParams);
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, medias.* FROM (SELECT * FROM media" + searchParams + ") medias) chuck WHERE chuck.rownum BETWEEN " + ((int.Parse(data["page"]) - 1) * int.Parse(data["limit"]) + 1) + " AND " + (int.Parse(data["page"]) * int.Parse(data["limit"])));
 
             Media[] tempArray = ListToArray(CreateMedia(dbCon.Query(data, stat)));
 
@@ -126,7 +129,7 @@ namespace RestService
                 string fileLocation = reader.GetString(reader.GetOrdinal("file_location"));
                 string title = reader.GetString(reader.GetOrdinal("title"));
                 string description = reader.GetString(reader.GetOrdinal("description"));
-                int mediaLength = reader.GetInt32(reader.GetOrdinal("length"));
+                int mediaLength = reader.GetInt32(reader.GetOrdinal("minutes"));
                 string format = reader.GetString(reader.GetOrdinal("format"));
 
                 returnMedia.Add(new Media(id, mediaCategory, user, fileLocation, title, description, mediaLength, format));

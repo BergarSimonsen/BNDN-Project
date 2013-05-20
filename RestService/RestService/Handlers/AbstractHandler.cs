@@ -6,7 +6,7 @@ using System.Text;
 using RestService.Security;
 using RestService.Entities;
 
-namespace RestService
+namespace RestService.Handlers
 {
     public abstract class AbstractHandler<T> where T : IEntities
     {

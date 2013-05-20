@@ -6,6 +6,7 @@ using System.Web;
 using System.Data.SqlClient;
 using RestService.Security;
 using RestService.Entities;
+using RestService.Handlers;
 
 namespace RestService
 {
@@ -48,11 +49,10 @@ namespace RestService
             
             Validate(data);
 
-            PreparedStatement stat = dbCon.Prepare("UPDATE user_account (email, password_hash, created, modified) VALUES ('" +
-            data["email"] + "', '" +
-            data["password"] + "', '" +
-            data["created"] + "', '" +
-            data["modified"] + "') where id=" + id);
+            PreparedStatement stat = dbCon.Prepare("UPDATE user_account SET email = '"+
+            data["email"] + "', password_hash = '" +
+            data["password"] + "', modified = '" +
+            data["modified"] + "' where id=" + id);
 
             dbCon.Command(data, stat);
         }
