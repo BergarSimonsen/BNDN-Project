@@ -72,15 +72,18 @@ namespace RestService
 
                 foreach (KeyValuePair<string, string> s in data)
                 {
-                    string semiResult = s.Key + " = '" + s.Value + "' and ";
-                    searchParams += semiResult;
+                    if (s.Key != "limit" && s.Key != "page")
+                    {
+                        string semiResult = s.Key + " = '" + s.Value + "' and ";
+                        searchParams += semiResult;
+                    }
                 }
 
                 // removes the last "and" since there are no more params to search for
                 searchParams = searchParams.Remove(searchParams.Length - 4);
             }
 
-            PreparedStatement stat = dbCon.Prepare("SELECT * FROM media" + searchParams);
+            PreparedStatement stat = dbCon.Prepare("SELECT * FROM (SELECT row_number() OVER (ORDER BY id) AS rownum, medias.* FROM (SELECT * FROM media" + searchParams + ") medias) chuck WHERE chuck.rownum BETWEEN " + ((int.Parse(data["page"]) - 1) * int.Parse(data["limit"]) + 1) + " AND " + (int.Parse(data["page"]) * int.Parse(data["limit"])));
 
             Media[] tempArray = ListToArray(CreateMedia(dbCon.Query(data, stat)));
 

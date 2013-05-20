@@ -63,7 +63,7 @@ namespace RestService
 		// DOCUMENTED
 
         [OperationContract]
-        [WebInvoke(
+        [WebInvoke( 
             Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
