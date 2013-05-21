@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.1.28)  15 MAY 2013 14:13
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.1.28)  21 MAY 2013 13:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -656,42 +656,98 @@ Package: verbatim 2003/08/22 v1.5q LaTeX2e package for verbatim enhancements
 \verbatim@line=\toks28
 \verbatim@in@stream=\read1
 )
+(/usr/local/texlive/2012/texmf-dist/tex/latex/oberdiek/pdflscape.sty
+Package: pdflscape 2008/08/11 v0.10 Display of landscape pages in PDF (HO)
+
+(/usr/local/texlive/2012/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
+)
+Package pdflscape Info: Auto-detected driver: pdftex on input line 80.
+)
+(/usr/local/texlive/2012/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2011/06/27 v1.7a multicolumn formatting (FMi)
+\c@tracingmulticols=\count105
+\mult@box=\box33
+\multicol@leftmargin=\dimen114
+\c@unbalance=\count106
+\c@collectmore=\count107
+\doublecol@number=\count108
+\multicoltolerance=\count109
+\multicolpretolerance=\count110
+\full@width=\dimen115
+\page@free=\dimen116
+\premulticols=\dimen117
+\postmulticols=\dimen118
+\multicolsep=\skip49
+\multicolbaselineskip=\skip50
+\partial@page=\box34
+\last@line=\box35
+\mult@rightbox=\box36
+\mult@grightbox=\box37
+\mult@gfirstbox=\box38
+\mult@firstbox=\box39
+\@tempa=\box40
+\@tempa=\box41
+\@tempa=\box42
+\@tempa=\box43
+\@tempa=\box44
+\@tempa=\box45
+\@tempa=\box46
+\@tempa=\box47
+\@tempa=\box48
+\@tempa=\box49
+\@tempa=\box50
+\@tempa=\box51
+\@tempa=\box52
+\@tempa=\box53
+\@tempa=\box54
+\@tempa=\box55
+\@tempa=\box56
+\c@columnbadness=\count111
+\c@finalcolumnbadness=\count112
+\last@try=\dimen119
+\multicolovershoot=\dimen120
+\multicolundershoot=\dimen121
+\mult@nat@firstbox=\box57
+\colbreak@box=\box58
+\multicol@sort@counter=\count113
+)
 (./api-spec.aux)
 \openout1 = `api-spec.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 29.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 29.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 32.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 32.
  (/usr/local/texlive/2012/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
 
 (/usr/local/texlive/2012/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count105
-\scratchdimen=\dimen114
-\scratchbox=\box33
-\nofMPsegments=\count106
-\nofMParguments=\count107
+\scratchcounter=\count114
+\scratchdimen=\dimen122
+\scratchbox=\box59
+\nofMPsegments=\count115
+\nofMParguments=\count116
 \everyMPshowfont=\toks29
-\MPscratchCnt=\count108
-\MPscratchDim=\dimen115
-\MPnumerator=\count109
-\makeMPintoPDFobject=\count110
+\MPscratchCnt=\count117
+\MPscratchDim=\dimen123
+\MPnumerator=\count118
+\makeMPintoPDFobject=\count119
 \everyMPtoPDFconversion=\toks30
 ) (/usr/local/texlive/2012/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
@@ -708,8 +764,8 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\AtBeginShipoutBox=\box34
-Package hyperref Info: Link coloring OFF on input line 29.
+\AtBeginShipoutBox=\box60
+Package hyperref Info: Link coloring OFF on input line 32.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2010/04/30 v2.40 Cross-referencing by name of section
@@ -717,32 +773,32 @@ Package: nameref 2010/04/30 v2.40 Cross-referencing by name of section
 (/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count111
+\c@section@level=\count120
 )
-LaTeX Info: Redefining \ref on input line 29.
-LaTeX Info: Redefining \pageref on input line 29.
-LaTeX Info: Redefining \nameref on input line 29.
+LaTeX Info: Redefining \ref on input line 32.
+LaTeX Info: Redefining \pageref on input line 32.
+LaTeX Info: Redefining \nameref on input line 32.
 
 (./api-spec.out) (./api-spec.out)
 \@outlinefile=\write3
 \openout3 = `api-spec.out'.
 
-LaTeX Font Info:    Try loading font information for U+wasy on input line 32.
+LaTeX Font Info:    Try loading font information for U+wasy on input line 35.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/wasysym/uwasy.fd
 File: uwasy.fd 2003/10/30 v2.0 Wasy-2 symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for U+lasy on input line 32.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 35.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 32.
+LaTeX Font Info:    Try loading font information for U+msa on input line 35.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 32.
+LaTeX Font Info:    Try loading font information for U+msb on input line 35.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
@@ -754,178 +810,217 @@ LaTeX Warning: No \author given.
 \tf@toc=\write4
 \openout4 = `api-spec.toc'.
 
- [1
+ [10
 
-{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 42--43
+{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [11]
+Underfull \hbox (badness 10000) in paragraph at lines 46--47
 
  []
 
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 65.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 69.
 (/usr/local/texlive/2012/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-Overfull \hbox (33.67654pt too wide) in paragraph at lines 50--68
+Overfull \hbox (33.67654pt too wide) in paragraph at lines 54--72
  [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 78--79
+Underfull \hbox (badness 10000) in paragraph at lines 92--93
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 80--82
+Underfull \hbox (badness 10000) in paragraph at lines 94--96
+
+ []
+
+[12]
+Underfull \hbox (badness 10000) in paragraph at lines 97--99
+
+ []
+
+[13] [14] [15] [16] [17] [18] [19] [20] [21] [22] [23] [24] [25] [26] [27]
+[28] [29] [30] [31]
+Underfull \hbox (badness 10000) in paragraph at lines 1030--1030
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 83--84
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 85--87
-
- []
-
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 88--90
-
- []
-
-[3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18]
-[19] [20] [21]
-Underfull \hbox (badness 10000) in paragraph at lines 1021--1021
-
- []
-
-
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 1021--1022
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 1030--1031
 [] 
  []
 
-[22]
-Underfull \hbox (badness 10000) in paragraph at lines 1047--1047
+[32]
+Underfull \hbox (badness 10000) in paragraph at lines 1056--1056
 
  []
 
 
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 1047--1048
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 1056--1057
 [] 
  []
 
-[23]
-Underfull \hbox (badness 10000) in paragraph at lines 1075--1075
+[33]
+Underfull \hbox (badness 10000) in paragraph at lines 1084--1084
 
  []
 
 
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 1075--1076
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 1084--1085
 [] 
  []
 
-[24]
-Underfull \hbox (badness 10000) in paragraph at lines 1098--1098
+[34]
+Underfull \hbox (badness 10000) in paragraph at lines 1107--1107
 
  []
 
 
-Overfull \hbox (40.93062pt too wide) in paragraph at lines 1098--1099
+Overfull \hbox (40.93062pt too wide) in paragraph at lines 1107--1108
 [] 
  []
 
-[25]
-Underfull \hbox (badness 10000) in paragraph at lines 1120--1120
+[35]
+Underfull \hbox (badness 10000) in paragraph at lines 1129--1129
 
  []
 
 
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 1120--1121
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 1129--1130
 [] 
  []
 
-[26]
-Underfull \hbox (badness 10000) in paragraph at lines 1146--1146
+[36]
+Underfull \hbox (badness 10000) in paragraph at lines 1155--1155
 
  []
 
 
-Overfull \hbox (35.59238pt too wide) in paragraph at lines 1146--1147
+Overfull \hbox (35.59238pt too wide) in paragraph at lines 1155--1156
 [] 
  []
 
-[27]
-Underfull \hbox (badness 10000) in paragraph at lines 1170--1170
+[37]
+Underfull \hbox (badness 10000) in paragraph at lines 1179--1179
 
  []
 
 
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 1170--1171
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 1179--1180
 [] 
  []
 
-[28]
-Underfull \hbox (badness 10000) in paragraph at lines 1193--1193
+[38]
+Underfull \hbox (badness 10000) in paragraph at lines 1202--1202
 
  []
 
 
-Overfull \hbox (79.66681pt too wide) in paragraph at lines 1193--1194
+Overfull \hbox (79.66681pt too wide) in paragraph at lines 1202--1203
 [] 
  []
 
-[29] [30] <diagrams/class_diagram.jpg, id=278, 1565.85pt x 973.7178pt>
-File: diagrams/class_diagram.jpg Graphic file (type jpg)
+[39] [40] <diagrams/class_diagram_final.png, id=298, 1766.6pt x 1204.5pt>
+File: diagrams/class_diagram_final.png Graphic file (type png)
 
-<use diagrams/class_diagram.jpg>
-Package pdftex.def Info: diagrams/class_diagram.jpg used on input line 1202.
-(pdftex.def)             Requested size: 360.0pt x 223.86124pt.
- [31 <./diagrams/class_diagram.jpg>]
-<images/project_plan.png, id=285, 1116.17pt x 343.2825pt>
+<use diagrams/class_diagram_final.png>
+Package pdftex.def Info: diagrams/class_diagram_final.png used on input line 12
+11.
+(pdftex.def)             Requested size: 360.0pt x 245.45377pt.
+ [41 <./diagrams/class_diagram_final.png (PNG copy)>] <images/project_plan.png,
+ id=304, 1116.17pt x 343.2825pt>
 File: images/project_plan.png Graphic file (type png)
 
 <use images/project_plan.png>
-Package pdftex.def Info: images/project_plan.png used on input line 1212.
+Package pdftex.def Info: images/project_plan.png used on input line 1221.
 (pdftex.def)             Requested size: 360.0pt x 110.71692pt.
- [32 <./images/project_plan.png>]
-<images/data_model.png, id=291, 983.675pt x 474.77374pt>
-File: images/data_model.png Graphic file (type png)
+ [42 <./images/project_plan.png>]
+<images/data_model_final.png, id=310, 1014.79124pt x 685.56125pt>
+File: images/data_model_final.png Graphic file (type png)
 
-<use images/data_model.png>
-Package pdftex.def Info: images/data_model.png used on input line 1222.
-(pdftex.def)             Requested size: 360.0pt x 173.75099pt.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1225.
- [33 <./images/data_model.png>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1225.
+<use images/data_model_final.png>
+Package pdftex.def Info: images/data_model_final.png used on input line 1231.
+(pdftex.def)             Requested size: 360.0pt x 243.20334pt.
+ [43 <./images/data_model_final.png>] [44
+
+]
+Overfull \hbox (119.83408pt too wide) in paragraph at lines 1310--1311
+[]\T1/cmr/m/n/10.95 Article on REST au-then-ti-ca-tion: http://www.thebuzzmedia
+.com/designing-
+ []
+
+[45]
+Underfull \hbox (badness 10000) in paragraph at lines 1365--1366
+[]\T1/cmr/m/n/10.95 User (User-Data, User-DataTyoe)
+ []
+
+
+Overfull \hbox (32.5763pt too wide) in paragraph at lines 1379--1379
+ []\T1/cmtt/m/n/10.95 https://docs.google.com/spreadsheet/ccc?[] 
+ []
+
+
+Overfull \hbox (111.79349pt too wide) in paragraph at lines 1380--1380
+ []\T1/cmtt/m/n/10.95 key=0Al6hudwhcsnmdEtZb0F1TVg2Wl9EWHRWUC1TWWhjcVE#gid=0[] 
+
+ []
+
+
+Overfull \hbox (26.91792pt too wide) in paragraph at lines 1383--1383
+ []\T1/cmtt/m/n/10.95 https://docs.google.com/document/d/1xcQ[] 
+ []
+
+
+Overfull \hbox (38.23466pt too wide) in paragraph at lines 1384--1384
+ []\T1/cmtt/m/n/10.95 -tLMycga5sebliyYadoc2zQifpeI1Z6AlwB7IKTY/[] 
+ []
+
+[46]
+Overfull \hbox (56.70364pt too wide) in paragraph at lines 1460--1461
+[]\T1/cmr/m/n/10.95 http://msdn.microsoft.com/en-us/library/dd203052.aspx 
+ []
+
+[47] [48] [49] [50]
+Underfull \hbox (badness 10000) in paragraph at lines 1682--1684
+
+ []
+
+[51] [52] [53
+
+]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1749.
+ [54]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1749.
  (./api-spec.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1225.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1225.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1749.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1749.
 
 Package rerunfilecheck Info: File `api-spec.out' has not changed.
-(rerunfilecheck)             Checksum: 31083E261E04A743FC42D963405AB0AB;1330.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1225.
+(rerunfilecheck)             Checksum: 1818575E3CDE6B40AF8F837440DA105A;1480.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1749.
  ) 
 Here is how much of TeX's memory you used:
- 7639 strings out of 493488
- 105319 string characters out of 3141326
- 186694 words of memory out of 3000000
- 10715 multiletter control sequences out of 15000+200000
- 17141 words of font info for 55 fonts, out of 3000000 for 9000
+ 7779 strings out of 493488
+ 107541 string characters out of 3141326
+ 195087 words of memory out of 3000000
+ 10831 multiletter control sequences out of 15000+200000
+ 17482 words of font info for 56 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 29i,8n,35p,542b,386s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
-</usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></
-usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></us
-r/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/
-local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/lo
-cal/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/loca
-l/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/
-texlive/2012/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on api-spec.pdf (33 pages, 2463402 bytes).
+ 29i,8n,35p,542b,653s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
+}{/usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}<
+/usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></u
+sr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr
+/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/l
+ocal/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/loc
+al/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local
+/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/t
+exlive/2012/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
+Output written on api-spec.pdf (45 pages, 605429 bytes).
 PDF statistics:
- 345 PDF objects out of 1000 (max. 8388607)
- 297 compressed objects within 3 object streams
- 101 named destinations out of 1000 (max. 500000)
- 168 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 420 PDF objects out of 1000 (max. 8388607)
+ 359 compressed objects within 4 object streams
+ 116 named destinations out of 1000 (max. 500000)
+ 192 words of extra memory for PDF output out of 10000 (max. 10000000)
 
