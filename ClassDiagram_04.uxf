@@ -81,7 +81,7 @@ Responsibilities
     <coordinates>
       <x>808</x>
       <y>432</y>
-      <w>560</w>
+      <w>568</w>
       <h>88</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Abstract&gt;&gt;
@@ -130,11 +130,11 @@ bg=yellow</panel_attributes>
     <coordinates>
       <x>808</x>
       <y>328</y>
-      <w>104</w>
+      <w>112</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>88;104;24;24</additional_attributes>
+    <additional_attributes>96;104;24;24</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -561,7 +561,7 @@ Responsibilities
       <x>768</x>
       <y>744</y>
       <w>432</w>
-      <h>152</h>
+      <h>184</h>
     </coordinates>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 *AbstractRelationHandler*
