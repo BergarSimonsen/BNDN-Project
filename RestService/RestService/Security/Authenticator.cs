@@ -42,7 +42,7 @@ namespace RestService.Security
         private static string GetSecretKey(string clientKey)
         {
             DatabaseConnection dbConnect = new DatabaseConnection("SMU");
-            string query = "SELECT * FROM secret_key WHERE clientKey=/'" + clientKey + "/'"; //TODO: Needs a table name.
+            string query = "SELECT * FROM secret_key WHERE clientKey=/'" + clientKey + "/'";
             
             PreparedStatement prepStat = dbConnect.Prepare(query);
             SqlDataReader data = dbConnect.Query(null, prepStat);
