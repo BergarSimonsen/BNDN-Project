@@ -1,0 +1,8 @@
+To test our software, we have decided to combine unittesting and manual testing. The unittesting is used in regard to most public methods, for example the security aspects of the service, while we test the media and database interaction manually using Fiddler*.
+Our software is functional whenever all the given tests pass.
+
+The client testing involves making sure that the client can communicate correctly with the server using the appropriate RESTful methods. This includes testing the login and uploading and viewing media on the server.
+
+The service testing involves making sure the server is capable of recieving media, and finding said media for future usage. The service should also be able to authenticate clients and users of the clients, and properly encrypt passwords and logintokens for future usage.
+
+We have unit-tests for the Authenticator, Encrypter, Permissions and TokenHandler. Of these tests, the Permission tests and the TokenHandler tests are the only tests that we've been capable of running, and of these, only the TokenHandler test passed successfully.
