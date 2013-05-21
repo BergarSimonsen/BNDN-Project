@@ -16,6 +16,9 @@
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{verbatim}
+\usepackage{soul}
+\usepackage{pdflscape}
+\usepackage{multicol}
 \tolerance=1000
 \providecommand{\alert}[1]{\textbf{#1}}
 
@@ -32,6 +35,7 @@
 
 \setcounter{tocdepth}{3}
 \tableofcontents
+\setcounter{page}{10}
 \vspace*{1cm}
 
 \newpage
@@ -71,14 +75,19 @@ MetaData & Metadata about the data. \\
 
 
 \textbf{Security and encoding} \\
-All requests should be made with a valid API-key, and values hashed into a “Checksum”. (TODO: Describe hashing details). Requests should be accompanied by a UTC timestamp and a nonce. All authenticated requests should contain an access token.
+All requests should be made with a valid API-key, and values hashed into a “Checksum”. Requests should be accompanied by a UTC timestamp and a nonce. All authenticated requests should contain an access token.
 
 So every request should look something like: 
-
-\verb[Resource]?auth=[AUTH-STRING]\&parama=xxx\&paramb=yyy \\
+\begin{verbatim}
+[Resource]?auth=[AUTH-STRING]&parama=xxx&paramb=yyy
+\end{verbatim}
 
 Where [AUTH-STRING] is something similar to:
-\{ “api-key” : ”AB14” , ”hmac” : ”XZ45” , ”time” : ”213” , “nonce” : “XC98” ; “token” = “DE95” \} \\
+\begin{verbatim}
+{ “api-key” : ”AB14” , ”hmac” : ”XZ45” , ”time” : ”213” , 
+“nonce” : “XC98” ; “token” = “DE95” }
+\end{verbatim}
+
 
 The only optional part of this auth object, is the token, which is only used after the user has successfully logged in. \\
 
@@ -1199,7 +1208,7 @@ MediaCategory
 \begin{figure}[h!]
   \caption{Complete class diagram of the system.}
   \centering
-    \includegraphics[width=1\textwidth, angle=270]{diagrams/class_diagram.jpg}
+    \includegraphics[width=1\textwidth, angle=270]{diagrams/class_diagram_final.png}
 \end{figure}
 
 \newpage
@@ -1219,7 +1228,522 @@ MediaCategory
 \begin{figure}[h!]
   \caption{Complete data model for the system}
   \centering
-    \includegraphics[width=1\textwidth, angle=270]{images/data_model.png}
+    \includegraphics[width=1\textwidth, angle=270]{images/data_model_final.png}
 \end{figure}
+
+\newpage
+
+\begin{landscape}
+\begin{multicols}{2}
+\section{Summary of Group Meetings}
+
+\textbf{07-05-2013 - Group meeting} 
+\begin{itemize}
+\item Feedback -> Fine and usable. Much as expected.
+\item We're running behind schedule. Too ambitious.
+\item CODEFREEZE Tuesday morning 21/5!!!
+\end{itemize}
+
+\textbf{23-04-2013 - Group meeting}
+\begin{itemize}
+\item Do we need custom attributes / meta data for media?
+\item Nope, tags cover most of it
+\end{itemize}
+
+\textbf{16-04-2013}
+\begin{itemize}
+\item What has been accomplished since last time?
+\item Bergar:
+\begin{itemize}
+\item Functional unit tests.
+\item Paused while waiting for new structure.
+\item API specifications written in report.
+\end{itemize}
+\item Alexander: ???
+\item Christian
+\begin{itemize}
+\item Started on requirement specifications.
+\item Not quite done.
+\end{itemize}
+\item Morten:
+\begin{itemize}
+\item Started working on UML
+\item Overview of system code.
+\end{itemize}
+\item What are we doing today?
+\begin{itemize}
+\item Bergar: Report -> Prepare for review
+\item Michael: Report -> Prepare for review
+\item Christian: Update code to match UML.
+\item Alexander: Free...? Coding
+\item Morten: Updating code to match UML
+\end{itemize}
+\item Division of assignments / responsibilities
+\begin{itemize}
+\item Report
+\item Web service
+\item Architecture
+\item Database
+\item Client
+\item Test of web service
+\item Test of client (manual?)
+\end{itemize}
+\end{itemize}
+
+\textbf{09-04-2013 - Group meeting}
+\begin{itemize}
+\item Have been working overtime in order to reach the web service specifications for the SMU deadline.
+\item Simplified architecture in order to reach the SMU deadline.
+\begin{itemize}
+\item Consider to change the architecture back, is there time?
+\item Found some relative easier alternatives which will improve the process.
+\end{itemize}
+\item Spend the day to discuss the report -> Especially problem statement.
+\begin{itemize}
+\item Have agreed on a problem statement.
+\end{itemize}
+\end{itemize}
+
+\textbf{22-03-2013}
+\begin{itemize}
+\item Article on tokens in REST. See comments for a good explanation on why tokens are clever: http://rest.elkstein.org/2008/01/how-do-i-handle-authentication-in-rest.html 
+\item Article on REST authentication: http://www.thebuzzmedia.com/designing-a-secure-rest-api-without-oauth-authentication/ 
+\end{itemize}
+
+\textbf{19-03-2013}
+\begin{itemize}
+\item Follow up on homework
+\begin{itemize}
+\item We are behind.
+\end{itemize}
+\item Plan work of the day
+\begin{itemize}
+\item Meeting with Singapore
+\end{itemize}
+\item WORK WORK
+\item Divide work for next time
+\begin{itemize}
+\item Finish API (Michael, Kuhre \& Alexander)
+\item Create demo-data stubs (Kuhre \& Alexander)
+\item Report
+\begin{itemize}
+\item Concept (Michael)
+\item API (Bergar)
+\item Datamodel (Bergar)
+\end{itemize}
+\item Set up database (Morten)
+\begin{itemize}
+\item Table set up
+\item Insert sample data
+\end{itemize}
+\end{itemize}
+\item Extra group meeting:
+\begin{itemize}
+\item Friday 14-16
+\item Welcome to meet earlier if possible
+\end{itemize}
+\end{itemize}
+
+\textbf{12-03-2013 - Group meeting}
+\begin{itemize}
+\item Meeting with Singapore
+\item Decisions from last time
+\begin{itemize}
+\item Generic web service.
+\item Data model
+\item Pay-per-view + subscription included in web service.
+\end{itemize}
+\item Follow up of project plan.
+\item Work with API
+\item General work.
+\item Homework
+\begin{itemize}
+\item API specifications
+\begin{itemize}
+\item Tag (MediaHasTag, TagGroup) + Media (MediaCategory) \textbf{Christian}
+\item Comment + UserTag (UserTagGroup) \textbf{Alexander}
+\item User (UserData, UserDataTyoe) \textbf{Morten}
+\item ACL (...) \textbf{Michael}
+\item Order (OrderLine, Promise, Transaction) \textbf{Bergar}
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\textbf{05-03-2013}
+\begin{itemize}
+\item Follow up on homework
+\begin{itemize}
+\item Michael
+\begin{itemize}
+\item See updated project plan: \begin{verbatim}
+https://docs.google.com/spreadsheet/ccc?
+key=0Al6hudwhcsnmdEtZb0F1TVg2Wl9EWHRWUC1TWWhjcVE#gid=0
+\end{verbatim}
+\item See data model (workbench-file in git-repo): \begin{verbatim}
+https://docs.google.com/document/d/1xcQ
+-tLMycga5sebliyYadoc2zQifpeI1Z6AlwB7IKTY/
+edit#heading=h.43607z2vh6ae 
+\end{verbatim}
+\item See API
+\begin{itemize}
+\item Not quite finished, needs more work. Will keep working on it.
+\end{itemize}
+\end{itemize}
+\item Bergar
+\begin{itemize}
+\item Server login / deployment
+\begin{itemize}
+\item Server login is working without any problems.
+\item UPDATE: Web service is now running on server.
+\end{itemize}
+\item Remote deployment
+\begin{itemize}
+\item Visual Studio has built in web deployment function.
+\item Web deployment not yet implemented on server side. Niels says it will be implemented in near future.
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\item Data-model
+\begin{itemize}
+\item PPV, Subscription, money?
+\begin{itemize}
+\item The app is in charge of products. We handle orders, orderlines and "promises"
+\end{itemize}
+\item Multiple sites / apps?
+\begin{itemize}
+\item Different databases.
+\item Consider doing web service interface to generate new "App" -> New database.
+\end{itemize}
+\end{itemize}
+\item API -> Not finished ...
+\item Report outline -> Not finished
+\item Division of assignments for next time:
+\begin{itemize}
+\item Update data model based on group meetings (Michael)
+\item Create UML for server (Morten + Kuhre)
+\item Example of call-flow (Morten)
+\item Write API specifications (Kuhre)
+\item Proof-of-concept -> same as last time. (ALL -> especially Alexander + Bergar)
+\item Draft of report outline (Bergar)
+\item Plan for net group meeting + plan meeting with SMU (Michael)
+\item Facebook message to all who weren't here today, including homework (Morten
+\end{itemize}
+\end{itemize}
+
+\textbf{05-03-2013 - Group meeting \& Video Conference}
+\begin{itemize}
+\item 08:50: Meet up and final preparations
+\item 09:20: Video conference with SMU:
+\begin{itemize}
+\item Introduction (everyone) (2 minutes)
+\item Outline specification (3 minutes)
+\begin{itemize}
+\item A very standardized web service, allowing multiple types of clients.
+\item Free movies, pay-per-view and subscriptions
+\item Tag-based meta-data (genre / actor / director / etc)
+\end{itemize}
+\item What are your demands (SMU)? (3 minutes)
+\item RESTful web service + agree ... (2 minutes)
+\end{itemize}
+\end{itemize}
+
+\textbf{19-02-2013 - Group meeting}
+\begin{itemize}
+\item 09:00 - 11:00 Lecture
+\item Homework follow up
+\begin{itemize}
+\item Need better definition precisely what everyone's job is.
+\item Work more together
+\end{itemize}
+\item REST or SOAP
+\begin{itemize}
+\item http://msdn.microsoft.com/en-us/library/dd203052.aspx
+\item SOAP is probably easier for this project.
+\item REST is more interesting, go with REST
+\end{itemize}
+\item Identify ALL requirements
+\begin{itemize}
+\item \begin{verbatim}
+https://wiki.smu.edu.sg/is411/2012T2-
+ITU-SMU_Project_Requirements
+\end{verbatim}
+\end{itemize}
+\item KEY GOAL(s) for us?
+\begin{itemize}
+\item Focus on web service
+\begin{itemize}
+\item Design
+\item Thorough testing
+\item All necessary features
+\end{itemize}
+\item Minimum features:
+\begin{itemize}
+\item \textbf{MANDATORY:}
+\item 0: CRUD - Account
+\item 0: Login
+\item \st{0: User-levels (simpler to user ACL}
+\item 0: CRUD - Media + search (category based)
+\item 0: Download / Stream
+\item \st{0: Rent (for a limited)} Ignored ... We think that login and access control should suffice.
+\item \textbf{CHOSEN}
+\item 1: ACL
+\item 1: Search in media (free test etc..)
+\item 2: Comments / Ratings
+\item 2: Favorites
+\item 3: Analytic -> collection of data
+\item 3: Pay-per-view / Money
+\item 3: Subscriptions / Money
+\item \begin{verbatim}
+######################
+\end{verbatim}
+\item 4: Others who watched/liked this also watched/liked
+\item 4: Share on facebook button
+\item 4: Revenue shares for premium content
+\item 4: Approvement of films by administrator
+\item 5: Login using facebook
+\item 5: Remember me feature
+\item 5: Cash prizes for most seen/liked films .. (could be handled manually..)
+\item 5: Administration / Moderation
+\end{itemize}
+\end{itemize}
+\item Lunch
+\item Homework
+\begin{itemize}
+\item Michael: Project plan
+\begin{itemize}
+\item Fill in relevant milestones
+\item Fill in tasks
+\end{itemize}
+\item Michael: Data model
+\begin{itemize}
+\item Draft for data model, including relations and attributes
+\item For starter, in relation to "basics"
+\end{itemize}
+\item Michael: Web-service specs
+\begin{itemize}
+\item Alexander: Rest-web-service (Proof of concept)
+\begin{itemize}
+\item Example (HelloWorld)
+\item Publish on server (evt. ask Bergar)
+\item Able to call web service from simple, external client.
+\end{itemize}
+\item Bergar: Remote Deploy - Automatic preferred (proof of concept)
+\begin{itemize}
+\item Try if remote deploy is working on the server.
+\item Try to set up remote deployment -> Publish directly from Visual Studio (locally)
+\end{itemize}
+\item Kuhre: Asp.net client (proof of concept)
+\begin{itemize}
+\item Show that a client is possible
+\item Use C\# -> show date for example
+\item Publish to server
+\item Call from browser ("HelloWorld on Dec 4th 2010")
+\end{itemize}
+\item Morten: MsSQL-database (proof of concept)
+\begin{itemize}
+\item Possible to run queries
+\item Remote (preferred) (outside server / remote desktop)
+\item Simple demo program in relation to C\#
+\end{itemize}
+\item Morten: Get access to WIKI
+\begin{itemize}
+\item Login / Password, so we can update -> Test that wen can create / edit articles
+\end{itemize}
+\item Morden: Update to Kuhre (on facebook)
+\end{itemize}
+\begin{itemize}
+\item Write update, so he knows what is going on.. + the ones that were sleeping :)
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\textbf{12-02-2013 - Group meeting}
+\begin{itemize}
+\item Agree on idea for system concept
+\begin{itemize}
+\item IndeeFlix
+\item Free and Premium
+\item PayPerView for free on premium material
+\item Division of \% of profit to free artists
+\end{itemize}
+\item Group norms
+\begin{itemize}
+\item Expectations
+\begin{itemize}
+\item Work time:
+\begin{itemize}
+\item About 5 hours at every group meeting + workshops
+\item 5 hours homework (for starters)
+\end{itemize}
+\item Ambitions
+\begin{itemize}
+\item Learn something (new)!
+\item WCF
+\item REST
+\item Minimum grade 7 .. 10 would be great .. 12 would be NICE
+\item Writing period: Yes, but will figure this out later
+\end{itemize}
+\end{itemize}
+\item Meeting times
+\begin{itemize}
+\item Tuesday 9-15 is HOLY
+\item Everything else is planned as we go
+\end{itemize}
+\item Method
+\begin{itemize}
+\item Development paradigm -> Iterativ
+\item Projectplan
+\item Requirements / Scenarios / User stories
+\end{itemize}
+\item Tools:
+\begin{itemize}
+\item Docs -> Documents
+\item GitHub -> Code
+\item Facebook -> Communications
+\item VS2012 -> IDE
+\end{itemize}
+\end{itemize}
+\item Define roles:
+\begin{itemize}
+\item Project leader: Bergar
+\begin{itemize}
+\item Responsible for what is done
+\item Handle requirements and make sure they are followed
+\item Make sure there is progress
+\item Meeting agenda and leading meetings
+\end{itemize}
+\item Contact responsible : Christian
+\begin{itemize}
+\item Communication with SMU
+\item Communication with Niels
+\item Keep updated on blog, mail, wiki etc..
+\end{itemize}
+\item Architect: Michael
+\begin{itemize}
+\item Overview of overall program
+\item Data model and program structure
+\item Make sure structure is followed.
+\end{itemize}
+\end{itemize}
+\item Choosing technology
+\begin{itemize}
+\item Desktop or web 
+\begin{itemize}
+\item Desktop: offline
+\item Web: More interesting -> Decided
+\end{itemize}
+\item REST or SOAP
+\begin{itemize}
+\item Read up on this for next time
+\end{itemize}
+\end{itemize}
+\item Project plan
+\begin{itemize}
+\item Baseline
+\end{itemize}
+\item Requirements specifications
+\begin{itemize}
+\item Description
+\item Scenarios
+\item User stories
+\end{itemize}
+\end{itemize}
+
+\textbf{12-02-2013 - Meeting with Niels}
+\begin{itemize}
+\item Have you settled on technology?
+\begin{itemize}
+\item NO Silverlight
+\item Desktop OR (Web application -> HTML(5) / CSS / JavaScript / ASP.NET)
+\item REST / SOPA / pure WCF
+\item C\# -> Of course ...
+\end{itemize}
+\item Your target group and requirements?
+\begin{itemize}
+\item Spotify-like -> Buy one at a time, or subscribe to all
+\item NO DRM
+\item Fairly mainstream
+\end{itemize}
+\item Group roles?
+\begin{itemize}
+\item Not decided yet ...
+\item Project leader: ???
+\item Contact responsible: ???
+\item Architect: ???
+\item More relevant roles, or do we have too many?? -> Niels: Fine :)
+\end{itemize}
+\item Project description and SMU Wiki
+\begin{itemize}
+\item Project description: Cool
+\item SMU Wiki: Not done yet
+\end{itemize}
+\end{itemize}
+
+\textbf{Niels says:} \\
+Use as much energy on the data logical; data model, web service specs, etc .. Use as little time on the technological as possible... \\
+
+\textbf{05-02-2013 - Introductory meeting}
+\begin{itemize}
+\item Tools
+\begin{itemize}
+\item Silverlight = NO GO!
+\item GitHub for versioning
+\item Entity Framework (!!)
+\end{itemize}
+\item Development
+\begin{itemize}
+\item Test-Driven design
+\item SCRUM
+\end{itemize}
+\item Requirements
+\begin{itemize}
+\item System must support multiple media types
+\begin{itemize}
+\item Video
+\item Music
+\item E-books
+\item ...
+\end{itemize}
+\item Streaming
+\begin{itemize}
+\item Download (back-up)
+\end{itemize}
+\item User-authentication
+\begin{itemize}
+\item Sign-up
+\item Login
+\item Multiple access levels
+\end{itemize}
+\item Multi-uer system
+\item 3 user levels
+\begin{itemize}
+\item Super user - Our group
+\item Upload user - Companies
+\item Regular users - Rent media
+\end{itemize}
+\item Encryption (optional)
+\item Client
+\begin{itemize}
+\item Desktop client
+\item Web client
+\end{itemize}
+\item Subscription?
+\begin{itemize}
+\item Subscription (monthly sub.)
+\item Free (pay-per-view)
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{multicols}
+
+\end{landscape}
+
+\newpage
+
+\section{User Manual}
+
+\newpage
+
+\section{Review}
 
 \end{document}
