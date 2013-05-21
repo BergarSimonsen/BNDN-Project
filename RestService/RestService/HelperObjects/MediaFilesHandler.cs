@@ -31,7 +31,7 @@ namespace RestService.HelperObjects
             }
             reader.Close();
 
-            string fileLocation = @"C:\RestServiceTest" + mediaMeta.id.ToString();
+            string fileLocation = @"C:\RentItServices\Rentit26\MediaFiles\" + mediaMeta.id.ToString();
             System.IO.Directory.CreateDirectory(fileLocation);
             string fileDir = fileLocation + @"\" + mediaMeta.title + "." + mediaMeta.format;
 
@@ -49,7 +49,7 @@ namespace RestService.HelperObjects
             file.Close();
             writer.Close();
 
-            string fileStream = "http://rentit.itu.dk/RentIt26/MediaFiles/" + id + "/" + mediaMeta.title + "." + mediaMeta.format;
+            string fileStream = "http://rentit.itu.dk/RentIt26/MediaFiles/" + mediaMeta.id.ToString() + "/" + mediaMeta.title + "." + mediaMeta.format;
 
             PreparedStatement stmt2 = db.Prepare("UPDATE media SET file_location = '"+fileStream+"' WHERE id = "+mediaMeta.id.ToString());
 
