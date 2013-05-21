@@ -19,6 +19,8 @@
 \usepackage{soul}
 \usepackage{pdflscape}
 \usepackage{multicol}
+\usepackage{caption}
+\usepackage{subcaption}
 \tolerance=1000
 \providecommand{\alert}[1]{\textbf{#1}}
 
@@ -43,7 +45,7 @@
 \section{Web service API-specifications}
 \subsection{M6, Movie Distribution Web Service API Specs}
 
-The web service uses RESTful concepts to provide a standardized and stateless programming interface, for interacting with the system. \\
+The web service uses RESTful concepts to provide a standardized and stateless programming interface for interacting with the system. \\
 
 \textbf{Standard response} \\
 All responses consists of the following data:
@@ -1307,7 +1309,10 @@ MediaCategory
 \textbf{22-03-2013}
 \begin{itemize}
 \item Article on tokens in REST. See comments for a good explanation on why tokens are clever: http://rest.elkstein.org/2008/01/how-do-i-handle-authentication-in-rest.html 
-\item Article on REST authentication: http://www.thebuzzmedia.com/designing-a-secure-rest-api-without-oauth-authentication/ 
+\item Article on REST authentication: \begin{verbatim}
+http://www.thebuzzmedia.com/designing-a-secure-
+rest-api-without-oauth-authentication/ 
+\end{verbatim}
 \end{itemize}
 
 \textbf{19-03-2013}
@@ -1714,7 +1719,7 @@ Use as much energy on the data logical; data model, web service specs, etc .. Us
 \item Login
 \item Multiple access levels
 \end{itemize}
-\item Multi-uer system
+\item Multi-user system
 \item 3 user levels
 \begin{itemize}
 \item Super user - Our group
@@ -1741,6 +1746,73 @@ Use as much energy on the data logical; data model, web service specs, etc .. Us
 \newpage
 
 \section{User Manual}
+\begin{figure}[H]
+  \caption{\textbf{Create new user}}
+  \centering
+    \includegraphics[width=1\textwidth]{images/UM_new_user.png}
+\end{figure}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{figure}[H]
+  \caption{\textbf{Login as registered user}}
+  \centering
+    \includegraphics[width=1\textwidth]{images/UM_login.png}
+\end{figure}
+
+\begin{figure}[H]
+  \caption{\textbf{Show user information}}
+  \centering
+    \includegraphics[width=0.6\textwidth]{images/UM_show_user.png}
+\end{figure}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{figure}[H]
+  \caption{\textbf{Change user information}}
+  \centering
+    \includegraphics[width=1\textwidth]{images/UM_change_user.png}
+\end{figure}
+
+\begin{figure}[H]
+  \caption{\textbf{Show all media in pages}}
+  \centering
+    \includegraphics[width=0.9\textwidth]{images/UM_show_media.png}
+\end{figure}
+
+\begin{figure}[H]
+  \caption{\textbf{Search for media by title}}
+  \centering
+    \includegraphics[width=1\textwidth]{images/UM_search_media.png}
+\end{figure}
+
+\begin{figure}[H]
+  \caption{\textbf{Select and stream media}}
+  \centering
+    \includegraphics[width=1\textwidth]{images/UM_select_stream_media.png}
+\end{figure}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{figure}[H]
+  \caption{\textbf{Create new media and upload file}}
+  \centering
+    \includegraphics[width=1\textwidth]{images/UM_create_media.png}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+  \caption{\textbf{Show media uploaded by user}}
+    \includegraphics[width=0.3\textwidth]{images/UM_show_media_by_user.png}
+\end{figure}
+
+\begin{center}\line(1,0){250}\end{center}
+
+\begin{figure}[H]
+\centering
+  \caption{\textbf{Delete user}}
+    \includegraphics[width=0.3\textwidth]{images/UM_delete_user.png}
+\end{figure}
 
 \newpage
 
