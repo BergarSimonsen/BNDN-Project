@@ -34,10 +34,12 @@ namespace RestService
 
         public override User[] Read(int id)
         {
-            PreparedStatement stat = dbCon.Prepare("select * from user_account "
+            PreparedStatement stat = dbCon.Prepare("select * from user_account where id="+id);
+            
+            /*PreparedStatement stat = dbCon.Prepare("select * from user_account "
             + "inner join user_account_data on user_account.id=user_account_data.user_account_id"
             + "inner join user_account_data_type on user_account_data.user_account_data_type_id=user_account_data_type.id "
-            + "where user_account.id=" + id);
+            + "where user_account.id=" + id);*/
 
             return ListToArray(CreateUser(dbCon.Query(new Dictionary<string,string>(), stat)));
         }
@@ -82,10 +84,12 @@ namespace RestService
                 searchParams = searchParams.Remove(searchParams.Length - 4);
             }
 
-            PreparedStatement stat = dbCon.Prepare("select * from user_account "
+            PreparedStatement stat = dbCon.Prepare("select * from user_account " + searchParams);
+
+            /*PreparedStatement stat = dbCon.Prepare("select * from user_account "
             + "inner join user_account_data on user_account.id=user_account_data.user_account_id"
             + "inner join user_account_data_type on user_account_data.user_account_data_type_id=user_account_data_type.id "
-            + searchParams);
+            + searchParams);*/
 
             return ListToArray(CreateUser(dbCon.Query(data, stat)));
         }
@@ -108,13 +112,14 @@ namespace RestService
                 string email = reader.GetString(reader.GetOrdinal("email"));
                 string password = reader.GetString(reader.GetOrdinal("password_hash"));
 
-                //int dataID = reader.GetInt32(reader.GetOrdinal("userDataId"));
-                string value = reader.GetString(reader.GetOrdinal("value"));
-                //string dataType = reader.GetString(reader.GetOrdinal("dataType"));
+                returnUsers.Add(new User(userId, email, password, null));
 
-                //TODO userdata has to be fetched witht he rast of the data
-                //returnUsers.Add(new User(userId, email, password, new User_Data[ new User_Data(dataID, userId, dataType, value)]));
-                returnUsers.Add(new User(userId, email, password, new string[]{value}));
+                /*
+                int dataId = reader.GetInt32(reader.GetOrdinal("userDataId"));
+                string value = reader.GetString(reader.GetOrdinal("value"));
+                string dataType = reader.GetString(reader.GetOrdinal("dataType"));
+
+                returnUsers.Add(new User(userId, email, password, new User_Data[]{new User_Data(dataId, userId, dataType, value}));*/
             }
 
             return returnUsers;

@@ -4,10 +4,10 @@ using System.Runtime.Serialization;
 using System.Linq;
 using System.Web;
 
-namespace RestService
+namespace RestService.Entities
 {
     [DataContract]
-    public class Promise
+    public class Promise : IEntities
     {
         [DataMember]
         public int id;
